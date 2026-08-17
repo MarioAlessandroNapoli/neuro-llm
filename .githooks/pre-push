@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+# Gate zero-trust: ispeziona gli ESATTI commit in uscita prima di ogni push.
+# Tre livelli: gitleaks (config .gitleaks.toml) + regex custom sul patch + path proibiti.
+# Fallisce chiuso: senza gitleaks il push è bloccato.
+# Override consapevole per falsi positivi: ALLOW_PUSH=1 git push
+set -uo pipefail
+
+if [ "${ALLOW_PUSH:-}" = "1" ]; then
+    echo "pre-push: OVERRIDE ATTIVO (ALLOW_PUSH=1) — nessun controllo eseguito" >&2
+    exit 0
+fi
+
+command -v gitleaks >/dev/null || {
+    echo "pre-push: BLOCCATO — gitleaks non installato (brew install gitleaks)" >&2
+    exit 1
+}
+
+Z40=0000000000000000000000000000000000000000
+FORBIDDEN_PATHS='(^|/)\.env($|\.)|\.pem$|(^|/)id_rsa|kaggle\.json|(^|/)\.netrc|credentials\.json|\.claude\.json'
+SECRET_PATTERNS='hf_[A-Za-z0-9]{30,}|KGAT_[0-9a-fA-F]{16,}|sk-ant-[A-Za-z0-9_\-]{10,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY|(?i:wandb)[^[:space:]]{0,40}[a-f0-9]{40}'
+
+fail=0
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+    [ "$local_sha" = "$Z40" ] && continue  # cancellazione di branch remoto: nulla in uscita
+
+    if [ "$remote_sha" = "$Z40" ]; then
+        range="$local_sha --not --remotes=origin"
+    else
+        range="$remote_sha..$local_sha"
+    fi
+
+    echo "== pre-push: commit in uscita =="
+    # shellcheck disable=SC2086
+    git log --oneline $range
+    echo "== file toccati =="
+    # shellcheck disable=SC2086
+    git log --name-status --format='-- %h %s' $range
+
+    # 1. gitleaks sui soli commit in uscita
+    # shellcheck disable=SC2086
+    if ! gitleaks git --no-banner --config .gitleaks.toml --log-opts="$range" . >/dev/null 2>&1; then
+        echo "pre-push: BLOCCATO — gitleaks ha trovato possibili segreti nei commit in uscita:" >&2
+        # shellcheck disable=SC2086
+        gitleaks git --no-banner --config .gitleaks.toml --log-opts="$range" . 2>&1 | grep -E "Finding|Secret|File|Commit" | head -20 >&2
+        fail=1
+    fi
+
+    # 2. regex custom sull'intero patch (difesa in profondità)
+    # shellcheck disable=SC2086
+    hits=$(git log -p $range | grep -cE "$SECRET_PATTERNS" || true)
+    if [ "$hits" -gt 0 ]; then
+        echo "pre-push: BLOCCATO — $hits match dei pattern segreti custom nel patch:" >&2
+        # shellcheck disable=SC2086
+        git log -p $range | grep -nE "$SECRET_PATTERNS" | head -5 >&2
+        fail=1
+    fi
+
+    # 3. path proibiti
+    # shellcheck disable=SC2086
+    badpaths=$(git log --name-only --format= $range | sort -u | grep -iE "$FORBIDDEN_PATHS" || true)
+    if [ -n "$badpaths" ]; then
+        echo "pre-push: BLOCCATO — file con nomi sensibili nei commit in uscita:" >&2
+        echo "$badpaths" >&2
+        fail=1
+    fi
+done
+
+if [ "$fail" -ne 0 ]; then
+    echo "" >&2
+    echo "Push bloccato. Rimuovi il segreto dalla history (git reset / rebase), poi ripush." >&2
+    echo "Falso positivo verificato a mano? ALLOW_PUSH=1 git push" >&2
+    exit 1
+fi
+
+echo "== pre-push: nessun segreto rilevato, push consentito =="
+exit 0

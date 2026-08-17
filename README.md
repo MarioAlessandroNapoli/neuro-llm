@@ -15,6 +15,7 @@ vs varianti oscillatorie (LinOSS, Wave-RNN — in arrivo).
 
 ```bash
 uv sync
+git config core.hooksPath .githooks   # attiva il gate pre-push (richiede gitleaks: brew install gitleaks)
 uv run python -m src.prepare_data                       # scarica + tokenizza (una tantum)
 uv run python -m src.train --arch transformer --tokens 1000000 --precision 32-true --no-wandb
 ```
@@ -45,6 +46,14 @@ repo HF privato: Kaggle li scarica pronti, la tokenizzazione non si ripete mai.
 
 I checkpoint vivono su HF Hub (`<user>/neuro-llm-ckpt`, privato): sopravvivono alle
 sessioni e non consumano i 5 GB/mese del free tier W&B.
+
+## Sicurezza push (repo pubblico)
+
+Ogni push passa dal gate `.githooks/pre-push`, che ispeziona gli esatti commit in uscita
+su tre livelli: gitleaks (config `.gitleaks.toml`, estesa con token HF/Kaggle/W&B), regex
+custom sull'intero patch, e blocklist di nomi file sensibili (`.env`, `kaggle.json`,
+chiavi). Fallisce chiuso: senza gitleaks installato il push è bloccato. Per un falso
+positivo verificato a mano: `ALLOW_PUSH=1 git push`.
 
 ## Interrogare le run da Claude Code (MCP)
 

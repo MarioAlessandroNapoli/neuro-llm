@@ -1,0 +1,17 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "huggingface-token"
+description = "HuggingFace access token"
+regex = '''hf_[A-Za-z0-9]{30,}'''
+
+[[rules]]
+id = "kaggle-access-token"
+description = "Kaggle API access token"
+regex = '''KGAT_[0-9a-fA-F]{16,}'''
+
+[[rules]]
+id = "wandb-api-key"
+description = "Weights & Biases API key (40 hex in contesto wandb)"
+regex = '''(?i)wandb[^\s]{0,40}[a-f0-9]{40}'''
