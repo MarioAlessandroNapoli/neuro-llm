@@ -36,10 +36,22 @@ class LMModule(L.LightningModule):
         self.log("val_ppl", loss.exp())
 
     def configure_optimizers(self):
+        # Ricetta simmetrica per categoria (D6): decay solo sulle matrici dense;
+        # bias, gain di norm, embedding e parametri di stato mai decaduti.
+        state = list(self.model.state_parameters())
+        state_ids = {id(p) for p in state}
+        embed_ids = {id(m.weight) for m in self.model.modules() if isinstance(m, torch.nn.Embedding)}
+        decay, no_decay = [], []
+        for p in self.parameters():
+            if id(p) in state_ids:
+                continue
+            (decay if p.ndim >= 2 and id(p) not in embed_ids else no_decay).append(p)
         opt = torch.optim.AdamW(
-            self.parameters(),
+            [
+                {"params": decay, "weight_decay": self.hparams.weight_decay},
+                {"params": no_decay + state, "weight_decay": 0.0},
+            ],
             lr=self.hparams.lr,
-            weight_decay=self.hparams.weight_decay,
             betas=(0.9, 0.95),
         )
         warmup, total = self.hparams.warmup_steps, self.hparams.max_steps

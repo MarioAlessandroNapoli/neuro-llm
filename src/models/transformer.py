@@ -39,6 +39,11 @@ class Transformer(nn.Module):
         self.head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)
         self.head.weight = self.tok.weight
 
+    def state_parameters(self):
+        # Contratto del registry: i parametri che definiscono il meccanismo della
+        # famiglia (frequenze/smorzamento/dt negli oscillatori) — mai weight decay.
+        return ()
+
     def forward(self, idx):
         x = self.tok(idx) + self.pos(torch.arange(idx.shape[1], device=idx.device))
         for blk in self.blocks:

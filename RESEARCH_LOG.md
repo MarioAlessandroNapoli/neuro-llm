@@ -17,7 +17,8 @@ bande delta/theta/alpha/beta/gamma — conferiscono un vantaggio misurabile a un
 a parità di parametri, dati e budget di training?
 
 Formato dell'esperimento: confronto controllato tra un transformer baseline e varianti con
-backbone oscillatorio (candidati: LinOSS, Wave-RNN), alla scala 8-33M parametri, from scratch.
+backbone oscillatorio (candidati: LinOSS, D-LinOSS, Wave-RNN), alla scala 8-33M parametri,
+from scratch.
 
 **Gap di letteratura verificato (2026-08-17)**: nessun LM con backbone oscillatorio è stato
 pubblicato su TinyStories o BabyLM. Ricerche web dedicate non hanno restituito alcun paper che
@@ -63,6 +64,52 @@ un'ablazione che lo isola.
 budget 10M/100M parole e pipeline di valutazione standardizzata (BLiMP); lezione dalla
 challenge: i curriculum "sviluppo-ispirati" ingenui non aiutano, contano architettura e
 obiettivo di training (GPT-BERT, arXiv:2410.24159).
+
+---
+
+## Ancore quantitative e apparato di valutazione del campo (rilevate 2026-08-17)
+
+Raccolta pre-design a supporto di D7 (che ha assorbito Q2) e Q4. Numeri di terzi = àncora,
+mai braccio di confronto (D5).
+
+**Ancore val loss su TinyStories.** I GPT-Neo ufficiali (roneneldan/TinyStories-1M/8M/33M) NON
+hanno loss pubblicata — solo curve in Fig. 3 del paper; training ~20 epoch (≈9-10B token, stima
+da HF Discussion #8), tokenizer GPT-Neo con vocab effettivo dibattuto (paper dice top-10k,
+config dice 50257). Uniche àncore citabili: llama2.c (tokenizer Llama-2 32k) — 15M → **1.072**,
+42M → **0.847**, 110M → **0.760** nats/token (README del repo); il 260K (vocab 512) → 1.297 non
+è confrontabile. Nessuna soglia pubblicata loss↔coerenza. Dataset: 471,6M token train / 2,37M
+val con BPE GPT-2 (arXiv:2601.23236).
+
+**Confronto cross-tokenizer solo via bits-per-byte** (The Pile §3.1, arXiv:2101.00027:
+BPB = loss_nats / ln2 / bytes_per_token). Nessun BPB di riferimento pubblicato per TinyStories:
+va calcolato da noi — incluso quello di un checkpoint pubblico (stories15M) sul NOSTRO val set,
+che diventa l'àncora esterna reale. **Condizioni di misura dell'àncora, dichiarate**: stories15M
+ha contesto 256 ed è addestrato su TinyStories V1, mentre il nostro val è V2-GPT4 a finestre
+512 — quindi (a) si valuta a contesto 256 per entrambi, riportando il nostro BPB sia a 256 sia
+a 512; (b) sul val V2 il numero di stories15M è un limite superiore (fuori distribuzione per
+lui), e si dichiara come tale. Convenzione BPB fissata: byte UTF-8 del solo testo, EOT esclusi
+dal conteggio token. Cautela: la loss più bassa cross-tokenizer non predice la qualità
+soggettiva (arXiv:2504.07989).
+
+**Come valuta il campo.** TinyStories: GPT-Eval — LLM giudice su grammar/creativity/consistency/
+plot, scala 1-10; i prompt ufficiali sono in `Evaluation_prompts.yaml` nel repo HF del dataset
+(pipeline da ricostruire, rubric disponibile). BabyLM 2025: repo `babylm/evaluation-pipeline-2025`
+— zero-shot BLiMP, BLiMP-supplement, EWoK, COMPS, WUG, reading/eye-tracking, AoA + fine-tuning
+GLUE ridotto; modalità fast (checkpoint intermedi) e full. BabyLM classifica per score dei task,
+non per perplexity.
+
+**Assenza verificata (rafforza il gap).** LinOSS, D-LinOSS, Wave-RNN, coRNN: mai valutati su LM
+testuale, nemmeno char-level (verificato sui paper). Termine di paragone più vicino al nostro
+regime: BabyLM 10M parole — Mamba BLiMP 64.44 vs transformer baseline 62.64, HGRN2 67.05
+(arXiv:2412.15978): le ricorrenti lineari battono già i transformer a questa scala.
+
+**Probe long-range con precedenti citabili.** (a) Ablazione del contesto a distanza d — aumento
+di loss quando il contesto oltre d viene troncato/mescolato (Khandelwal, arXiv:1805.04623; la
+metodologia canonica per "quanto contesto usa davvero il modello"); (b) coerenza delle entità in
+generazione — match entità generate vs gold, finestra di menzione del protagonista
+(arXiv:2202.01709); (c) FFT 2D spazio-tempo delle attivazioni hidden — ricetta nel paper wRNN
+stesso (arXiv:2309.08045). FFT su hidden state di un LM testuale: mai pubblicata — spazio di
+contributo, insieme a oscillatori-su-LM e name-consistency su TinyStories.
 
 ---
 
@@ -141,12 +188,162 @@ tokenizer (50k) e budget diversi e la valutazione del paper è grading GPT-4, no
 confronto contro numeri altrui sarebbe invalido by design.
 
 ### D6 — Parità e statistica minima
-**Decisione.** Confronti a parità di parametri (±5%) e di token budget; ogni configurazione
-con ≥2-3 seed; si riportano media e range, e il segno del risultato si dichiara sempre (anche
-se negativo per l'ipotesi oscillatoria).
+**Decisione.** Confronti a parità di **backbone** (±5%): tutti i parametri esclusa la matrice
+di embedding dei token (8192×256 = 2,10M, identica per costruzione in ogni braccio e legata
+alla testa). Il position embedding conta nel backbone del transformer — "come si rappresenta
+l'ordine" è parte del meccanismo confrontato — quindi una variante che non lo usa può
+rispendere quel budget nei propri layer. Riferimento congelato: backbone baseline =
+**6.449.664** parametri; enforcement nel codice (`train.py` rifiuta di partire fuori dal ±5%).
+Scartato: parità sul totale (la tolleranza si scaricherebbe tutta sulla parte che differisce,
+±6,8% effettivo, e i 131k di position embedding resterebbero non regolati). Parità anche di
+token budget; **minimo 3 seed**
+per configurazione (2 non bastano: la regola di verdetto scatterebbe per puro caso ~1 volta
+su 6); prima della griglia, 5 seed della sola baseline per misurare σ della val loss, che
+fissa la banda di equivalenza ε di D7. Si riportano media e range, e il segno del risultato
+si dichiara sempre (anche se negativo per l'ipotesi oscillatoria).
+
+**Ricetta di training (parità di ricetta, non solo di conteggio).** Regola simmetrica per
+categoria di parametro, identica per tutte le braccia, cablata in `configure_optimizers`
+(`src/lit_module.py`): AdamW betas (0.9, 0.95), weight decay 0,1 **solo sulle matrici dense**;
+zero su bias, gain di normalizzazione, embedding e **parametri di stato** — frequenze,
+smorzamento, passi di discretizzazione degli oscillatori, dichiarati da ogni architettura via
+contratto `state_parameters()` del registry (il transformer ritorna vuoto). È la ricetta
+canonica di entrambe le famiglie (GPT non decade norm/bias; S4/S5/LinOSS non decadono A e dt).
+**Learning rate: mini-sweep pre-registrato per braccio.** Per ogni architettura (baseline
+inclusa, stesso trattamento): 3 valori {1e-4, 3e-4, 1e-3}, 1 seed, budget ridotto a ~20M token,
+selezione sulla val loss; il valore vincente si congela per la griglia. Le run di sweep non
+sono risultati scientifici: vivono su W&B, non nel registro.
+**Scartato.** Ricetta del transformer per tutti i bracci (decay sui parametri di stato =
+prior contro il meccanismo in prova; il codice ufficiale LinOSS addestra senza decay); lr
+unico non tunato (un esito negativo resterebbe attaccabile come "lr sbagliato per la
+famiglia"); tuning completo per braccio (il budget esplode e la parità di compute salta).
 **Perché.** A questa scala il rumore tra seed è materiale; un vantaggio architetturale
 dichiarato su una singola run non è un risultato. Il costo è sostenibile (run da ~30-60 min su
 GPU cloud).
+
+### D7 — Apparato di valutazione stadio 1: loss + giudice LLM (scoring e Elo indipendenti)
+**Decisione.** Tre strumenti, congelati prima di ogni run scientifica:
+1. **Val loss** (nats/token) ad apparato congelato — metrica primaria del confronto interno.
+   **BPB** (formula Pile) solo come aggancio esterno, con àncora calcolata da noi su stories15M.
+2. **Giudice LLM**: `claude-opus-5` (ID fisso, senza suffisso di data), giudizio cieco (mai
+   il nome dell'architettura, ordine randomizzato), su completamenti dei prompt ufficiali
+   TinyStories (`Evaluation prompts.yaml` — con lo spazio — nel repo HF del dataset).
+   **L'API attuale non espone sampling né seed** (temperature/top_p/top_k rimossi su Opus 5:
+   400 se inviati; thinking adattivo di default): il determinismo del giudice non è
+   richiedibile e si sostituisce con protocollo — (i) output strutturato via
+   `output_config.format` con JSON schema validato (score e verdetti tipizzati, zero parsing
+   di testo libero); (ii) effort dichiarato e fisso per tutta la campagna (`medium`);
+   (iii) doppio ordine per coppia, inversione = pareggio; (iv) self-agreement del giudice
+   misurata su un sottoinsieme ripetuto e riportata; (v) tutte le braccia giudicate nella
+   stessa finestra via Batches API (−50% di costo): l'invarianza dello strumento *tra le
+   braccia* conta più della riproducibilità assoluta nel tempo.
+   Due strumenti **indipendenti**: (a) scoring assoluto multi-asse
+   1-10 (grammar / consistency / plot / creativity) — misura la qualità in sé e aggancia la
+   scala GPT-Eval del paper; (b) confronti pairwise ciechi A/B aggregati in rating Elo
+   (fit Bradley-Terry, indipendente dall'ordine delle partite) — misura la discriminazione
+   tra braccia. Il prompt set è **stratificato per lunghezza del prefisso** (corto ~50 token
+   vs lungo 200-300, dove vive la scala narrativa di D4): score e Elo si riportano anche per
+   strato, così la tenuta a lungo raggio è misurata dentro questo apparato.
+3. **Pipeline BabyLM (BLiMP ecc.): solo stadio 2.** Allo stadio 1 il lessico è fuori dominio
+   per modelli a lessico infantile; i valori sarebbero depressi e non decisionali.
+
+**Protocollo di generazione (congelato, identico per tutte le braccia).** Quello del GPT-Eval
+originale: **temperatura 1, 10 completamenti per prompt**, nessun troncamento — il paper non ne
+dichiara alcuno (arXiv:2305.07759 §3, verificato: zero occorrenze di top-k/top-p), e i loro
+stessi modelli 1-33M generavano inglese coerente così. `max_new_tokens` 200 con stop a
+`<|endoftext|>`, totale entro la finestra 512 della baseline. Seed di generazione derivato da
+(arch, seed della run, prompt, indice del completamento); poiché PyTorch non garantisce
+riproducibilità cross-piattaforma (docs/notes/randomness), l'àncora vera è che **i testi
+generati si salvano come artefatti versionati**: ogni giudizio è ri-eseguibile su testi
+identici. Scartati con motivo: temp 0,8/top-k 40 (nessuna fonte lo usa — era un falso
+ricordo); beam 5 deterministico (commento HF informale dell'autore, contraddice il testo del
+paper e misura la moda, non la distribuzione); top-p 0,9 (convenzione llama2.c, non del paper).
+
+**Prompt set: due strati, entrambi versionati in repo.** Strato corto = i 44 prompt ufficiali
+(`Evaluation prompts.yaml`; mediana 59 token, max 118) — unico ponte col GPT-Eval del paper.
+Strato lungo = **50 prefissi** da 250-300 token ritagliati dalle storie del val set V2 con
+lunghezza ≥400 token (pool: 1.046 storie; resta ≥100 token di continuazione vera da giudicare),
+selezione con seed dichiarato. Il file dei prompt è apparato di misura come il tokenizer (D3).
+
+**Mappa generazione→giudizio (scelte nostre, senza precedente pubblicato: si dichiarano).**
+Pairwise: verdetto **set-vs-set** — un giudizio per (coppia, prompt, ordine) con tutti i 10
+completamenti per lato nello stesso prompt; i blocchi A/B si scambiano tra i due ordini,
+l'ordine intra-blocco si mescola con seed; la rubric istruisce a giudicare la qualità
+complessiva del set, non il singolo migliore/peggiore (mitiga la salienza degli outlier,
+comunque simmetrica tra braccia). Razionale: a temp 1 × 10 il measurand è la *distribuzione*
+del modello e il verdetto sul set la misura direttamente; accoppiare i completamenti uno-a-uno
+(10 match per prompt) darebbe un guadagno di potenza illusorio — i match sullo stesso prompt
+della stessa run sono correlati e il bootstrap clusterizzato li tratta come tale — mentre
+20 storie per verdetto riducono il rumore per match a parità di confronti. Perdita accettata:
+la win-rate per singolo completamento (la copre lo scoring). Scoring: **una chiamata per
+(prompt, braccio, run)** che restituisce l'array dei 10 vettori di score per-completamento —
+mai uno score aggregato sul set: gli score individuali servono al check score↔lunghezza e
+all'aggancio GPT-Eval, che è per-completamento. Ordine dei 10 mescolato con seed;
+l'ancoraggio intra-chiamata è rumore condiviso, non bias tra braccia (ogni chiamata è
+mono-braccio, procedura identica ovunque).
+
+**Dettagli del giudice, ciascuno con la sua fonte.** Swap d'ordine obbligatorio, inconsistenza
+= tie (MT-Bench, arXiv:2306.05685: position bias fino al 75% su giudici deboli). Bradley-Terry
+via MLE, mai Elo sequenziale, tie = ½ vittoria + ½ sconfitta (Chatbot Arena, arXiv:2403.04132).
+Rating sempre con CI bootstrap; nel nostro caso il bootstrap è clusterizzato sulle run —
+scelta nostra, più severa dei protocolli pubblicati che ricampionano i singoli match, perché
+la nostra unità di replicazione è il seed. Scoring assoluto con **rubric ancorata per fascia**
+sulle dimensioni del paper (grammar/consistency/plot/creativity): l'ancoraggio è l'intervento
+con più evidenza di impatto (Prometheus, arXiv:2310.08491); l'aggancio assoluto alla scala
+GPT-4 del paper è comunque rotto dal cambio di giudice, e si dichiara. Length bias: controllato
+per costruzione (cap uniforme su tutte le braccia) + check diagnostico della correlazione
+residua score↔lunghezza (razionale di AlpacaEval 2 LC, arXiv:2404.04475). La **self-agreement
+su sottoinsieme ripetuto è un'aggiunta nostra**, non una pratica pubblicata: si dichiara come
+scelta originale. Numerosità: nessuna regola pubblicata per coppia; 94 prompt
+(44 corto + 50 lungo) × 2 ordini = **188 verdetti set-vs-set per coppia** (88 corto +
+100 lungo), sul totale sopra l'euristica di potenza (~150-200 per risolvere ~100 punti Elo);
+per strato decide comunque il CI, non il rating puntuale.
+
+**Regola di verdetto (pre-registrata, esaustiva).** Ogni esito della griglia cade in una e
+una sola cella della tabella; il verdetto è scritto qui, prima di qualunque numero.
+
+*Stati dell'asse loss* (primario, per braccio vs baseline): **L+**/**L−** = test di
+permutazione esatto sulla differenza delle medie, unilaterale, α=0,05 per braccio (con 3v3:
+la differenza osservata è la più estrema delle 20 permutazioni); **L=** = non significativo
+e |Δmedie| ≤ ε, con **ε = σ della baseline** misurata con 5 seed prima della griglia;
+*indeterminato* (non significativo, |Δ| > ε) → escalation pre-registrata: +2 seed per
+braccio, una sola volta; se resta indeterminato si riporta come tale. Il familywise sui
+bracci confrontati si dichiara nella scrittura dei risultati.
+
+*Stati dell'asse Elo, strato lungo*: ogni coppia giudicata in entrambi gli ordini
+(inversione = pareggio, neutralizza il position bias); CI 95% della differenza di rating
+Bradley-Terry via bootstrap clusterizzato sulle run (unità di replicazione = seed).
+**E+**/**E−** = CI esclude lo zero; **E=** = lo include ("non distinguibile con questo
+apparato", non "uguali"). Lo strato corto non è un cancello: si riporta sempre e etichetta
+la vittoria (corto pari → vantaggio *specifico* long-range; corto superiore → *generale*).
+Eccezione: se lungo E+ ma corto E−, la vittoria decade a "mista" (trade-off, non vantaggio).
+
+| | E+ (lungo superiore) | E= (indistinguibile) | E− (lungo inferiore) |
+|---|---|---|---|
+| **L+** | Supportata — esito forte → stadio 2 | Supportata via (a), specificità non dimostrata → stadio 2 | Supportata via (a), qualità in tensione → stadio 2 con riserva, prima diagnosi |
+| **L=** | Supportata via (b), l'esito più interessante → stadio 2 | **Non supportata da questo apparato** (≠ "nessun effetto"); negativo pubblicato, niente stadio 2 | Falsificata sul lato qualità |
+| **L−** | Mista, non supportata come formulata; segnale esplorativo per eventuale nuova ipotesi | Falsificata | Falsificata — esito netto |
+
+**Probe di riserva = solo diagnostica.** Name-cloze a distanza, ablazione del contesto e
+analisi spettrale possono essere eseguiti su qualunque esito come diagnostica esplorativa,
+ma **non cambiano mai il verdetto dello stadio 1**: un loro eventuale segnale diventa
+l'ipotesi di un nuovo esperimento pre-registrato, mai una vittoria retroattiva. Il controllo
+strutturale contro i falsi positivi resta D1: la variante promossa deve replicare su
+BabyLM/BLiMP.
+
+**Scartato.** Benchmark name-cloze a distanza e ablazione del contesto (Khandelwal 1805.04623)
+come strumenti di stadio 1 — scelta di semplicità dell'apparato; restano candidati per
+ablazioni future (precedenti citabili in § Ancore). BLiMP a stadio 1 (mismatch di dominio).
+Scoring-only o pairwise-only (le due misure rispondono a domande diverse: qualità assoluta vs
+discriminazione). Pairwise a completamento singolo campionato (standard MT-Bench/Arena, ma
+verdetti più rumorosi a parità di match e nessun guadagno statistico col bootstrap
+clusterizzato); match uno-a-uno sui 10 completamenti (costo ×10 per potenza effettiva quasi
+nulla, vedi Mappa generazione→giudizio).
+
+**Riconsiderare se.** L'apparato produce sistematicamente esiti "indeterminato" anche dopo
+l'escalation (σ tra seed più grande del previsto): allora il problema è la potenza, e si
+riapre la questione del numero di seed o del budget — mai la tabella dei verdetti a
+posteriori.
 
 ---
 
@@ -157,10 +354,6 @@ GPU cloud).
   multiple apprese)? Wave-RNN? Ibrido attention+oscillatori (dove l'ablazione isola il
   contributo oscillatorio)? Da decidere in brainstorming con criterio: il meccanismo deve
   essere isolabile in un'ablazione (principio HRM/TRM).
-- **Q2 — Ipotesi falsificabile e probe.** La val loss non basta: servono probe che tocchino la
-  *specificità* oscillatoria — es. dipendenze a lungo raggio (coerenza dei nomi dei personaggi
-  a 100-300 token, dove vive la scala narrativa misurata in D4), degradazione con la distanza,
-  eventuale analisi spettrale degli hidden state. Da definire prima di scrivere le architetture.
 - **Q3 — Granularità temporale come ablazione futura.** Char-level (~4× più passi, dipendenze
   stirate: test più severo per la memoria oscillatoria) o chunking appreso stile H-Net. Fuori
   dallo scope dello stadio 1; richiede baseline dedicate.

@@ -34,8 +34,8 @@ Resume da checkpoint provato in locale (ripresa dallo step 1001 con loss in cont
 
 ## Note residue
 
-- I token HF e Kaggle sono transitati in chiaro nei log della sessione di setup: se i log
-  vengono condivisi, rigenerarli (HF settings/tokens; Kaggle settings/API).
+- I token HF e Kaggle sono transitati in chiaro nei log della sessione di setup (fatto
+  storico; l'azione di rigenerarli è tracciata nella BOARD, non qui).
 - La cancellazione dei vecchi progetti W&B 2021 è stata fatta da UI (l'MCP è read-only e
   il bearer token MCP non autentica la Models API).
 - Stima pre-collaudo M2 vs realtà T4: il fattore è ~22× — le stime di budget dello stadio 1

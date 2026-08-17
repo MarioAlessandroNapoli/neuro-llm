@@ -2,7 +2,7 @@
 
 Esperimenti di architetture neuro-ispirate per language model piccoli (8-33M parametri),
 addestrati from scratch su TinyStories. Confronto a parità di setup: transformer baseline
-vs varianti oscillatorie (LinOSS, Wave-RNN — in arrivo).
+vs varianti oscillatorie (LinOSS, D-LinOSS, Wave-RNN — in arrivo).
 
 ## Struttura
 
