@@ -1,0 +1,5 @@
+lightning>=2.6
+wandb
+tokenizers
+huggingface_hub
+numpy
