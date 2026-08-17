@@ -119,6 +119,7 @@ def main():
         logger.log_hyperparams({**vars(args), "n_params": n_params, **cfg.__dict__})
 
     trainer = L.Trainer(
+        devices=1,
         max_steps=max_steps,
         max_time=args.max_time,
         precision=args.precision,
