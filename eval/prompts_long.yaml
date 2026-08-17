@@ -1,0 +1,1315 @@
+selection_seed: 20260817
+pool_size: 1046
+rule: primi 300 token, troncati all'ultimo whitespace; storie ≥400 token
+prompts:
+- id: long-01
+  story_index: 611
+  n_tokens: 299
+  text: ' Ben and Mia are friends. They like to play in the park on Tuesday. They have a ball and a bat.
+    They take turns to hit the ball with the bat. They call it strike.
+
+    One Tuesday, Ben and Mia go to the park. They see a big dog. The dog is brown and furry. It has a
+    long tail. The dog runs to them and barks. Ben and Mia are scared. They drop the ball and the bat.
+
+    "Go away, dog!" Ben says. "We want to play strike!"
+
+    The dog does not go away. It picks up the ball in its mouth. It wags its tail. It thinks Ben and Mia
+    want to play with it.
+
+    "Hey, that''s our ball!" Mia says. "Give it back, dog!"
+
+    The dog does not give it back. It runs away with the ball. Ben and Mia chase the dog. They run and
+    run. They cannot catch the dog.
+
+    They see a man. The man is the dog''s owner. He is sitting on a bench. He is reading a book. He does
+    not see the dog or the children.
+
+    "Excuse me, sir!" Ben says. "Your dog has our ball!"
+
+    The man looks up. He sees the dog and the children. He smiles. He thinks they are silly.
+
+    "I''m sorry, kids," he says. "My dog likes to play, too. He does not know he is'
+- id: long-02
+  story_index: 1586
+  n_tokens: 298
+  text: ' Sara liked to imagine things. She imagined she was a princess, a doctor, a teacher, and many
+    other things. She liked to play with her toys and make up stories. She had a lot of fun.
+
+    One day, she wanted to play with her brother Tom. Tom was older and liked to read books and play games.
+    Sara asked him, "Tom, can you play with me? I want to imagine things with you."
+
+    Tom looked at his book and said, "Not now, Sara. I am busy reading. Maybe later."
+
+    Sara felt sad. She wanted to play with Tom. She asked him again, "Please, Tom, can you play with me?
+    I have a lot of things to imagine."
+
+    Tom got annoyed and said, "Sara, stop bothering me. I said not now. Go away and play by yourself."
+
+    Sara felt angry. She thought Tom was mean. She grabbed his book and threw it on the floor. She said,
+    "You are a bad brother. You don''t care about me. You are selfish."
+
+    Tom got angry too. He yelled at Sara and pushed her. He said, "You are a bad sister. You don''t respect
+    me. You are rude."
+
+    They started to fight and cry. Their mom heard them and came to see what was wrong. She saw the book
+    on the floor and the toys scattered. She saw Tom and Sara with red faces and tears. She said,'
+- id: long-03
+  story_index: 1910
+  n_tokens: 299
+  text: ' Lily and Tom were playing in their room. They had many toys and books and dolls. They liked
+    to make stories with them and have fun. But they had to be careful not to disturb Mom and Dad. Mom
+    and Dad were working in the other room. They had big papers and pens and computers. They needed quiet
+    and peace.
+
+    One day, Lily and Tom found a big chest in the closet. It was brown and old and had a lock. They wondered
+    what was inside. They wanted to open it and see. They tried to pull it out, but it was heavy and hard.
+    They pushed and pulled and dragged it to the floor. It made a loud noise. Bang!
+
+    Mom and Dad heard the noise and came to the room. They saw Lily and Tom and the chest. They were not
+    happy. They said, "What are you doing? You disturbed us! You could have hurt yourselves! This chest
+    is not a toy. It has important things inside. Things from Grandma and Grandpa. You have to be careful
+    with it. Put it back in the closet and leave it alone."
+
+    Lily and Tom felt sorry. They did not mean to disturb Mom and Dad. They did not know the chest was
+    special. They said, "We are sorry, Mom and Dad. We were curious. We wanted to see what was inside.
+    We will put it back and not touch it again."
+
+    Mom and Dad hugged Lily and Tom. They said,'
+- id: long-04
+  story_index: 2406
+  n_tokens: 299
+  text: ' Lily and Ben were playing in the park. They liked to slide, swing and run. They saw a big chest
+    under a tree. It was brown and had a lock.
+
+    "Look, a chest!" Lily said. "Maybe it has toys inside."
+
+    "Let''s open it," Ben said. He tried to pull the lock, but it was too hard.
+
+    "Maybe we need a key," Lily said. She looked around and saw a man sitting on a bench. He had a hat
+    and a coat. He was reading a book.
+
+    "Excuse me, sir," Lily said. "Do you have the key for the chest?"
+
+    The man looked at Lily and smiled. He put down his book and took out a key from his pocket.
+
+    "I do have the key," he said. "But it is not for free. You have to pay me something."
+
+    "What do you want?" Ben asked.
+
+    The man thought for a moment. He was feeling thirsty. He saw a water fountain nearby.
+
+    "I want a drink of water," he said. "If you bring me a cup of water, I will give you the key."
+
+    Lily and Ben nodded. They ran to the water fountain and filled a cup with water. They brought it back
+    to the man.
+
+    "Here you go, sir," Lily said. "A cup of water for you."
+
+    "Thank you, children," the man said. He drank'
+- id: long-05
+  story_index: 2940
+  n_tokens: 299
+  text: ' Lily wanted to see what was in the cabinet. She knew her mom kept some yummy things there, like
+    cookies and candy. But the cabinet was too high for her to reach. She needed a stool or a chair to
+    stand on.
+
+    She looked around the kitchen and saw a stool by the table. She dragged it to the cabinet and climbed
+    on it. She raised her hand and opened the cabinet door. She smiled when she saw a big jar of cookies.
+    They looked so crunchy and sweet.
+
+    She reached for the jar, but it was too heavy for her. She tried to pull it out, but it slipped from
+    her fingers and fell to the floor. The jar broke and the cookies scattered everywhere. Lily gasped
+    and felt scared. She knew her mom would be angry.
+
+    She heard her mom coming from the living room. She quickly jumped off the stool and hid behind the
+    couch. She hoped her mom would not see her or the mess.
+
+    Her mom walked into the kitchen and saw the broken jar and the cookies. She frowned and said, "Oh
+    no, what happened here?" She looked around and saw the stool by the cabinet. She guessed what had
+    happened. She walked to the couch and peeked behind it. She saw Lily crouching there, looking guilty
+    and sad.
+
+    She knelt down and said, "Lily, did you do this?" Lily nodded and said, "I''m sorry, mom. I wanted
+    a cookie." Her mom sighed and said,'
+- id: long-06
+  story_index: 3135
+  n_tokens: 299
+  text: ' Sara loves to play with her toys. She has many toys in her room. She has dolls, cars, blocks,
+    and books. She likes to make stories with her toys. She pretends they are her friends.
+
+    One day, Sara is playing with her dolls. She makes them have a tea party. She gives them cups and
+    plates. She says, "Here you go, Anna. Here you go, Elsa. Do you like the tea? It is very yummy." She
+    makes them nod and smile.
+
+    Then, Sara hears a noise. She looks under her bed. She sees something moving. She is curious. She
+    moves her dolls aside. She crawls under the bed. She discovers a sock. It is not her sock. It is a
+    big sock. It is blue and green. It has stripes. It has a hole. She wonders who it belongs to.
+
+    She picks up the sock. She hears another noise. She sees a tail. It is a furry tail. It is brown and
+    white. It wags. She follows the tail. She finds a dog. It is a small dog. It is hiding under the bed.
+    It looks scared. It shivers. It has no collar. It has no name.
+
+    Sara feels sorry for the dog. She says, "Hello, dog. Are you lost? Are you cold? Do you want to be
+    my friend?" She holds out the sock. The dog sniffs the sock. It licks the'
+- id: long-07
+  story_index: 3381
+  n_tokens: 299
+  text: ' Bella loved animals. She wanted to be a veterinarian when she grew up. She liked to read books
+    about animals and ask questions to her mom and dad.
+
+    One day, she went to the library with her mom. She saw a big book with a picture of a lion on the
+    cover. She wanted to read it. She asked her mom, "Can I borrow this book, please?"
+
+    Her mom looked at the book. It had many hard words that Bella could not read. She said, "This book
+    is too difficult for you, honey. Why don''t you choose another one?"
+
+    Bella was frustrated. She really wanted to learn about lions. She said, "But I want to know how lions
+    live, and what they eat, and how they roar. Please, mom, let me have this book."
+
+    Her mom smiled. She had an idea. She said, "How about we go to the zoo tomorrow? There is a veterinarian
+    there who takes care of the lions. Maybe he can answer your questions."
+
+    Bella was happy. She said, "Yes, yes, yes! Thank you, mom. I can''t wait to meet the veterinarian
+    and the lions."
+
+    The next day, they went to the zoo. They saw many animals, but Bella was most excited to see the lions.
+    They were big and beautiful and loud. She saw a man wearing a white coat and a hat. He was holding
+    a clipboard and a stethoscope. He was'
+- id: long-08
+  story_index: 3397
+  n_tokens: 299
+  text: ' Lily liked to study books with pictures and words. She wanted to learn many things. She had
+    a neighbor named Tom who also liked to study books. They sometimes studied together and shared their
+    books.
+
+    One day, Lily found a big book with many pictures and words. It was about animals and plants and places.
+    She was very happy and wanted to show it to Tom. She ran to his house and knocked on the door.
+
+    "Tom, Tom, look what I have!" she said, holding the book.
+
+    Tom opened the door and saw the book. He was impressed by the book. He wanted to see it and study
+    it.
+
+    "Wow, Lily, that is a very impressive book. Can I see it?" he asked.
+
+    "Sure, Tom, we can study it together. Come on, let''s go to my house," Lily said.
+
+    They went to Lily''s house and sat on the floor. They opened the book and looked at the pictures and
+    words. They saw lions and elephants and giraffes. They saw mountains and rivers and forests. They
+    saw many things they did not know.
+
+    They were so busy studying the book that they did not hear Lily''s mom calling them for lunch. They
+    did not hear Lily''s dad coming home from work. They did not hear Lily''s dog barking.
+
+    They only heard a loud noise when Lily''s dad stepped on the book by accident. He did not see the
+    book on the floor. He was'
+- id: long-09
+  story_index: 3716
+  n_tokens: 298
+  text: ' Sara and Tom were playing in the park. They liked to run and jump and slide. They saw a big
+    tree with many acorns on the ground. Sara wanted to collect them and put them in her basket. Tom wanted
+    to throw them and see how far they could go.
+
+    "Look, Sara, I can speed this acorn very far!" Tom said. He picked up an acorn and threw it as hard
+    as he could. The acorn flew in the air and hit a bird that was sitting on a branch. The bird cried
+    out and flew away.
+
+    "Tom, that was not nice!" Sara said. "You hurt the bird. The acorns are not for throwing. They are
+    for the squirrels and the birds to eat. They need them for the winter."
+
+    Tom did not listen. He threw another acorn and hit a squirrel that was running on the grass. The squirrel
+    squeaked and ran away.
+
+    "Tom, stop it!" Sara said. "You are scaring the animals. They are our friends. They live in the park.
+    We should be kind to them."
+
+    Tom did not care. He threw another acorn and hit a boy who was riding a bike. The boy lost his balance
+    and fell off his bike. He scraped his knee and started to cry.
+
+    "Tom, look what you did!" Sara said. "You hurt the boy. The acorns are not for hurting. They are for
+    sharing. We should be nice to other people."
+
+    Tom felt'
+- id: long-10
+  story_index: 4018
+  n_tokens: 299
+  text: ' Sara liked to play with her mom''s jewelry. She liked the shiny rings and necklaces and bracelets.
+    She liked to pretend she was a princess or a fairy. One day, she found a new jewelry box in her mom''s
+    room. It had a lock and a key. Sara was curious. She wanted to see what was inside.
+
+    She took the key and opened the box. Inside, she saw many colorful candies. They looked like jewels,
+    but they smelled sweet and yummy. Sara thought they were for her. She took one and put it in her mouth.
+    It was hard and crunchy and sour. Sara made a face. She did not like it. She spit it out and tried
+    another one. It was soft and chewy and sweet. Sara liked it. She ate it and took another one.
+
+    She did not know that the candies were not candies. They were pills. They were for her mom, who was
+    sick. They helped her mom feel better. But they were not good for Sara. They made her feel sick. She
+    ate too many. She started to feel dizzy and sleepy and sick. She lay down on the bed. She felt very
+    bad.
+
+    Her mom came home and saw Sara on the bed. She saw the open jewelry box and the pills on the floor.
+    She was scared. She called the doctor. She hugged Sara and told her she loved her. She told her not
+    to eat the jewelry. She told her it was not candy. It'
+- id: long-11
+  story_index: 4078
+  n_tokens: 299
+  text: ' Tim and Sue wanted to play in the backyard. They liked to run and jump and swing on the big
+    tree. But they had a problem. There was a big fence around the backyard. The fence was very high and
+    tight. They could not climb over it or crawl under it.
+
+    They asked their mom if they could go outside. Mom said no. She said there was a mean dog on the other
+    side of the fence. The dog did not like children. He would bark and bite and chase them. Mom said
+    they had to stay inside and play with their toys.
+
+    Tim and Sue were sad and bored. They did not want to play with their toys. They wanted to play in
+    the backyard. They had an idea. They found a big box in the garage. They cut a hole in the box. They
+    put the box over the fence. They thought they could use the box as a tunnel to get to the other side.
+
+    They pushed the box over the fence. They climbed into the box. They crawled through the hole. They
+    were very happy. They thought they were very clever. They did not listen to their mom. They did not
+    see the mean dog.
+
+    The mean dog saw them. He was very angry. He did not like strangers in his backyard. He ran towards
+    them. He barked and bit and chased them. Tim and Sue were very scared. They tried to run back to the
+    box. But the box was too far. The dog was'
+- id: long-12
+  story_index: 4355
+  n_tokens: 299
+  text: ' Anna and Ben were twins. They liked to play with their toys, but sometimes they fought. One
+    day, they both wanted to play with the same toy. It was a big red car that could rock back and forth.
+
+    "I saw it first!" Anna said. She grabbed the car and hugged it to her chest.
+
+    "No, I did!" Ben said. He tried to pull the car away from Anna. They both pulled hard and shouted.
+
+    "Stop it, you two!" Mom said. She came into the room and saw the twins fighting. "You need to share
+    the car. It is not nice to fight over toys."
+
+    "But I want it!" Anna said. She was stubborn and did not want to let go.
+
+    "So do I!" Ben said. He was stubborn too and did not want to give up.
+
+    Mom sighed. She knew the twins loved each other, but sometimes they forgot. She had an idea. She took
+    a small pink heart from her pocket and showed it to the twins.
+
+    "Look, this is a special heart," she said. "It is a magic heart. It can make you happy and kind. But
+    it only works if you share it with someone you love. Do you want to try it?"
+
+    Anna and Ben looked at the heart. It was shiny and pretty. They both wanted to touch it.
+
+    "OK, Mom," Anna said. She let go of the car and reached'
+- id: long-13
+  story_index: 4547
+  n_tokens: 298
+  text: ' Ben and Lily were having breakfast with their mom and dad. They liked to eat toast and eggs
+    and juice. But today, mom had a surprise for them. She put a big plate of sausages on the table.
+
+    "Look, kids, I made some sausages for you. They are very yummy and good for you. Do you want to try
+    some?" mom asked.
+
+    Ben''s eyes lit up. He loved sausages. He reached for the plate and took the biggest sausage he could
+    find. It was enormous. He bit into it and smiled.
+
+    "Mmm, this is delicious, mom. Thank you!" he said.
+
+    Lily looked at the plate and frowned. She did not like sausages. She thought they were gross and smelly.
+    She pushed her plate away and shook her head.
+
+    "No, thank you, mom. I don''t want any sausages. I only want toast and eggs and juice," she said.
+
+    Mom and dad looked at each other. They knew that Ben and Lily sometimes disagreed about food. They
+    wanted them to eat a balanced diet and try new things.
+
+    "Lily, why don''t you give the sausages a chance? They are not gross or smelly. They are made of meat
+    and spices and herbs. They have a lot of protein and iron. They will make you strong and healthy,"
+    dad said.
+
+    Lily still did not want to try the sausages. She crossed her arms and pouted.
+
+    "No,'
+- id: long-14
+  story_index: 5175
+  n_tokens: 299
+  text: ' Tom and Lily were friends who liked to play in the garden. They had a little red wagon that
+    they used to deliver flowers and fruits to their neighbors. One day, they picked some roses and apples
+    from the garden and put them in the wagon.
+
+    "Let''s go deliver these to Mrs. Lee, she is very nice and always gives us cookies," Tom said.
+
+    "Okay, but we have to be careful, there is a big dog on the way," Lily said.
+
+    They pulled the wagon along the path, but when they reached the gate of Mrs. Lee''s house, they heard
+    a loud bark. It was the big dog, and he did not look friendly. He ran towards them, growling and showing
+    his teeth.
+
+    "Help, help, the dog is chasing us!" Tom and Lily shouted.
+
+    They turned around and ran back to the garden, but the dog was faster. He caught up with them and
+    jumped on the wagon, making it tip over. The roses and apples fell on the ground, and the dog started
+    to eat them.
+
+    "Stop, stop, those are not for you, those are for Mrs. Lee!" Tom and Lily cried.
+
+    But the dog did not listen, he was too hungry and greedy. He ate all the roses and apples, and then
+    licked his lips. He looked at Tom and Lily and wagged his tail, as if he wanted to play.
+
+    "Go away, go away, you are a'
+- id: long-15
+  story_index: 5228
+  n_tokens: 298
+  text: ' Anna and Ben were friends who liked to play in the park. They liked to run on the grass, swing
+    on the swings, and slide on the slide. Sometimes they also liked to throw pebbles in the pond and
+    watch the ripples.
+
+    One day, they found a big pile of pebbles near the pond. They thought it would be fun to throw them
+    all in the water. They picked up some pebbles and started to toss them.
+
+    "Look, Anna, I can throw farther than you!" Ben said.
+
+    "No, you can''t, Ben, I can throw farther than you!" Anna said.
+
+    They threw and threw, trying to outdo each other. They did not notice that some of the pebbles hit
+    the ducks and the fish in the pond. The ducks and the fish were scared and hurt by the pebbles. They
+    tried to swim away, but some of them could not.
+
+    A man who was walking his dog saw what Anna and Ben were doing. He came over and said, "Stop, stop,
+    what are you doing? Don''t you see that you are hurting the animals in the pond? They are living things,
+    just like you. How would you like it if someone threw pebbles at you?"
+
+    Anna and Ben stopped and looked at the pond. They saw the ducks and the fish that were hit by the
+    pebbles. They felt sorry for them. They realized that they were wrong to throw pebbles at them.
+
+    "We''re sorry,'
+- id: long-16
+  story_index: 5590
+  n_tokens: 299
+  text: ' Ben and Lily were playing in the garden. They liked to dig in the dirt and find things. Sometimes
+    they found worms, sometimes they found stones, sometimes they found shiny things.
+
+    One day, they found something black and hard. It was not a stone, and it was not shiny. It was coal.
+    Ben and Lily did not know what coal was. They thought it was a toy.
+
+    "Look, Lily, I found a toy!" Ben said, holding the coal in his hand.
+
+    "Let me see, Ben!" Lily said, reaching for the coal.
+
+    But Ben did not want to share. He wanted to keep the coal for himself. He pinched Lily''s hand when
+    she tried to take it.
+
+    "Ow, Ben, that hurts!" Lily cried, pulling her hand away.
+
+    "Mine, mine, mine!" Ben shouted, holding the coal tightly.
+
+    Lily was angry and sad. She did not like Ben anymore. She ran to their mom, who was sitting on a bench.
+
+    "Mom, Ben pinched me!" Lily said, showing her hand.
+
+    Mom looked at Lily''s hand. She saw a red mark. She was serious.
+
+    "Ben, come here!" Mom called.
+
+    Ben came, still holding the coal. He looked scared.
+
+    "Ben, did you pinch Lily?" Mom asked.
+
+    Ben nodded. He knew he did something bad.
+
+    "Why did you do that, Ben?" Mom asked.'
+- id: long-17
+  story_index: 7168
+  n_tokens: 299
+  text: ' Lily and Ben are twins. They like to play with their toys in the living room. But today, Mom
+    says they have to bathe. She says they are dirty and smelly.
+
+    "No, no, no!" Lily and Ben say. They do not want to bathe. They want to play more. They run away from
+    Mom and hide under the sofa.
+
+    Mom looks for them. She sees their feet sticking out. She says, "Lily and Ben, come out now. It is
+    time to bathe. You have to wash your body with soap and water. It will make you clean and fresh."
+
+    Lily and Ben shake their heads. They say, "No, no, no! We do not like to bathe. It is cold and wet.
+    It makes us cry."
+
+    Mom sighs. She says, "Please, Lily and Ben, listen to me. Bathing is good for you. It is fun and relaxing.
+    You can play with your rubber ducks and bubbles. You can sing and splash. You can choose your favorite
+    shampoo and towel. I will help you and hug you."
+
+    Lily and Ben peek out from under the sofa. They see Mom''s smile. They see the rubber ducks and bubbles.
+    They see the shampoo and towel. They think maybe bathing is not so bad. They say, "OK, Mom, we will
+    bathe. But can we play a little more after?"
+
+    Mom nods. She says, "Yes, you can play'
+- id: long-18
+  story_index: 7353
+  n_tokens: 299
+  text: ' Sam and Lily are friends. They like to play outside. One day, they see a big puddle. It is wet
+    and shiny.
+
+    "Look, Lily, a puddle!" Sam says. "Let''s jump in it!"
+
+    "OK, Sam, that sounds fun!" Lily says. She takes off her shoes and socks. Sam does the same.
+
+    They run to the puddle and jump in it. Splash! Splash! Splash! The water is cold and wet. They laugh
+    and splash each other.
+
+    "Sam, you are so wet!" Lily says. "Your hair is wet, your shirt is wet, your pants are wet!"
+
+    "So are you, Lily!" Sam says. "You are wet from head to toe!"
+
+    They jump and splash some more. They have a lot of fun.
+
+    Then, they hear a voice. It is Sam''s mom. She is looking for them.
+
+    "Sam, Lily, where are you?" she calls.
+
+    "Here, mom, we are here!" Sam says. He and Lily get out of the puddle. They are dripping wet.
+
+    Sam''s mom sees them. She is not happy.
+
+    "Sam, Lily, what are you doing?" she asks. "You are wet and dirty! You need to change your clothes!"
+
+    "Sorry, mom, we were playing in the puddle," Sam says. "It was fun!"
+
+    "But, Sam, you can''t play in the'
+- id: long-19
+  story_index: 7354
+  n_tokens: 299
+  text: ' Tim and Kim are twins. They like to play with blocks. They have many blocks of different shapes
+    and colors. They can make towers, houses, cars and animals with their blocks.
+
+    One day, they have a new friend, Sam, who comes to play with them. Sam has a big bag of blocks too.
+    He says he can make anything with his blocks. He is very proud of his blocks.
+
+    Tim and Kim show Sam their blocks. They ask him what he can make with his blocks. Sam says he can
+    make a rocket. He takes out some blocks from his bag. He puts them together. But all his blocks are
+    square. He cannot make a pointy nose for his rocket. He cannot make round windows for his rocket.
+    He cannot make a long tail for his rocket. His rocket looks like a big square.
+
+    Tim and Kim laugh at Sam''s rocket. They say it is a silly rocket. They say it cannot fly. They say
+    it is not a rocket at all. They say it is a box.
+
+    Sam feels embarrassed. He does not like Tim and Kim laughing at him. He says his rocket is better
+    than their blocks. He says his rocket is strong and solid. He says his rocket can go to the moon.
+
+    Tim and Kim do not believe Sam. They say his rocket is boring and ugly. They say his rocket can only
+    go to the trash. They say he is a bad block maker.
+
+    Sam gets angry.'
+- id: long-20
+  story_index: 7718
+  n_tokens: 298
+  text: ' Ben and Mia were playing in the backyard after dinner. They liked to pretend they were explorers
+    and look for bugs and plants. They had a flashlight to help them see in the dark.
+
+    "Look, I found a big spider!" Ben said, shining the flashlight on a hairy creature. "It''s so scary
+    and gross!"
+
+    Mia was not afraid of spiders. She knew they were harmless and good for the garden. She wanted to
+    show Ben that he didn''t need to be scared.
+
+    "Don''t be silly, Ben. It''s just a spider. It won''t hurt you. Watch this!" Mia said, and reached
+    out to touch the spider gently.
+
+    But as soon as she touched it, the spider jumped on her hand and ran up her arm. Mia screamed and
+    shook her arm, trying to get the spider off. Ben laughed and pointed at her.
+
+    "Haha, Mia, you''re so funny! You''re scared of a harmless spider! You''re so embarrassed!" Ben said,
+    still holding the flashlight.
+
+    Mia felt angry and sad. She didn''t like Ben laughing at her. She didn''t think it was funny. She
+    grabbed the flashlight from Ben and turned it off.
+
+    "Hey, give that back! I can''t see anything!" Ben said, feeling scared in the dark.
+
+    Mia ignored him and ran inside the house. She told her mom what happened and asked for a hug. Her
+    mom hugged her and said,'
+- id: long-21
+  story_index: 7812
+  n_tokens: 299
+  text: ' Lily liked to skip. She skipped in the park, she skipped in the yard, she skipped in the house.
+    She skipped with her mom, she skipped with her dad, she skipped with her dog. She skipped when she
+    was happy, she skipped when she was sad, she skipped when she was bored.
+
+    One day, she saw a new neighbor. He was a boy with a wide smile and a red hat. He was playing with
+    a ball. Lily wanted to play with him. She skipped to him and said, "Hi, I am Lily. Do you want to
+    skip with me?"
+
+    The boy looked at her and said, "Hi, I am Ben. I don''t know how to skip. Can you show me?"
+
+    Lily nodded and said, "Sure, it is easy and fun. You just hop on one foot, then the other, then the
+    other, then the other. Like this." She skipped in a circle and laughed.
+
+    Ben watched her and tried to copy her. He hopped on one foot, then the other, then the other, then
+    the other. He stumbled and fell. He said, "Ouch, this is hard. I don''t like to skip."
+
+    Lily helped him up and said, "Don''t worry, you can do it. You just need to practice. Come on, let''s
+    try again. Skip with me." She held his hand and skipped with him. He skipped with her. He skipped
+    faster and'
+- id: long-22
+  story_index: 7857
+  n_tokens: 299
+  text: ' Sara and Tom were playing in the hall. The hall was wide and long, with many doors and pictures.
+    Sara liked to run and jump in the hall. Tom liked to hide and seek in the hall.
+
+    "Let''s play hide and seek!" Tom said. "You count to ten and I hide, okay?"
+
+    "Okay!" Sara said. She closed her eyes and counted. "One, two, three, four, five, six, seven, eight,
+    nine, ten! Ready or not, here I come!"
+
+    Sara opened her eyes and looked for Tom. She checked behind the doors and under the tables. She did
+    not see Tom. She heard a giggle from the end of the hall. She ran to the sound.
+
+    "Tom, I found you!" Sara said. She saw Tom hiding behind a big vase. The vase was tall and shiny,
+    with flowers and leaves on it. Sara reached for Tom, but Tom moved away.
+
+    "Ha ha, you can''t catch me!" Tom said. He ran around the vase, but he bumped into it. The vase wobbled
+    and fell. It broke into many pieces. The flowers and leaves scattered on the floor.
+
+    Sara and Tom gasped. They heard footsteps and voices. They knew it was Mom and Dad. They were angry.
+
+    "Who did this?" Mom said. She saw the broken vase and the mess. She saw Sara and Tom. "Did you do
+    this?"
+
+    Sara and'
+- id: long-23
+  story_index: 7865
+  n_tokens: 299
+  text: ' Sara and Ben were best friends. They liked to play with blocks, dolls and cars. One day, they
+    had a big fight. Sara wanted to play with the red car, but Ben said it was his. They both pulled the
+    car and it broke. Sara and Ben cried and shouted at each other.
+
+    "I don''t like you anymore!" Sara said.
+
+    "Me neither! You are mean!" Ben said.
+
+    They ran away to different corners of the room. They did not talk to each other for a long time.
+
+    Mom came to see what was wrong. She saw the broken car and the sad faces.
+
+    "What happened, my loves?" she asked.
+
+    "Sara broke my car!" Ben said.
+
+    "Ben took my car!" Sara said.
+
+    Mom hugged them both and said, "I''m sorry, my loves. It was an accident. You both wanted to play
+    with the same toy. But you know what? Toys are not as important as friends. Friends are people who
+    love you and help you and have fun with you. Sometimes friends make mistakes, but they can say sorry
+    and forgive each other. Do you want to be friends again?"
+
+    Sara and Ben looked at each other. They felt nervous. They still liked each other, but they were angry
+    and hurt.
+
+    Mom smiled and said, "How about we fix the car together? We can use some glue and tape and make it
+    look like new. Then you can'
+- id: long-24
+  story_index: 8476
+  n_tokens: 298
+  text: ' Lila and Ben were playing in the snow. They made a big snowman with a hat and a scarf. They
+    gave him a carrot nose and two rocks for eyes.
+
+    "Look, our snowman is so happy!" Lila said.
+
+    "Yes, he is. But he might get cold at night. We should wrap him with something warm," Ben said.
+
+    They looked around and saw a big red blanket on the porch. They ran to get it and brought it to the
+    snowman.
+
+    "Here, Mr. Snowman. This is for you. It will keep you cozy," Lila said. She wrapped the blanket around
+    the snowman''s body.
+
+    "Thank you, Lila and Ben. You are very kind," the snowman said in a soft voice.
+
+    Lila and Ben were surprised. They did not know the snowman could talk.
+
+    "Wow, you can talk? How do you do that?" Ben asked.
+
+    "I can talk because you gave me a magic hat. It was a gift from the mountain fairy. She is very graceful
+    and lives on the top of the mountain. She likes to make snowflakes and snowmen," the snowman said.
+
+    "Really? Can we meet her?" Lila asked.
+
+    "Maybe. But you have to be very brave and careful. The mountain is very high and steep. And you have
+    to be back before dark. The mountain fairy only comes out when the sun is shining," the snowman said.
+
+    Lila and Ben looked at each'
+- id: long-25
+  story_index: 8748
+  n_tokens: 299
+  text: ' Lily liked to play with her toys in her room. She had many toys, but her favorite was a pink
+    dollhouse. She liked to pretend that the dolls were her family and friends. She put them in different
+    rooms and made up stories for them.
+
+    One day, Lily was playing with her dollhouse when she heard a loud noise. She looked and saw that
+    her brother Tom had opened her cabinet and dropped some of her books on the floor. He was looking
+    for his crayons. Lily was angry and ran to him. She shouted, "Tom, you are bad! You made a mess and
+    you broke my cabinet!"
+
+    Tom was scared and sorry. He said, "I''m sorry, Lily. I didn''t mean to break your cabinet. I just
+    wanted to find my crayons. Please don''t be mad at me."
+
+    Lily said, "You have to fix it. You have to repair my cabinet. It is mine and I don''t want it to
+    be broken."
+
+    Tom said, "I don''t know how to repair it. I need help. Can you help me, Lily?"
+
+    Lily thought for a moment. She was still angry, but she also felt sorry for Tom. She remembered that
+    her mom always told her to be kind and helpful. She said, "Okay, I will help you. But you have to
+    be careful next time. You have to ask me before you touch my things."
+
+    Tom said, "Thank you, Lily. You are'
+- id: long-26
+  story_index: 9354
+  n_tokens: 298
+  text: ' Sara was very excited to go to school for the first time. She had a new backpack, a new dress
+    and a new friend. Her friend was Lily, who lived next door and was also going to school for the first
+    time. Sara and Lily walked to school together, holding hands and talking.
+
+    When they got to school, they saw a big building with many windows and doors. They followed their
+    teacher, Miss Lee, to their classroom. Miss Lee was very nice and smiled a lot. She showed them where
+    to put their backpacks, where to sit and where to play. Sara and Lily sat next to each other and looked
+    around. There were many toys, books, crayons and puzzles in the classroom. Sara and Lily wanted to
+    play with everything.
+
+    But then, they saw a girl with curly hair and a pink dress. She was sitting at the front of the class,
+    next to Miss Lee''s desk. She had a big bow on her head and a big smile on her face. She looked at
+    Sara and Lily and said, "Hi, I''m Amy. I''m the best student in the class. I know all the answers
+    and I can do everything. Miss Lee likes me the most. You have to do what I say, because I''m the boss."
+
+    Sara and Lily did not like Amy. She was very bossy and rude. They did not want to do what she said.
+    They wanted to play and learn and have fun. They whispered to each'
+- id: long-27
+  story_index: 10368
+  n_tokens: 298
+  text: ' Ben and Mia liked to play with their bird, Sunny. Sunny was yellow and sang a lot. Sunny lived
+    in a birdcage in their room. One day, Ben and Mia wanted to take Sunny outside to see the flowers.
+    They were very eager to show Sunny the garden.
+
+    They carried the birdcage carefully down the stairs. But when they reached the door, they bumped into
+    their dog, Spot. Spot was big and friendly, but he liked to chase birds. Spot barked and jumped at
+    the birdcage. Ben and Mia got scared and dropped the birdcage. The birdcage broke and Sunny flew out.
+
+    "Spot, no!" Ben shouted. "Sunny, come back!" Mia cried.
+
+    They ran after Sunny and Spot. They hoped Sunny would not fly away. They hoped Spot would not catch
+    Sunny. They were very sad and sorry.
+
+    They looked for Sunny in the garden. They saw him on a tree branch. He was safe, but he looked scared.
+    Spot was still barking at the tree.
+
+    "Please, Sunny, come to us," Ben said. "We love you, Sunny," Mia said.
+
+    They held out their hands and called Sunny softly. Sunny saw them and heard them. He remembered them
+    and trusted them. He flew down and landed on Ben''s hand. Ben and Mia hugged Sunny and each other.
+    They were very happy and relieved.
+
+    They took Sunny back to the house. They found their dad in the garage. He was good at fixing'
+- id: long-28
+  story_index: 10769
+  n_tokens: 299
+  text: ' Anna and Ben are twins. They like to play with their toys and their dog, Spot. Spot is a big,
+    soft dog who likes to lick their faces and wag his tail.
+
+    One day, Mom says, "Anna and Ben, it is time to clean your room. Put your toys in the box and your
+    clothes in the hamper. Then you can have a treat."
+
+    Anna and Ben do not want to clean their room. They want to keep playing with Spot. They say, "No,
+    Mom, we do not want to clean our room. We want to play with Spot. He is fun and soft."
+
+    Mom says, "You have to clean your room. It is messy and dirty. If you do not clean your room, you
+    will not get a treat. You will get a time-out."
+
+    Anna and Ben refuse to listen to Mom. They keep playing with Spot. They throw the ball and he runs
+    after it. They hug him and he snuggles with them.
+
+    Mom is not happy. She says, "Anna and Ben, you are being naughty. You did not clean your room. You
+    did not do what I asked. Now you have to go to your time-out chair. No treat for you."
+
+    Anna and Ben are sad. They do not want to go to their time-out chair. They want to have a treat. They
+    say, "Sorry, Mom, we are sorry. We will clean our'
+- id: long-29
+  story_index: 11149
+  n_tokens: 299
+  text: ' Sara and Ben are playing in the garden. They have a big box of toys. Sara likes to bury her
+    toys in the sand. She thinks it is fun to dig them out later. Ben likes to keep his toys tidy. He
+    puts them in the box when he is done.
+
+    "Look, Sara, I buried my doll!" Sara says. She shows Ben a hole in the sand. "Can you find her?"
+
+    "No, Sara, I don''t want to play that game. It is messy. You will lose your toys. And the sand will
+    get in their eyes and hair. It is not nice." Ben says. He shakes his head.
+
+    "But it is fun, Ben. And I can always find them. See?" Sara says. She digs out her doll. She brushes
+    off the sand. "She is fine. She likes to hide."
+
+    "Sara, stop it. You are making the garden dirty. And you are ruining your toys. They will get old
+    and broken. You should be more careful." Ben says. He frowns. He picks up his car. He puts it in the
+    box.
+
+    Sara and Ben start to argue. They raise their voices. They do not listen to each other. They are not
+    happy.
+
+    Mama hears them. She comes out of the house. She sees the sand and the toys. She sees Sara and Ben.
+    She is not happy either.
+
+    "Sara, Ben, what are you'
+- id: long-30
+  story_index: 12639
+  n_tokens: 299
+  text: ' Lily was a brown dog who liked to play with her ball. She could run fast and catch the ball
+    in her mouth. She was very happy when her owner, Ben, threw the ball for her.
+
+    One day, Ben took Lily to the park. There were many other dogs and people there. Lily saw a big, black
+    dog who had a bone. She wanted the bone, so she ran towards the big dog. The big dog growled and showed
+    his teeth. He did not want to share his bone.
+
+    Lily was scared and ran back to Ben. She hid behind his legs and whimpered. Ben saw what happened
+    and hugged Lily. He said, "Don''t be afraid, Lily. You are a good dog. You have a brain and you can
+    learn. You can make friends with other dogs if you are nice and polite. I will encourage you and help
+    you."
+
+    Ben took out a treat and gave it to Lily. He said, "This is for you, Lily. You are brave and smart.
+    Now, let''s try again. Look, there is a small, white dog who has a ball. Maybe you can play with him.
+    Come on, Lily. You can do it."
+
+    Lily sniffed the treat and ate it. She felt better and wagged her tail. She looked at the small, white
+    dog who had a ball. He looked friendly and fun. Lily decided to give him a chance. She walked slowly
+    towards him and barked softly.'
+- id: long-31
+  story_index: 14223
+  n_tokens: 299
+  text: ' Timmy and his dog Spot were playing in the park. They liked to run and chase each other on the
+    grass. Sometimes, Spot would catch Timmy and lick his face. Timmy would laugh and hug Spot.
+
+    One day, a big and loud car came to the park. It was red and shiny and had a siren. The car stopped
+    near Timmy and Spot. A man in a blue suit got out of the car. He had a badge and a hat. He looked
+    at Timmy and Spot and said, "Hello, little boy. Is this your dog?"
+
+    Timmy nodded and said, "Yes, this is Spot. He is my best friend."
+
+    The man smiled and said, "He is a nice dog. But he needs a collar and a leash. Do you have them?"
+
+    Timmy shook his head and said, "No, I don''t. Spot does not like collars and leashes. He likes to
+    be free."
+
+    The man frowned and said, "I''m sorry, but that is not safe. All dogs must have collars and leashes
+    in the park. It is the rule. If you don''t have them, I have to take your dog to the shelter."
+
+    Timmy felt frightened and said, "No, please don''t take Spot. He is not a bad dog. He is a good dog.
+    He loves me and I love him."
+
+    Spot felt frightened too. He barked and growled at the man. He did not want'
+- id: long-32
+  story_index: 16105
+  n_tokens: 299
+  text: ' Tom and Anna are friends. They like to play with toys and books. One day, Tom comes to Anna''s
+    house. He sees a big thing on Anna''s desk. It has a screen and a keyboard.
+
+    "What is that?" Tom asks.
+
+    "That is a computer," Anna says. "My dad uses it for work. He lets me play games on it sometimes."
+
+    "Can I play too?" Tom says.
+
+    "Okay, but we have to be careful. The computer is very clean and we cannot make it dirty or break
+    it," Anna says.
+
+    They sit on the chair and turn on the computer. They see many pictures and words on the screen. Anna
+    clicks on a picture of a cat. The cat makes a sound and moves.
+
+    "Wow, that is fun!" Tom says.
+
+    They play with the cat for a while. Then they see another picture of a dog. Anna clicks on it. The
+    dog barks and runs.
+
+    "Look, the dog is chasing the cat!" Tom says.
+
+    They laugh and watch the dog and the cat. They forget about the time. They do not hear Anna''s mom
+    calling them for lunch.
+
+    "Tom, Anna, come downstairs. It is time to eat," Anna''s mom says.
+
+    She goes upstairs and sees them playing on the computer. She is not happy.
+
+    "Tom, Anna, what are you doing? You did not mention you wanted to'
+- id: long-33
+  story_index: 16161
+  n_tokens: 299
+  text: ' Anna loved books. She liked to look at the pictures and listen to the stories. She had many
+    books in her room, on a big bookcase. But she was not allowed to take the books from the bookcase
+    by herself. Her mom said it was too high and too heavy for her. She had to ask for help.
+
+    One day, Anna was bored. She wanted to read a new book. She saw a book on the top shelf of the bookcase.
+    It had a colorful cover and a funny title. She wondered what it was about. She decided to try to get
+    it. She climbed on a chair and reached for the book. But she was too short. She stretched and stretched,
+    but she could not touch it.
+
+    "Anna, what are you doing?" her mom asked. She came into the room and saw Anna on the chair. She was
+    troubled. She was afraid Anna would fall and hurt herself. She ran to the chair and lifted Anna down.
+    "You know you are not permitted to take books from the bookcase by yourself. It is dangerous. You
+    could have asked me for help. I would have given you the book."
+
+    "I''m sorry, mom," Anna said. She felt sad. She did not mean to make her mom troubled. She just wanted
+    to read the book. "I was curious about the book. It looked fun. Can I see it, please?"
+
+    Her mom sighed. She was not angry, but she was'
+- id: long-34
+  story_index: 16321
+  n_tokens: 298
+  text: ' Lily was a young bee who liked to fly around the flowers. She wanted to learn more about the
+    world, so she often asked her mother questions.
+
+    "Mom, why do we make honey?" she asked one day.
+
+    "Honey is our food, dear. We work hard to collect nectar from the flowers and turn it into honey in
+    our hive. Honey gives us energy and keeps us warm in the winter," her mother explained.
+
+    "Can I see the hive, mom?" Lily asked.
+
+    "Of course, dear. But you have to be careful. The hive is our home, but it is also where the queen
+    bee lives. She is the most important bee in the colony. She lays all the eggs and makes sure we are
+    healthy and happy. You have to be respectful and quiet when you see her," her mother said.
+
+    Lily nodded and followed her mother to the hive. It was a big and busy place, full of bees and honeycombs.
+    Lily saw many bees doing different jobs, like guarding, cleaning, feeding, and making honey. She was
+    amazed by how much they worked together.
+
+    "Mom, can I meet the queen bee?" she asked.
+
+    "Maybe another day, dear. She is very busy right now. But you can say hello to her from a distance.
+    Look, there she is, in the middle of the hive. She is bigger and brighter than the other bees. Can
+    you see'
+- id: long-35
+  story_index: 16614
+  n_tokens: 299
+  text: ' Tom and Sue are friends who live on a farm. They like to help their parents with the animals
+    and the plants. One day, they have a special job. They have to deliver eggs to the neighbors.
+
+    They take a basket and fill it with eggs from the hen house. They are careful not to break them. They
+    walk along the road and knock on the doors. They say hello and give the eggs to the people. The people
+    are happy and thank them.
+
+    On their way back, they see a big puddle. It looks fun to jump in. Tom says, "Let''s play in the puddle!"
+    Sue says, "But what about the eggs? They will get dirty." Tom says, "It doesn''t matter. They are
+    in the basket. Come on, it will be fun!"
+
+    They put the basket on the ground and run to the puddle. They jump and splash and laugh. They get
+    wet and muddy. They forget about the eggs.
+
+    But then, a dog comes by. He sees the basket and smells the eggs. He is hungry and curious. He runs
+    to the basket and knocks it over. The eggs fall out and break. The dog licks them up.
+
+    Tom and Sue hear the noise and turn around. They see the dog and the mess. They are shocked and sad.
+    They say, "Oh no! The eggs! The dog ate them! What will we do?"
+
+    They run to the basket and try to save some'
+- id: long-36
+  story_index: 18546
+  n_tokens: 298
+  text: ' Lily and Ben are playing in the garden. They have a big box of toys. They like to make cars
+    and houses and animals with the toys. But they also make a lot of mess. The toys are everywhere on
+    the grass and the dirt.
+
+    "Look, Lily, I made a big truck!" Ben says. He shows Lily his toy truck. It has four wheels and a
+    door and a window.
+
+    "Wow, Ben, that''s a nice truck!" Lily says. She likes Ben''s truck. She wants to play with it too.
+    "Can I have a turn?" she asks.
+
+    "OK, Lily, but you have to be careful. The truck has a lock. You need a key to open the door." Ben
+    says. He gives Lily a small toy key. "Here, this is the key. You have to put it in the hole and turn
+    it. Then you can unlock the door and get in the truck."
+
+    Lily takes the key and tries to unlock the door. She puts the key in the hole and turns it. But the
+    key is stuck. She can''t unlock the door. She pulls and pulls, but the key won''t come out.
+
+    "Ben, help me! The key is stuck!" Lily cries. She is sad and scared. She thinks she broke the truck.
+
+    Ben runs to Lily and tries to help her. He pulls the key too, but it won''t come out. He is angry
+    and'
+- id: long-37
+  story_index: 18765
+  n_tokens: 298
+  text: ' Anna and Ben were twins who liked to play with their toys. They had many toys, but they did
+    not share them well. Anna always wanted Ben''s cars, and Ben always wanted Anna''s dolls. They often
+    fought and grabbed each other''s toys.
+
+    One day, their mom gave them a new toy. It was a magic wand that could make things shrink or grow.
+    She told them to be careful and use it nicely. But Anna and Ben did not listen. They wanted to have
+    the wand for themselves. They started to tug and pull on the wand, and shouted at each other.
+
+    "Give me the wand! I want to make your cars tiny!" Anna said.
+
+    "No, give me the wand! I want to make your dolls big!" Ben said.
+
+    They did not notice that the wand was pointing at them. Suddenly, they felt a strange tingling in
+    their bodies. They looked at each other and gasped. They had shrunk to the size of their toys!
+
+    "Oh no! What have we done?" Anna cried.
+
+    "We have to find mom and ask her to help us!" Ben said.
+
+    They tried to run to the door, but it was too far and too high. They saw their toys scattered on the
+    floor. They realized that they had been mean and selfish with their toys. They felt sorry and ashamed.
+
+    "Anna, I''m sorry I took your dolls. They are very pretty and you love'
+- id: long-38
+  story_index: 19192
+  n_tokens: 299
+  text: ' Lily and Ben are playing with blocks in the living room. They are building a big tower with
+    many colors. Lily likes to move the blocks with her hands and stack them high. Ben likes to move the
+    blocks with his mouth and chew them softly.
+
+    "Ben, stop!" Lily says. "You are making the blocks messy with your mouth. They are not food. They
+    are toys."
+
+    Ben looks at Lily and smiles. He has a block in his mouth and some drool on his chin. He thinks the
+    blocks are tasty and fun. He does not want to stop.
+
+    "No, Lily," he says. "I like the blocks. They are yummy and chewy. They are food and toys."
+
+    Lily shakes her head. She does not like the blocks in Ben''s mouth. She thinks they are dirty and
+    gross. She wants to keep them clean and neat.
+
+    "Ben, please," she says. "Give me the block. You can have this one." She holds out a different block
+    for Ben. It is yellow and round.
+
+    Ben looks at the yellow block. He does not like it. It is not as good as the block in his mouth. It
+    is boring and smooth.
+
+    "No, Lily," he says. "I want this one." He points to the block in his mouth. It is blue and square.
+
+    Lily and Ben start to argue. They both want the blue block. They pull and tug on'
+- id: long-39
+  story_index: 20445
+  n_tokens: 299
+  text: ' Ben and Mia were twins who liked to play with their toys. They had many toys, but their favorite
+    was a big, hairy bear that they called Bobo. Bobo was soft and cuddly, and he had a red bow on his
+    neck. Ben and Mia took Bobo everywhere, and they shared him at bedtime.
+
+    One day, Ben and Mia went to the park with their mom and dad. They brought Bobo with them, and they
+    had fun on the swings, the slide, and the sandbox. But when they were ready to go home, they realized
+    that Bobo was missing. They looked everywhere, but they could not find him. They felt very sad and
+    cried.
+
+    "Where is Bobo?" Ben asked.
+
+    "I don''t know, maybe someone took him," Mia said.
+
+    "Maybe he ran away," Ben said.
+
+    "No, he wouldn''t do that, he loves us," Mia said.
+
+    They asked their mom and dad to help them look for Bobo, but they could not find him either. They
+    had to leave the park without him.
+
+    That night, Ben and Mia could not sleep. They missed Bobo so much. They hugged each other and wished
+    that Bobo would come back.
+
+    The next day, they went to the park again, hoping to see Bobo. They searched all over, but they still
+    could not find him. They were about to give up, when they saw a little girl sitting on a bench. She
+    was holding Bobo in her'
+- id: long-40
+  story_index: 21811
+  n_tokens: 299
+  text: ' Tim and Sam were brothers who liked to play with their toys. They had a big jeep that they could
+    drive around the yard. One day, they decided to go on an adventure with their jeep. They packed some
+    snacks, water, and a map.
+
+    "Where are we going?" Tim asked Sam, who was holding the map.
+
+    "We are going to the big hill, where we can see the whole town," Sam said. "It will be fun!"
+
+    They drove their jeep along the road, past the houses, the shops, and the park. They saw many people
+    and cars, but they did not stop. They wanted to reach the big hill. They followed the map until they
+    saw a sign that said "Hill Road".
+
+    "Look, there it is!" Sam said, pointing to the sign. "Let''s go!"
+
+    They turned their jeep onto the hill road, which was steep and bumpy. They had to go very slow and
+    careful, or they would fall off. The jeep made loud noises as it climbed the hill. Tim and Sam held
+    on tight and cheered.
+
+    "We are almost there!" Tim said, looking at the top of the hill.
+
+    They reached the top of the hill and parked their jeep. They got out and looked around. They saw the
+    whole town below them, with the houses, the shops, and the park. They also saw the sky, which was
+    blue and clear, with some white clouds.'
+- id: long-41
+  story_index: 22462
+  n_tokens: 299
+  text: ' Tim and Sam were friends who liked to play with paints. They had many colors of paints, but
+    they wanted to make new ones. They decided to mix different paints together and see what happened.
+
+    They mixed red and yellow and got orange. They mixed blue and yellow and got green. They mixed red
+    and blue and got purple. They were happy with their new colors and painted many pictures.
+
+    But then they ran out of white paint. They wanted to make pink and light blue and light green, but
+    they could not. They asked their teacher for more white paint, but she said no. She said they had
+    to use the paints they had and share with the other children.
+
+    Tim and Sam were sad and angry. They did not want to share their new colors. They wanted to make more.
+    They were persistent. They looked around the classroom and saw a big jar of glue. They thought glue
+    was white and sticky, like paint. They decided to mix glue with their paints and make more colors.
+
+    They took the jar of glue and poured some into their paint cups. They mixed glue and red and got pink.
+    They mixed glue and blue and got light blue. They mixed glue and green and got light green. They were
+    happy again and painted more pictures.
+
+    But then they noticed something was wrong. Their pictures were not dry. They were wet and gooey. The
+    glue made the paint sticky and runny. The colors mixed together and became brown and gray. Their'
+- id: long-42
+  story_index: 22730
+  n_tokens: 299
+  text: ' Anna and Ben were twins who loved to play at the beach. They liked to build sand castles, collect
+    shells and splash in the water. One day, they saw a big boat on the sea. It was impressive. It had
+    a tall mast, a wide sail and a shiny flag.
+
+    "Wow, look at that boat!" Anna said. "I wonder where it is going."
+
+    "Maybe it is going to a faraway land," Ben said. "Or maybe it is looking for treasure."
+
+    They decided to wave at the boat and see if anyone would wave back. They ran to the edge of the water
+    and shouted, "Hello, boat! Hello, boat!"
+
+    The boat did not seem to hear them. It kept sailing on the sea. Anna and Ben felt sad. They wanted
+    to talk to the people on the boat.
+
+    "Maybe they are busy," Anna said. "Maybe they are doing a test."
+
+    "A test?" Ben asked. "What kind of test?"
+
+    "Maybe they are testing how fast the boat can go," Anna said. "Or how strong the sail is. Or how much
+    water they can carry."
+
+    "That sounds fun," Ben said. "I wish we could do a test like that."
+
+    They thought for a moment. Then they had an idea. They ran back to their sand castle and grabbed two
+    sticks. They tied a towel to the sticks and made a sail. They put the sail on their'
+- id: long-43
+  story_index: 24128
+  n_tokens: 299
+  text: ' Lily and Tom were twins. They liked to play with their toys and books. But today, they had nothing
+    to do. They were bored.
+
+    "Mom, can we go to the park?" Lily asked.
+
+    "Sorry, sweetie, it''s raining outside. You have to stay in the house," Mom said.
+
+    Lily and Tom made a sad face. They looked around the room. They saw a big bowl of strawberries on
+    the table.
+
+    "Can we have some strawberries, Mom?" Tom asked.
+
+    "Sure, you can have some. But you have to wash them first," Mom said.
+
+    Lily and Tom ran to the sink. They washed the strawberries. They picked the ones they liked. Lily
+    liked the big ones. Tom liked the small ones.
+
+    They sat on the floor and ate the strawberries. They were sweet and juicy. They made their mouths
+    red.
+
+    "Yum, these are good," Lily said.
+
+    "I like them too," Tom said.
+
+    They ate and ate until there were only two strawberries left. One was big and one was small.
+
+    "Can I have the big one?" Lily asked.
+
+    "No, I want the big one," Tom said.
+
+    They both reached for the big strawberry. They pulled and pulled. The strawberry broke in half. They
+    both dropped their halves.
+
+    They looked at the small strawberry. It was wrinkled and brown.
+
+    "Yuck, that one is bad," Lily'
+- id: long-44
+  story_index: 24166
+  n_tokens: 299
+  text: ' Lily and Ben were playing with their toys in the living room. They liked to make up stories
+    with their dolls and cars. Lily had a pink doll that she called Rosie, and Ben had a blue car that
+    he called Zoom. They pretended that Rosie and Zoom were friends who went on adventures.
+
+    One day, they decided to play a game where Rosie and Zoom had to find a treasure. They used a map
+    that Lily drew with crayons. The map showed a big X where the treasure was. They followed the map
+    around the room, looking for clues.
+
+    "Look, Rosie, there is a clue!" Ben said, pointing to a piece of paper under the sofa. He reached
+    for it, but it was too far. He twisted his arm, trying to grab it, but he could not. He felt a pain
+    in his elbow. He cried out loud.
+
+    "Ben, are you okay?" Lily asked, dropping her doll and running to him. She saw his face was red and
+    wet with tears. She hugged him and said, "I''m sorry, Ben. It was just a game. You don''t have to
+    twist your arm. Let me see."
+
+    She looked at his elbow and saw a bruise. She said, "It''s okay, Ben. It''s not bad. It will go away
+    soon. Do you want some ice?"
+
+    Ben nodded, still sniffling. Lily said, "Come on, let''s go to the kitchen. Mommy'
+- id: long-45
+  story_index: 25059
+  n_tokens: 299
+  text: ' Lily and Ben were very happy today. They moved to a new house with Mom and Dad. They had many
+    boxes to unpack, but they also wanted to play.
+
+    "Can we unpack our toys first?" Lily asked Mom.
+
+    "Yes, you can," Mom said. "But only one box each. Then you have to help me with the other things."
+
+    Lily and Ben ran to their room and picked one box each. Lily opened her box and found her doll, her
+    tea set, and her dress-up clothes. Ben opened his box and found his cars, his train, and his superhero
+    cape.
+
+    "Let''s play together!" Lily said. She put her doll on the tea table and poured some pretend tea.
+    "Do you want some tea, Ben?"
+
+    "No, thank you," Ben said. He put his cars on the floor and made zooming noises. "I want to race my
+    cars!"
+
+    Lily frowned. She wanted Ben to play with her. She grabbed one of his cars and put it on the tea table.
+    "This is your car, Ben. It wants some tea too."
+
+    Ben got angry. He snatched his car back and pushed Lily''s doll off the table. "No, it doesn''t! This
+    is my car, Lily. It doesn''t like tea. It likes to go fast!"
+
+    Lily cried. She picked up her doll and hugged it. "You''re mean, Ben. You ruined my tea party!"'
+- id: long-46
+  story_index: 25884
+  n_tokens: 299
+  text: ' Anna and Ben were playing with their toys in the living room. They had a big box, some blocks,
+    and a doll. They pretended the box was a castle, the blocks were soldiers, and the doll was a princess.
+
+    "Look, I made a tower with the blocks!" Ben said, showing Anna his creation.
+
+    "That''s nice, Ben. But my princess needs a dress. Can I use some of your blocks?" Anna asked.
+
+    "No, these are my blocks. You have to find your own dress," Ben said, holding his blocks tightly.
+
+    Anna was sad. She looked around the room for something to make a dress. She saw a red scarf on the
+    sofa. She ran to get it, but she did not see the cat sleeping on the other side of the sofa. The cat
+    woke up and hissed at Anna. Anna was scared and dropped the scarf. The cat grabbed the scarf and ran
+    away.
+
+    "Hey, that''s my scarf!" Anna shouted, chasing the cat.
+
+    Ben heard Anna and followed her. They ran after the cat, but the cat was fast and sneaky. It ran into
+    the kitchen, then into the bathroom, then into the bedroom. Anna and Ben could not catch it.
+
+    The cat jumped on the bed and hid under the blanket. Anna and Ben climbed on the bed and lifted the
+    blanket. They saw the cat, but they also saw something else. It was a small bottle with a label that'
+- id: long-47
+  story_index: 26022
+  n_tokens: 299
+  text: ' Lily and Ben are playing with their toys in the garden. Lily has a doll and Ben has a car. They
+    are having fun, but they are also very messy. They leave their toys everywhere on the grass.
+
+    "Look, Lily, my car can go very fast!" Ben says, making zooming noises.
+
+    "That''s nice, Ben, but my doll can talk!" Lily says, pressing a button on the doll''s back.
+
+    Suddenly, they hear a loud bark. It is their dog, Rex, who has come to join them. Rex is a big, brown
+    dog with a long, fluffy tail. He likes to play with Lily and Ben, but he also likes to chase their
+    toys.
+
+    "Rex, no!" Lily shouts, as Rex runs towards her doll. "That''s my doll, not your toy!"
+
+    But Rex does not listen. He grabs the doll with his mouth and shakes it. The doll makes a funny sound
+    and its hair falls off.
+
+    "Hey, stop that!" Ben yells, as Rex drops the doll and goes for his car. "That''s my car, not your
+    chew!"
+
+    But Rex does not care. He bites the car and breaks one of its wheels. The car makes a sad noise and
+    stops moving.
+
+    Lily and Ben are very upset. They run to their toys and try to fix them. But they are too broken.
+    They look at Rex, who is wagging his tail and panting.'
+- id: long-48
+  story_index: 26272
+  n_tokens: 299
+  text: ' Tom and Lily were twins who liked to play with their toys. One day, they found a big box in
+    the garage. They wondered what was inside. They opened the box and saw a lot of strange things. There
+    were wires, buttons, lights, and a screen.
+
+    "Wow, what is this?" Tom asked.
+
+    "I don''t know, maybe it''s a game," Lily said.
+
+    They decided to try the things in the box. They put the wires on their arms and legs. They pressed
+    the buttons and saw the lights flash. They looked at the screen and saw their bones.
+
+    "Look, Tom, we can see our bones!" Lily said.
+
+    "That''s cool, Lily, maybe this is an x-ray," Tom said.
+
+    They were having fun with the x-ray. They moved their fingers and toes and saw them on the screen.
+    They made funny faces and saw their teeth. They laughed and giggled.
+
+    But then, Tom had an idea. He wanted to be more creative. He took a wire and poked Lily with it.
+
+    "Ow, Tom, that hurts!" Lily cried.
+
+    "Sorry, Lily, I just wanted to see what happens," Tom said.
+
+    He looked at the screen and saw a spark. He poked Lily again and saw another spark.
+
+    "Stop it, Tom, stop it!" Lily shouted.
+
+    But Tom didn''t stop. He poked Lily harder and harder. He wanted'
+- id: long-49
+  story_index: 26368
+  n_tokens: 299
+  text: ' Lily and Ben are twins. They like to play in the farm with their dog, Spot. One day, they see
+    a big mill near the farm. The mill has a big wheel that turns and makes noise.
+
+    "Let''s go see the mill!" Ben says. He runs to the mill with Spot.
+
+    "No, Ben, wait!" Lily says. She follows him. "Mama said the mill is hot and dangerous. We can''t go
+    near it."
+
+    But Ben does not listen. He wants to touch the mill. He pokes the wheel with his finger. Ouch! The
+    wheel is very hot. It burns his finger. Ben cries.
+
+    "Ben, are you okay?" Lily asks. She hugs him. She is scared.
+
+    Spot barks. He sees a man coming out of the mill. The man is angry. He yells at Ben and Lily.
+
+    "Hey, you kids! What are you doing here? This is not a place to play. This is my mill. Go away, or
+    I will call your mama!"
+
+    Ben and Lily are sorry. They did not mean to make the man mad. They run away from the mill with Spot.
+    They go back to the farm. They tell their mama what happened.
+
+    Mama is not happy. She scolds Ben and Lily. She says they should not go near the mill. She says the
+    mill is hot and dangerous. She says they could get hurt. She says they should listen'
+- id: long-50
+  story_index: 27098
+  n_tokens: 299
+  text: ' Lily and Ben wanted to fly a kite. They had a big kite with a long tail and many colors. They
+    went to the park with their mom and dad. The park had a lot of grass and a small hill.
+
+    "Look, the wind is strong today!" Lily said. "We can make the kite go high in the sky!"
+
+    "Yes, let''s go to the top of the hill!" Ben said. "We can run and let go of the kite!"
+
+    They climbed the hill with their mom and dad. They held the kite and the string. They waited for a
+    big gust of wind.
+
+    "Ready, set, go!" Lily shouted. They ran and let go of the kite. The kite flew up and up. It looked
+    like a bird.
+
+    "Wow, it''s so beautiful!" Ben said. "Can I hold the string, Lily?"
+
+    "OK, but be careful!" Lily said. She gave the string to Ben. Ben felt the kite pull and tug. He tried
+    to balance the kite in the air.
+
+    But the wind was rough. It made the kite shake and twist. Ben lost his grip on the string. The kite
+    flew away.
+
+    "Oh no, our kite!" Lily cried. "We have to get it back!"
+
+    They ran after the kite. They saw it land on a big tree. The tree had many branches and leaves.
+
+    "Mom, dad, help us!" Lily and Ben'

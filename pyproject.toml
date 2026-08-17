@@ -3,9 +3,11 @@ name = "neuro-llm"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "anthropic>=0.122.0",
     "huggingface-hub>=1.27.0",
     "lightning>=2.6.5",
     "numpy>=2.5.2",
+    "pyyaml>=6.0.3",
     "tiktoken>=0.13.0",
     "tokenizers>=0.23.1",
     "torch>=2.13.0",

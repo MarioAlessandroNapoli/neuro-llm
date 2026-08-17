@@ -3,3 +3,5 @@ wandb
 tokenizers
 huggingface_hub
 numpy
+pyyaml
+anthropic

@@ -21,12 +21,16 @@ scientifiche (cosa testare e perché) stanno nella skill `neuro`; qui c'è il co
 ## Ciclo standard di un esperimento
 
 1. Modifica codice → smoke locale su M2:
-   `uv run python -m src.train --arch <a> --tokens 1000000 --precision 32-true --no-wandb`
+   `uv run python -m src.train --arch <a> --tokens 1000000 --seed 1 --precision 32-true --no-wandb`
 2. Commit + push (il runner Kaggle clona `main`).
 3. Se cambia il runner: `mcp__kaggle__save_notebook` (o UI).
 4. Lancio: **Save & Run All (Commit)** — mai run lunghe in interattivo (muoiono col tab).
-   Run lunghe: `--max-time 00:11:00:00`. Multi-seed: `--run-name <arch>-s<seed>` distinto
-   per seed (il run_name è anche l'id W&B: nomi uguali = run W&B fusa).
+   Run lunghe: `--max-time 00:11:00:00`. `--seed` è obbligatorio ed entra nel nome della
+   run insieme a budget e lr (`arch-dD-LN-tXM-sS-lrY`): niente collisioni tra seed, il
+   run_name è anche l'id W&B. Resume solo esplicito con `--resume` (checkpoint trovato
+   senza flag = errore). Contenimento registri: sweep lr senza `--hub-repo` e con
+   `--group sweep-lr`; run di griglia con `--group grid-stage1`; solo le run di griglia
+   hanno checkpoint su HF e riga nel registro esperimenti.
 5. Monitor: W&B MCP (sotto). Stato sessione: `get_notebook_session_status` traccia solo le
    versioni committate — su run interattive risponde "No runs found"; il consumo reale si
    vede con `get_accelerator_quota`.
@@ -69,6 +73,12 @@ Griglia tipo stadio 1 (3 arch × 3 seed × 100M): ~2-2,5 h GPU.
 | Scritture W&B da locale falliscono | Il bearer token MCP non è una API key classica: serve `wandb login` |
 | `get_notebook_info` esplode il contesto | Output ~130KB (include il sorgente): salvarlo su file e parsare con python |
 
+## Harness di valutazione (D7)
+
+Vive nella skill `eval` (codice `src/eval/`, artefatti `eval/`): generazione, giudice
+Opus 5 via Batches, analisi con i verdetti pre-registrati. A fine run di griglia il ciclo
+è: checkpoint verificato su HF → `src.eval.generate` → skill `eval` per il resto.
+
 ## Aggiungere un'architettura
 
 `src/models/<nome>.py` come `nn.Module` puro con la stessa firma del baseline
@@ -78,5 +88,7 @@ Parità parametri col baseline (±5%) verificata prima della prima run. Il token
 
 ## Gap noti
 
-- `--seed` non esiste ancora in `train.py`: da aggiungere prima della prima griglia multi-seed.
 - Upload periodico su HF ogni 2000 step: per run < 30 min interviene solo a fine run.
+- L'ordine dei dati non è ripristinato al resume (sampler riparte da una nuova
+  permutazione): accettato per l'ordine, ma su arm molto lente il conteggio di token
+  unici si accorcia — rivalutare se un'arm scende sotto ~2,5k tok/s.
