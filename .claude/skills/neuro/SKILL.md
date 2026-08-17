@@ -52,6 +52,12 @@ in fondo al RESEARCH_LOG (dettagli su W&B, qui solo l'essenziale). Gli smoke non
 Findings in registro narrativo umano: prima il modello di dominio, poi il comportamento
 in parole, il riferimento tecnico come prova in coda. Tabelle solo per confronti e numeri.
 
+**Sigle sempre etichettate.** Mai citare una D*/Q* nuda: ogni menzione porta un'etichetta
+breve che ne richiama il contenuto (es. «Q1-backbone», «D7-valutazione», «Q4-budget»).
+L'utente non ricorda le sigle a memoria; l'etichetta è il gancio mnemonico. Etichette
+canoniche: D1-due-stadi, D2-candidati, D3-tokenizer, D4-asse-token, D5-baseline-nostra,
+D6-parità, D7-valutazione, Q1-backbone, Q3-granularità, Q4-budget.
+
 ## Operatività esperimenti
 
 Per lanciare, monitorare e verificare run (Kaggle, W&B, checkpoint): usare la skill

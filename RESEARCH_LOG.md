@@ -81,15 +81,19 @@ config dice 50257). Uniche àncore citabili: llama2.c (tokenizer Llama-2 32k) �
 val con BPE GPT-2 (arXiv:2601.23236).
 
 **Confronto cross-tokenizer solo via bits-per-byte** (The Pile §3.1, arXiv:2101.00027:
-BPB = loss_nats / ln2 / bytes_per_token). Nessun BPB di riferimento pubblicato per TinyStories:
-va calcolato da noi — incluso quello di un checkpoint pubblico (stories15M) sul NOSTRO val set,
-che diventa l'àncora esterna reale. **Condizioni di misura dell'àncora, dichiarate**: stories15M
-ha contesto 256 ed è addestrato su TinyStories V1, mentre il nostro val è V2-GPT4 a finestre
-512 — quindi (a) si valuta a contesto 256 per entrambi, riportando il nostro BPB sia a 256 sia
-a 512; (b) sul val V2 il numero di stories15M è un limite superiore (fuori distribuzione per
-lui), e si dichiara come tale. Convenzione BPB fissata: byte UTF-8 del solo testo, EOT esclusi
-dal conteggio token. Cautela: la loss più bassa cross-tokenizer non predice la qualità
-soggettiva (arXiv:2504.07989).
+BPB = loss_nats / ln2 / bytes_per_token). Nessun BPB pubblicato per TinyStories: l'àncora
+esterna l'abbiamo misurata noi (2026-08-17, `src/eval/anchor_stories15m.py` — modello e
+tokenizer ufficiali llama2.c a commit pinnato, mai reimplementati). **stories15M sul NOSTRO
+val V2 a contesto 256**, stream packing identico al suo training (BOS per storia, finestre
+non sovrapposte da 256): **loss 1,1511 nats/token → BPB 0,4407** (3,7687 byte/token Llama-2,
+BOS esclusi). Coerenza verificata: il README llama2.c riporta 1,072 sul suo val V1 — il
++0,08 è l'effetto fuori-distribuzione V1→V2 atteso, quindi il numero è un limite superiore
+e si dichiara come tale. Il nostro BPB si riporterà sia a contesto 256 (confronto con
+l'àncora) sia a 512 (finestra di training). Equivalenza per leggere i nostri numeri: col
+nostro tokenizer (4,0988 byte/token, EOT esclusi) BPB 0,4407 ≡ val loss 1,252 nats/token.
+Convenzione BPB fissata: byte UTF-8 del solo testo, EOT/BOS esclusi dal conteggio token.
+Cautela: la loss più bassa cross-tokenizer non predice la qualità soggettiva
+(arXiv:2504.07989).
 
 **Come valuta il campo.** TinyStories: GPT-Eval — LLM giudice su grammar/creativity/consistency/
 plot, scala 1-10; i prompt ufficiali sono in `Evaluation_prompts.yaml` nel repo HF del dataset

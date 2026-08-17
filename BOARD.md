@@ -7,18 +7,17 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 - **Design stadio 1 — chiudere Q1** (quale backbone oscillatorio, in quale forma, con
   quale ablazione). Output atteso: D8 nel RESEARCH_LOG.
-- **Baseline transformer 8,5M** — sweep lr pre-registrato (3 valori × ~20M token, 1 seed)
-  poi 5 seed al lr congelato (σ della val loss → fissa ε di D7): non dipende da Q1; il suo
-  costo/step è uno degli input di Q4 (che richiede anche quello delle varianti).
+- **Baseline transformer 8,5M** — sweep lr fatto (2026-08-17, T4 x2 ~100k tok/s):
+  val loss a 20M token = 7,05 (1e-4) / 4,47 (3e-4) / **3,67 (1e-3)** → lr congelato
+  **1e-3**. Attenzione: vincitore sul bordo della griglia con trend monotono — se si
+  volesse estendere la griglia è una revisione di D6, da decidere esplicitamente.
+  Prossimo: 5 seed al lr congelato (σ della val loss → fissa ε di D7); il token budget
+  di quelle run va fissato con Q4.
 
 ## Next
 
-- Rigenerare i token HF e Kaggle (transitati in chiaro nei log della sessione di setup:
-  HF settings/tokens; Kaggle settings/API) — pochi minuti
 - Validare il giudice con una chiamata reale (serve `ANTHROPIC_API_KEY` nell'ambiente:
   la build delle richieste è già verificata, manca solo il round-trip API)
-- Misurare BPB del checkpoint pubblico stories15M sul nostro val set, a contesto 256 e
-  con i caveat V1/V2 dichiarati (condizioni in RESEARCH_LOG § Ancore quantitative)
 - Implementare le architetture scelte in `src/models/` (registry `ARCHS`), parità
   parametri col baseline ±5%
 - Sweep lr delle varianti + griglia stadio 1 su Kaggle — dopo D8/Q4 (bracci e budget);
@@ -33,6 +32,9 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Done
 
+- 2026-08-17 — Àncora BPB misurata: stories15M sul nostro val V2 @256 → loss 1,1511
+  nats/token, **BPB 0,4407** (≡ val loss 1,252 col nostro tokenizer); coerente col README
+  llama2.c (1,072 su V1); script riproducibile `src/eval/anchor_stories15m.py`
 - 2026-08-17 — Harness D7 implementato e validato E2E (`src/eval/`): prompt set congelati
   (44 ufficiali verbatim + 50 prefissi lunghi, pool 1046 = valore atteso), generazione
   temp 1 × 10 con seed derivati e artefatti JSON, giudice Opus 5 via Batches (scoring

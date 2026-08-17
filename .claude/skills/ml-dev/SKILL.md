@@ -72,6 +72,7 @@ Griglia tipo stadio 1 (3 arch × 3 seed × 100M): ~2-2,5 h GPU.
 | Run persa alla chiusura del tab | Era interattiva: usare sempre Save & Run All per run > 15 min |
 | Scritture W&B da locale falliscono | Il bearer token MCP non è una API key classica: serve `wandb login` |
 | `get_notebook_info` esplode il contesto | Output ~130KB (include il sorgente): salvarlo su file e parsare con python |
+| Crash immediato `CUDA error: no kernel image` su tutte le run | `save_notebook` via API resetta l'acceleratore al default P100 (sm_60, non più supportato da PyTorch); `machineShape` viene ignorato/normalizzato a "Gpu". Fix: impostare **GPU T4 x2** dalla UI (Settings → Accelerator) e lanciare Save & Run All da lì; conferma T4 = `tokens_per_sec` ~100k |
 
 ## Harness di valutazione (D7)
 
