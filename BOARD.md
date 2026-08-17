@@ -7,12 +7,11 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 - **Design stadio 1 — chiudere Q1** (quale backbone oscillatorio, in quale forma, con
   quale ablazione). Output atteso: D8 nel RESEARCH_LOG.
-- **Baseline transformer 8,5M** — sweep lr fatto (2026-08-17, T4 x2 ~100k tok/s):
-  val loss a 20M token = 7,05 (1e-4) / 4,47 (3e-4) / **3,67 (1e-3)** → lr congelato
-  **1e-3**. Attenzione: vincitore sul bordo della griglia con trend monotono — se si
-  volesse estendere la griglia è una revisione di D6, da decidere esplicitamente.
-  Prossimo: 5 seed al lr congelato (σ della val loss → fissa ε di D7); il token budget
-  di quelle run va fissato con Q4.
+- **Baseline transformer 8,5M** — sweep lr fatto → lr congelato **1e-3** (vincitore sul
+  bordo della griglia: estenderla = revisione D6). Pilot epoch completa fatto (2026-08-18,
+  riga pilot-1 nel registro): val loss 1,509, curva completa per Q4 in mano.
+  Prossimo: **chiudere Q4** (proposta dalla curva pilot), poi 5 seed al lr congelato
+  (σ della val loss → fissa ε di D7).
 
 ## Next
 
@@ -25,6 +24,9 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Later
 
+- DDP su T4 x2 (oggi `devices=1`, seconda GPU ferma): si decide solo se il fabbisogno
+  supera ~15h/settimana dopo Q1/Q4, e solo PRIMA di congelare σ e sweep — raddoppia il
+  batch efficace, quindi invalida lr congelato e misure fatte (da rifare al nuovo batch)
 - Stadio 2: BabyLM Strict-Small (10M parole) + valutazione BLiMP per la variante migliore
 - Ablazione granularità temporale (Q3: char-level o chunking appreso)
 - Probe diagnostici esplorativi (D7: non cambiano mai il verdetto dello stadio 1):

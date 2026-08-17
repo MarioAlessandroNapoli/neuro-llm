@@ -372,6 +372,7 @@ posteriori.
 | ID | Data | Arch | Params | Token | Seed | val_loss | Note |
 |----|------|------|--------|-------|------|----------|------|
 | smoke-0 | 2026-08-17 | transformer | 8,5M | 8,4M (2 run, prova resume) | 1 | ~5,0 (non a convergenza) | Solo validazione pipeline su M2; nessun valore scientifico |
+| pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo
 l'essenziale per leggere la storia dell'esperimento senza aprire dashboard.
