@@ -400,15 +400,76 @@ possibile.
 (1a: assi singoli; 1b: combinazioni dei soli assi con segnale); se nessun asse singolo
 mostra segnale, le combinazioni non si esplorano a tappeto.
 
+### D10 — Griglia 1a: sei bracci, un grado di libertà per confronto
+**Decisione.** La griglia 1a confronta la baseline (fatta: base-1..3) con sei bracci;
+ogni confronto adiacente cambia un solo meccanismo:
+
+| Braccio | Asse D9 isolato | Confronto che lo decide |
+|---|---|---|
+| `linoss` | 1 scale temporali | vs baseline |
+| `dlinoss` | 2 inibizione/oblio | vs `linoss` (solo lo smorzamento) |
+| `dlinoss-phi` | 4 metastabilità | vs `dlinoss` (solo l'init) |
+| `hyb-oa` (osc sotto, attn sopra) | 5 gerarchia | vs `dlinoss` e vs baseline |
+| `hyb-ao` (inverso) | 5 direzione | vs `hyb-oa` |
+| `wrnn` | onde vs oscillatori | vs `linoss` |
+
+**Blocco (deviazione dichiarata dal blocco ufficiale LinOSS).** Scheletro transformer
+identico per tutti i bracci (pre-norm → mixer → residuo → FFN → residuo): si scambia
+*solo il mixer*. Il blocco ufficiale LinOSS (readout→GELU→GLU, niente FFN) è scartato
+perché confonderebbe meccanismo di mixing e struttura del blocco (principio HRM/TRM).
+
+**Mixer oscillatorio (equazioni paper-esatte, verificate 2026-08-18 sui full text).**
+LinOSS-IMEX (arXiv:2410.03943): `z[k+1]=z[k]+Δt(−A·x[k]+B·u[k+1])`,
+`x[k+1]=x[k]+Δt·z[k+1]`; A=ReLU(Â) init U[0,1], Δt=1 fisso. D-LinOSS
+(arXiv:2505.12171): smorzamento *implicito* `z[k+1]=(z[k]+Δt(−A·x[k]+B·u[k+1]))/(1+Δt·G)`;
+G=ReLU(Ḡ), Δt=σ(Δt̄), A clampata nella finestra di stabilità; init: autovalori
+nell'anello complesso raggio [0,9, 1], angolo uniforme. Nota di merito: LinOSS puro ha
+|λ|=1 (non può dimenticare — Funes), D-LinOSS apprende |λ|<1: l'ablazione 1-vs-2 misura
+esattamente "l'oblio serve al linguaggio?". Parallelizzazione: prefix scan associativo
+su matrici 2×2 diagonali (op binaria `(a₁,a₂)•(b₁,b₂)=(b₁∘a₁, b₁∘a₂+b₂)`), ~9 livelli
+di raddoppio a 512 token, implementazione nostra in PyTorch. Parità: m=2d=512 oscillatori
+per layer → B,C ≈ 262k ≈ i 4d² dell'attention; bracci puri senza position embedding
+(l'ordine è nella ricorrenza; budget respendibile, come D6 prevede).
+
+**Init aurea (`dlinoss-phi`).** Cambia solo la distribuzione degli *angoli* (=frequenze
+in rad/token, D4): bande con periodi centrali in progressione aurea — periodi di
+Fibonacci 377, 233, 144, 89, 55, 34, 21, 13, 8, 5, 3 token — jitter uniforme
+intra-banda, ripartizione uniforme degli oscillatori tra bande; raggio come il default.
+Dichiarato: è un prior, non un vincolo — il probe spettrale a fine run verifica se la
+struttura a bande sopravvive al training.
+
+**Ibridi.** 4+4 layer, mixer D-LinOSS (init default: le combinazioni con φ sono materia
+1b) + attention della baseline; position embedding attivo (serve all'attention).
+
+**wRNN (arXiv:2309.08045, verificato).** Mixer a campo d'onda: stato = campo circolare
+N=512 (c=16 canali × 32), `h[t]=ReLU(u★h[t−1]+V·u[t]+b)`, kernel k=3 init shift-matrix
+(ν=1), V init a iniezione puntuale — ricette del paper. Deviazioni dichiarate: impilata
+nello scheletro a 8 layer (il paper è mono-layer); ricorrenza non lineare → niente scan,
+loop sequenziale: uno smoke di velocità su T4 precede e condiziona il calendario dei
+suoi seed. Il paper non ha alcun task linguistico: gap confermato.
+
+**Percorso operativo (pre-registrato).** Smoke M2 per arch → smoke di velocità Kaggle
+(gruppo bench) → sweep lr per *tutti e sei* i bracci (3 lr × 20M × 1 seed, D6) →
+griglia 3 seed × 170M (D8), gruppo grid-stage1, checkpoint HF. Verdetti: asse loss
+(permutazione 3v3, ε=0,017) + asse Elo (campagna giudice in un'unica finestra Batches)
+→ tabella D7 per ogni braccio vs baseline; i confronti interni (dlinoss vs linoss,
+φ vs uniforme, oa vs ao) sono secondari, stesso test, dichiarati come tali. Costi:
+5 bracci veloci ≈ 5h GPU inclusi sweep; wrnn secondo smoke.
+**Scartato.** Blocco paper-faithful (confonde due variabili); φ sugli ibridi e gradiente
+di frequenze per profondità (combinazioni → 1b); ibrido a direzione singola (la direzione
+della gerarchia è domanda empirica); Wave-RNN esclusa per costo (si è scelto di includerla
+accettando run lunghe).
+**Riconsiderare se.** Lo smoke wrnn desse tok/s da rendere impraticabili 3×170M nella
+quota → i suoi seed slittano o il braccio decade a esperimento separato (si dichiara);
+instabilità numeriche dello scan in 16-mixed → fallback a precisione fp32 del solo scan,
+dichiarato.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
 
-- **Q1 — Istanziazione concreta degli assi D9.** Quale architettura precisa implementa
-  gli assi: LinOSS vs D-LinOSS (isola l'asse 2), init aurea vs uniforme (isola l'asse 4),
-  disposizione per profondità e forma dell'ibrido attention+oscillatori (asse 5), e quali
-  celle della matrice entrano nella griglia 1a. Output atteso: D10 (architetture della
-  griglia + piano di ablazione).
+- **Q5 — Griglia 1b.** Quali combinazioni di assi esplorare dopo la 1a: si decide con la
+  tabella dei verdetti in mano (solo assi con segnale; clausola già in D9).
 - **Q3 — Granularità temporale come ablazione futura.** Char-level (~4× più passi, dipendenze
   stirate: test più severo per la memoria oscillatoria) o chunking appreso stile H-Net. Fuori
   dallo scope dello stadio 1; richiede baseline dedicate.
