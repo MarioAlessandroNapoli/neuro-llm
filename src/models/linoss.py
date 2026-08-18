@@ -45,12 +45,9 @@ class DLinOSSPhiConfig(DLinOSSConfig):
 def prefix_scan(M, f):
     """Scan associativo inclusivo della ricorrenza affine s[k] = M·s[k−1] + f[k].
 
-    M: (m, 2, 2) — la transizione non dipende né dal batch né dal tempo (A, G, Δt
-    sono parametri), quindi al livello l il fattore cumulato applicato è sempre
-    M^(2^l): f[k] += M^(2^l)·f[k−2^l] per k ≥ 2^l, log2(t) raddoppi. Stessa
-    aritmetica dell'op binaria (a₁,a₂)•(b₁,b₂)=(b₁·a₁, b₁·a₂+b₂), senza portarsi
-    dietro il tensore (t, m, 2, 2) né i cat (verificata equivalenza numerica).
-    f: (b, t, m, 2). Ritorna gli stati s[k] (b, t, m, 2) con s iniziale nullo.
+    M: (t, m, 2, 2) — la transizione non dipende dal batch (A, G, Δt sono parametri).
+    f: (b, t, m, 2). Op binaria (a₁,a₂)•(b₁,b₂) = (b₁·a₁, b₁·a₂+b₂), log2(t) raddoppi.
+    Ritorna gli stati s[k] (b, t, m, 2) con s iniziale nullo.
 
     Sempre in fp32 (fallback pre-registrato in D10, cablato di default): sotto
     16-mixed l'autocast casterebbe einsum/matmul a fp16 e l'errore si compone sui
@@ -58,16 +55,17 @@ def prefix_scan(M, f):
     GradScaler. B, C e FFN restano in fp16.
     """
     with torch.autocast(device_type=f.device.type, enabled=False):
-        return _scan_fp32(M.float(), f.float()).to(f.dtype)
+        return _scan_fp32(M.float(), f.float())
 
 
 def _scan_fp32(M, f):
     t = f.shape[1]
     stride = 1
     while stride < t:
-        contrib = torch.einsum("mij,btmj->btmi", M, f[:, :-stride])
-        f = f + F.pad(contrib, (0, 0, 0, 0, stride, 0))
-        M = M @ M
+        M_hi = M[stride:]
+        f_new = torch.einsum("tmij,btmj->btmi", M_hi, f[:, :-stride]) + f[:, stride:]
+        M = torch.cat([M[:stride], M_hi @ M[:-stride]], dim=0)
+        f = torch.cat([f[:, :stride], f_new], dim=1)
         stride *= 2
     return f
 
@@ -102,6 +100,7 @@ class OscMixer(nn.Module):
         return [self.A_raw] + ([self.G_raw, self.dt_raw] if self.damped else [])
 
     def forward(self, u):
+        t = u.shape[1]
         bu = self.B(u)  # (b, t, m)
         if self.damped:
             dt = torch.sigmoid(self.dt_raw)
@@ -119,7 +118,7 @@ class OscMixer(nn.Module):
         row2 = torch.stack([dt * S, 1 - dt.square() * S * A], dim=-1)
         M = torch.stack([row1, row2], dim=-2)  # (m, 2, 2)
         f = torch.stack([dt * S * bu, dt.square() * S * bu], dim=-1)  # (b, t, m, 2)
-        states = prefix_scan(M, f)
+        states = prefix_scan(M.unsqueeze(0).expand(t, -1, -1, -1), f)
         return self.C(states[..., 1])  # componente x dello stato
 
 
