@@ -5,10 +5,10 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- **Implementazione griglia 1a (D10)** — sei bracci in `src/models/` (linoss, dlinoss,
-  dlinoss-phi, hyb-oa, hyb-ao, wrnn), scheletro transformer con mixer scambiato.
-  Scalini pre-registrati: smoke M2 → smoke velocità Kaggle (bench; il numero wrnn decide
-  il suo calendario) → sweep lr × 6 bracci → griglia 3 seed × 170M.
+- **Griglia 1a snellita (D11) — catena notturna su vast**: sonde transformer 1e-1/3e-1 →
+  baseline 5 seed @ lr nuova → hyb-ao/hyb-oa/dlinoss × 3 seed × 170M (hub) → linoss
+  20M fp32. Poi: righe registro + gate dlinoss-phi (parte solo con segnale dlinoss).
+  Istanza vast da **distruggere** a griglia finita (fattura anche da ferma).
 
 ## Next
 
@@ -27,6 +27,11 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
   (per dlinoss-phi: verifica se la struttura a bande sopravvive al training)
 
 ## Done
+
+- 2026-08-18 — **Sei bracci implementati** (review avversariale: 3 difetti corretti);
+  smoke+sweep completi su vast 3090 (~2 $); revisione D6-lr (tutte le categorie oltre il
+  vecchio bordo); verdetti: linoss instabile (=risultato asse 2), wrnn negativo di
+  porting; primi segnali dlinoss≈baseline e hyb-ao>hyb-oa. Dettagli: D11.
 
 - 2026-08-18 — **Fase 1 chiusa: baseline e apparato numerico completi.** Baseline 8,5M:
   5 seed a 170M, media 1,8266, **ε = 0,017** (base-1..5); lr 1e-3, budget 170M (D8),

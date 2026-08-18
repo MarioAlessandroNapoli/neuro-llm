@@ -464,6 +464,48 @@ quota → i suoi seed slittano o il braccio decade a esperimento separato (si di
 instabilità numeriche dello scan in 16-mixed → fallback a precisione fp32 del solo scan,
 dichiarato.
 
+### D11 — Esiti smoke/sweep, revisione lr (clausola D6) e griglia 1a snellita
+**Contesto.** Implementati i sei bracci (review avversariale: 3 difetti corretti pre-run,
+tra cui init V della wrnn perso per copia e scan fp16 → fallback fp32 di D10 cablato).
+Smoke e sweep su istanza vast dedicata (GPU singola, batch 32 = config storica D6).
+
+**Revisione D6 — lr per categoria.** La clausola del bordo (vincitore sull'estremo della
+griglia + trend monotono) è scattata per *tutte* le categorie, baseline inclusa: a 20M la
+baseline passa da 3,67 (lr 1e-3 congelata ieri) a 2,41 (3e-2), i bracci guadagnano
+0,5-1,2 nats oltre il vecchio bordo. Ricette congelate al punto di svolta misurato
+(NaN/divergenza alla lr successiva): **dlinoss 1e-2 · dlinoss-phi 3e-3 · hyb-oa 1e-2 ·
+hyb-ao 3e-3 · transformer: argmin tra 3e-2 (2,41) e sonde 1e-1/3e-1 in corso**.
+Conseguenza: i 5 seed baseline e ε=0,017 (D8, registro base-1..5) si rifanno alla nuova
+lr sulla stessa macchina della griglia; le righe vecchie restano come storia.
+
+**Verdetti dai bracci malati (evidenza smoke/diagnosi, 5-20M):**
+- **linoss puro — il fallimento È il risultato dell'asse 2.** In 16-mixed: NaN (overflow
+  fp16 dello stato, |λ|=1 → crescita polinomiale su 512 token). In fp32: niente NaN ma
+  impara pochissimo (6,35 vs 5,03 di dlinoss a 5M) a 3,6× il costo. L'ablazione
+  "l'oblio serve al linguaggio?" ha risposta affermativa già qui. Nel registro entra una
+  run fp32 dichiarata a budget sweep (20M); niente run 170M (−9h, informazione ~nulla).
+- **wrnn — negativo di porting.** Non impara a nessuna lr (1e-3 diverge; 3e-4 ~random;
+  1e-4 sopra il random): il campo ReLU con shift senza scarico accumula energia; il paper
+  non aveva task linguistici (gap dichiarato in D10). Registrato com'è; una variante
+  riparata (leak/norm sul campo) è materia esplicita della 1b, non un fix silenzioso.
+
+**Griglia snellita (emendamento al percorso D10):** baseline 5 seed + hyb-ao, hyb-oa,
+dlinoss × 3 seed × 170M; **dlinoss-phi è gated**: parte solo se dlinoss mostra segnale
+(o parità) contro la baseline — altrimenti scala a domanda 1b. Tutta la griglia su una
+sola istanza vast (GPU singola, hardware dichiarato nel registro): confronto interno,
+stessa macchina per tutti i bracci.
+
+**Primi segnali (1 seed, 20M — da confermare coi 3 seed):** dlinoss al passo della
+baseline a parità di lr-ottima; **hyb-ao > hyb-oa a ogni lr** (2,80 vs 3,01 al meglio):
+la gerarchia "anti-biologica" batte la direzione suggerita dal cap. 1. Ipotesi di lavoro
+(testabile col probe name-cloze): gli oscillatori sotto sfocano l'identità dei token che
+l'attention deve recuperare; sopra, integrano il contesto senza distruggere il retrieval.
+**Scartato.** Riparare linoss (clamp/init-floor: cambierebbe il meccanismo che l'ablazione
+vuole misurare); sweep wrnn esteso; 170M per linoss.
+**Riconsiderare se.** dlinoss coi 3 seed contraddicesse il segnale a 20M → phi decade a
+1b senza run; la sonda transformer 1e-1/3e-1 vincesse ancora sul bordo → si accetta il
+bordo residuo dichiarandolo (il rendimento marginale per decade è già in calo).
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
