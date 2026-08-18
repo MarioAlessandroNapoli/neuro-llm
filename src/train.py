@@ -198,6 +198,18 @@ def main():
         check_ckpt_compat(ckpt_path, max_steps, args.lr)
     trainer.fit(lit, train_dl, val_dl, ckpt_path=ckpt_path)
 
+    # Caso reale (2026-08-18): dopo la run pilot da 87 min con --hub-repo il processo è
+    # rimasto appeso allo shutdown dell'interprete (thread residui HF/W&B/dataloader),
+    # tenendo viva la sessione Kaggle ~10h a vuoto. Tutto ciò che conta (checkpoint,
+    # upload HF, metriche) è già flushato in modo sincrono: uscita dura.
+    if logger:
+        import wandb
+
+        wandb.finish()
+    import os
+
+    os._exit(0)
+
 
 if __name__ == "__main__":
     main()

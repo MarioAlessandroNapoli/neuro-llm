@@ -73,6 +73,7 @@ Griglia tipo stadio 1 (3 arch × 3 seed × 100M): ~2-2,5 h GPU.
 | Scritture W&B da locale falliscono | Il bearer token MCP non è una API key classica: serve `wandb login` |
 | `get_notebook_info` esplode il contesto | Output ~130KB (include il sorgente): salvarlo su file e parsare con python |
 | Crash immediato `CUDA error: no kernel image` su tutte le run | `save_notebook` via API resetta l'acceleratore al default P100 (sm_60, non più supportato da PyTorch); `machineShape` viene ignorato/normalizzato a "Gpu". Fix: impostare **GPU T4 x2** dalla UI (Settings → Accelerator) e lanciare Save & Run All da lì; conferma T4 = `tokens_per_sec` ~100k |
+| Quota GPU che evapora senza run (−10h in una notte, 2026-08-18) | La sessione di commit del pilot (87 min, --hub-repo) è rimasta RUNNING dopo la fine del training: processo appeso allo shutdown dell'interprete (thread residui HF/W&B/dataloader; le run brevi senza --hub-repo uscivano pulite). `time_reserved` è la prenotazione del cap 12h e si rilascia solo a processo morto. Fix cablato: `os._exit(0)` a fine `main()` in train.py. Controlli dopo ogni lancio: la versione in kaggle.com/me/sessions deve chiudersi da sola a fine run; `time_reserved` in `get_accelerator_quota` ~0. Anche l'editor aperto con acceleratore attivo è una sessione interattiva che brucia quota: Stop session dopo Save & Run All |
 
 ## Harness di valutazione (D7)
 
