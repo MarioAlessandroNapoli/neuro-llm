@@ -309,7 +309,9 @@ una sola cella della tabella; il verdetto è scritto qui, prima di qualunque num
 *Stati dell'asse loss* (primario, per braccio vs baseline): **L+**/**L−** = test di
 permutazione esatto sulla differenza delle medie, unilaterale, α=0,05 per braccio (con 3v3:
 la differenza osservata è la più estrema delle 20 permutazioni); **L=** = non significativo
-e |Δmedie| ≤ ε, con **ε = σ della baseline** misurata con 5 seed prima della griglia;
+e |Δmedie| ≤ ε, con **ε = σ della baseline** misurata con 5 seed prima della griglia
+— **misurata (2026-08-18): ε = 0,017 nats** (5 seed a 170M, config D8: media 1,8266,
+range [1,8064, 1,8427], run base-1..5 nel registro);
 *indeterminato* (non significativo, |Δ| > ε) → escalation pre-registrata: +2 seed per
 braccio, una sola volta; se resta indeterminato si riporta come tale. Il familywise sui
 bracci confrontati si dichiara nella scrittura dei risultati.
@@ -418,6 +420,11 @@ mostra segnale, le combinazioni non si esplorano a tappeto.
 | ID | Data | Arch | Params | Token | Seed | val_loss | Note |
 |----|------|------|--------|-------|------|----------|------|
 | smoke-0 | 2026-08-17 | transformer | 8,5M | 8,4M (2 run, prova resume) | 1 | ~5,0 (non a convergenza) | Solo validazione pipeline su M2; nessun valore scientifico |
+| base-1 | 2026-08-18 | transformer | 8,5M | 170M (D8) | 1 | 1,8427 | Griglia 1a, braccio baseline; DDP b16×2+compile |
+| base-2 | 2026-08-18 | transformer | 8,5M | 170M (D8) | 2 | 1,8064 | idem |
+| base-3 | 2026-08-18 | transformer | 8,5M | 170M (D8) | 3 | 1,8114 | idem |
+| base-4 | 2026-08-18 | transformer | 8,5M | 170M (D8) | 4 | 1,8336 | idem (seed extra per σ) |
+| base-5 | 2026-08-18 | transformer | 8,5M | 170M (D8) | 5 | 1,8390 | idem (seed extra per σ). I 5 seed: media 1,8266, **σ = 0,017 = ε di D7** |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo

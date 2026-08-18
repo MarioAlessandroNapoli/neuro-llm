@@ -9,11 +9,6 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
   architetture nella griglia 1a, con quale piano di ablazione). Output atteso: D10.
   Assi congelati in D9 (2026-08-18, da lettura Castellanos cap. 1): scale temporali ·
   inibizione/oblio · scia · metastabilità · gerarchia per profondità.
-- **Baseline transformer 8,5M** — lr congelato **1e-3** (bordo griglia: estenderla =
-  revisione D6), budget congelato **170M** (D8), config standard DDP 2×T4 b16×2 + compile
-  (bench 2026-08-18: 176k tok/s, 1,69×, traiettoria identica al terzo decimale).
-  **In esecuzione: 5 seed a 170M** (v14 del runner, ~85 min) → σ della val loss fissa
-  la banda ε di D7; 3 dei 5 seed = braccio baseline della griglia.
 
 ## Next
 
@@ -33,6 +28,9 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Done
 
+- 2026-08-18 — **Baseline completa e apparato numerico chiuso**: 5 seed a 170M (registro
+  base-1..5) → media 1,8266, **σ = 0,017 = banda ε di D7**; lr 1e-3, budget 170M (D8),
+  config DDP b16×2+compile; checkpoint su HF. La griglia 1a ha tutto tranne D10.
 - 2026-08-18 — Bench velocità (4 config × 20M): DDP 2×T4 b16×2 + compile = **176k tok/s
   (1,69×)** a batch globale e traiettoria invariati (val loss 3,669 vs 3,666 sweep) →
   adottata come standard; batch 64 (2,03×) scartato: richiederebbe ri-sweep per +20%.
