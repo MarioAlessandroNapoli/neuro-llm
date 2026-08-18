@@ -371,15 +371,42 @@ della curva pilot si leggono come stima centrale del risultato a quel budget, no
 il problema sarebbe la potenza); o il costo per step di una variante rendesse 170M
 impraticabile nella quota — revisione esplicita, mai silenziosa.
 
+### D9 — Assi di design dello stadio 1: cinque temi, ablazioni singole e combinate
+**Decisione.** Il design dell'architettura dello stadio 1 si organizza su cinque assi,
+distillati dalla mappa temi→transformer (lettura "Neurociencia del cuerpo", Castellanos,
+cap. 1 — 2026-08-18): (1) **scale temporali multiple e parallele**; (2) **inibizione
+selettiva e oblio strutturale**; (3) **scia percettiva**; (4) **metastabilità**;
+(5) **gerarchia subcorticale→corticale**. Ogni asse va tradotto in "matematica da LLM"
+— un meccanismo isolabile in ablazione — e adottato solo nella misura in cui l'ablazione
+ne mostra il beneficio, singolarmente e in combinazione (feature seeking, non adozione
+estetica: principio HRM/TRM).
+**Traduzione operativa provvisoria** (da raffinare in D10): 1 → mixer oscillatorio con
+frequenze apprese per unità (famiglia LinOSS); 2 → smorzamento apprendibile
+(D-LinOSS-style: un parametro che è insieme alfa-inibizione e curva dell'oblio);
+3 → proprietà emergente dello stato che decade — si *misura* (probe), non si implementa
+come modulo; 4 → schema di inizializzazione/vincolo dei rapporti di frequenza (bande a
+rapporti aurei/irrazionali vs spaziatura uniforme); 5 → disposizione per profondità
+(gradiente di scale temporali tra layer; ibrido attention+oscillatori).
+**Perché.** Sono gli assi dove il capitolo e la letteratura convergono su meccanismi
+isolabili; gli overlap noti (3 emerge da 1+2; 4 è un vincolo su 1) riducono la matrice
+reale a ~4 fattori indipendenti, compatibile col budget D8 (run da ~16 min).
+**Scartato (con motivo).** Fase come canale computazionale (contro-evidenza Nature
+Neuroscience 2025 già a registro; resta nei probe diagnostici); interocezione e valenza
+emotiva (nessun analogo a questa scala, fuori scope); porting di temi senza ablazione
+possibile.
+**Riconsiderare se.** La matrice combinata sfora il budget → si procede a stadi
+(1a: assi singoli; 1b: combinazioni dei soli assi con segnale); se nessun asse singolo
+mostra segnale, le combinazioni non si esplorano a tappeto.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
 
-- **Q1 — Quale backbone oscillatorio, in quale forma.** LinOSS puro come mixer di sequenza?
-  D-LinOSS (lo smorzamento apprendibile è la variante più "bande cerebrali": scale temporali
-  multiple apprese)? Wave-RNN? Ibrido attention+oscillatori (dove l'ablazione isola il
-  contributo oscillatorio)? Da decidere in brainstorming con criterio: il meccanismo deve
-  essere isolabile in un'ablazione (principio HRM/TRM). Output atteso: D9.
+- **Q1 — Istanziazione concreta degli assi D9.** Quale architettura precisa implementa
+  gli assi: LinOSS vs D-LinOSS (isola l'asse 2), init aurea vs uniforme (isola l'asse 4),
+  disposizione per profondità e forma dell'ibrido attention+oscillatori (asse 5), e quali
+  celle della matrice entrano nella griglia 1a. Output atteso: D10 (architetture della
+  griglia + piano di ablazione).
 - **Q3 — Granularità temporale come ablazione futura.** Char-level (~4× più passi, dipendenze
   stirate: test più severo per la memoria oscillatoria) o chunking appreso stile H-Net. Fuori
   dallo scope dello stadio 1; richiede baseline dedicate.

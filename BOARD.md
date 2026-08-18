@@ -5,12 +5,15 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- **Design stadio 1 — chiudere Q1** (quale backbone oscillatorio, in quale forma, con
-  quale ablazione). Output atteso: D9 nel RESEARCH_LOG.
+- **Design stadio 1 — chiudere Q1** (istanziazione concreta dei 5 assi D9: quali
+  architetture nella griglia 1a, con quale piano di ablazione). Output atteso: D10.
+  Assi congelati in D9 (2026-08-18, da lettura Castellanos cap. 1): scale temporali ·
+  inibizione/oblio · scia · metastabilità · gerarchia per profondità.
 - **Baseline transformer 8,5M** — lr congelato **1e-3** (bordo griglia: estenderla =
   revisione D6), budget congelato **170M** (D8), config standard DDP 2×T4 b16×2 + compile
   (bench 2026-08-18: 176k tok/s, 1,69×, traiettoria identica al terzo decimale).
-  Prossimo: **5 seed a 170M** (σ della val loss → fissa ε di D7) — runner pronto.
+  **In esecuzione: 5 seed a 170M** (v14 del runner, ~85 min) → σ della val loss fissa
+  la banda ε di D7; 3 dei 5 seed = braccio baseline della griglia.
 
 ## Next
 
