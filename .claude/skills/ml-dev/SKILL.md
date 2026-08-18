@@ -53,13 +53,17 @@ Metriche loggate: `train_loss`, `train_ppl`, `val_loss`, `val_ppl`, `tokens_per_
 
 ## Numeri di riferimento (misurati, 2026-08-17)
 
-| | M2 (solo smoke) | Kaggle T4 |
+| | M2 (solo smoke) | Kaggle T4 x2 (config standard) |
 |---|---|---|
-| Throughput @8,5M params | ~5,3k tok/s | **~115k tok/s** |
-| 100M token | ~5 h | **~15 min** |
+| Throughput @8,5M params | ~5,3k tok/s | **~176k tok/s** (DDP b16×2 + compile; 1 GPU: ~104k) |
+| Run di griglia (170M, D8) | — | **~16 min** |
 | Quota | — | 30 h/settimana (`get_accelerator_quota`), sessioni max 12 h |
 
-Griglia tipo stadio 1 (3 arch × 3 seed × 100M): ~2-2,5 h GPU.
+**Config standard di lancio (bench 2026-08-18)**: `--devices 2 --batch-size 16 --compile`
+— batch efficace 32 invariato (16×2), traiettoria identica alla config storica (val loss
+3,669 vs 3,666 a parità di step), 1,69× di velocità. Il batch efficace è parte della
+ricetta D6: non cambiarlo mai senza ri-sweep del lr.
+Griglia tipo stadio 1 (3 arch × 3 seed × 170M): ~2,5 h GPU.
 
 ## Gotchas (tutti già pagati una volta)
 
@@ -73,7 +77,7 @@ Griglia tipo stadio 1 (3 arch × 3 seed × 100M): ~2-2,5 h GPU.
 | Scritture W&B da locale falliscono | Il bearer token MCP non è una API key classica: serve `wandb login` |
 | `get_notebook_info` esplode il contesto | Output ~130KB (include il sorgente): salvarlo su file e parsare con python |
 | Crash immediato `CUDA error: no kernel image` su tutte le run | `save_notebook` via API resetta l'acceleratore al default P100 (sm_60, non più supportato da PyTorch); `machineShape` viene ignorato/normalizzato a "Gpu". Fix: impostare **GPU T4 x2** dalla UI (Settings → Accelerator) e lanciare Save & Run All da lì; conferma T4 = `tokens_per_sec` ~100k |
-| Quota GPU che evapora senza run (−10h in una notte, 2026-08-18) | La sessione di commit del pilot (87 min, --hub-repo) è rimasta RUNNING dopo la fine del training: processo appeso allo shutdown dell'interprete (thread residui HF/W&B/dataloader; le run brevi senza --hub-repo uscivano pulite). `time_reserved` è la prenotazione del cap 12h e si rilascia solo a processo morto. Fix cablato: `os._exit(0)` a fine `main()` in train.py. Controlli dopo ogni lancio: la versione in kaggle.com/me/sessions deve chiudersi da sola a fine run; `time_reserved` in `get_accelerator_quota` ~0. Anche l'editor aperto con acceleratore attivo è una sessione interattiva che brucia quota: Stop session dopo Save & Run All |
+| Quota GPU che evapora senza run (−10h in una notte, 2026-08-18) | La sessione di commit del pilot (87 min, --hub-repo) è rimasta RUNNING dopo la fine del training: processo appeso allo shutdown dell'interprete (thread residui HF/W&B/dataloader; le run brevi senza --hub-repo uscivano pulite). `time_reserved` è la prenotazione del cap 12h e si rilascia solo a processo morto. Fix cablato: `os._exit(0)` a fine `main()` in train.py. Controllo dopo ogni lancio: la versione in kaggle.com/me/sessions deve chiudersi da sola a fine run. Anche l'editor aperto con acceleratore attivo è una sessione interattiva che brucia quota: Stop session dopo Save & Run All. ATTENZIONE (verificato 2026-08-18): `time_reserved` traccia solo le sessioni interattive, NON i commit — un commit GPU può girare con reserved=0; per sapere se un commit sta girando fa fede W&B o la version history, mai la quota |
 
 ## Harness di valutazione (D7)
 

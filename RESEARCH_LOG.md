@@ -349,6 +349,28 @@ l'escalation (σ tra seed più grande del previsto): allora il problema è la po
 riapre la questione del numero di seed o del budget — mai la tabella dei verdetti a
 posteriori.
 
+### D8 — Token budget stadio 1: 170M per run
+**Decisione.** Ogni run di griglia dello stadio 1 usa 170.000.000 token di training
+(`--tokens 170000000`), identico per tutte le braccia e i seed (parità D6). La run
+pilota da epoch piena (536M) resta un'àncora interna, non un braccio.
+**Perché.** (a) È il Chinchilla-ottimale per 8,5M parametri, quindi difendibile senza
+argomenti ad hoc; (b) la curva del pilot (registro, pilot-1) mostra che a 170M il modello
+ha completato ~96% della discesa dall'inizializzazione (1,80 vs 1,51 dell'epoch piena) ed
+è pienamente nel regime "inglese coerente"; (c) il costo consente griglia completa + 5 seed
++ escalation D7 dentro la quota settimanale (run da ~16 min in DDP); (d) la domanda di
+ricerca è a budget fisso moderato — il framing sample-efficiency è il terreno naturale
+dell'ipotesi oscillatoria.
+**Scartato.** 100M (lascia 0,48 nats sul tavolo, regime più rumoroso, risparmio marginale);
+536M per tutte (×3 di costo per 0,15 nats di informazione in più, quota a rischio con le
+varianti lente); budget differenziato per braccio (viola la parità D6 by design).
+**Nota di misura (dal confronto sweep vs pilot).** A piccoli budget una run dedicata chiude
+peggio del punto intermedio di una run lunga (20M dedicata: 3,67 vs ~3,4 della curva pilot
+a 20M): l'annealing precoce costa più progresso di quanto rumore tolga. I punti intermedi
+della curva pilot si leggono come stima centrale del risultato a quel budget, non come limite.
+**Riconsiderare se.** La σ dei 5 seed rendesse la banda ε inutilizzabile (clausola già in D7,
+il problema sarebbe la potenza); o il costo per step di una variante rendesse 170M
+impraticabile nella quota — revisione esplicita, mai silenziosa.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
@@ -357,13 +379,10 @@ posteriori.
   D-LinOSS (lo smorzamento apprendibile è la variante più "bande cerebrali": scale temporali
   multiple apprese)? Wave-RNN? Ibrido attention+oscillatori (dove l'ablazione isola il
   contributo oscillatorio)? Da decidere in brainstorming con criterio: il meccanismo deve
-  essere isolabile in un'ablazione (principio HRM/TRM).
+  essere isolabile in un'ablazione (principio HRM/TRM). Output atteso: D9.
 - **Q3 — Granularità temporale come ablazione futura.** Char-level (~4× più passi, dipendenze
   stirate: test più severo per la memoria oscillatoria) o chunking appreso stile H-Net. Fuori
   dallo scope dello stadio 1; richiede baseline dedicate.
-- **Q4 — Token budget per lo stadio 1.** ~100M token per run (una via di mezzo tra il
-  Chinchilla-ottimale ~170M per 8,5M parametri e il costo di 3 architetture × 3 seed)? Da
-  fissare insieme a Q1 quando sapremo il costo per step delle varianti.
 
 ---
 

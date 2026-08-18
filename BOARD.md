@@ -6,12 +6,11 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 ## Now
 
 - **Design stadio 1 — chiudere Q1** (quale backbone oscillatorio, in quale forma, con
-  quale ablazione). Output atteso: D8 nel RESEARCH_LOG.
-- **Baseline transformer 8,5M** — sweep lr fatto → lr congelato **1e-3** (vincitore sul
-  bordo della griglia: estenderla = revisione D6). Pilot epoch completa fatto (2026-08-18,
-  riga pilot-1 nel registro): val loss 1,509, curva completa per Q4 in mano.
-  Prossimo: **chiudere Q4** (proposta dalla curva pilot), poi 5 seed al lr congelato
-  (σ della val loss → fissa ε di D7).
+  quale ablazione). Output atteso: D9 nel RESEARCH_LOG.
+- **Baseline transformer 8,5M** — lr congelato **1e-3** (bordo griglia: estenderla =
+  revisione D6), budget congelato **170M** (D8), config standard DDP 2×T4 b16×2 + compile
+  (bench 2026-08-18: 176k tok/s, 1,69×, traiettoria identica al terzo decimale).
+  Prossimo: **5 seed a 170M** (σ della val loss → fissa ε di D7) — runner pronto.
 
 ## Next
 
@@ -24,9 +23,6 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Later
 
-- DDP su T4 x2 (oggi `devices=1`, seconda GPU ferma): si decide solo se il fabbisogno
-  supera ~15h/settimana dopo Q1/Q4, e solo PRIMA di congelare σ e sweep — raddoppia il
-  batch efficace, quindi invalida lr congelato e misure fatte (da rifare al nuovo batch)
 - Stadio 2: BabyLM Strict-Small (10M parole) + valutazione BLiMP per la variante migliore
 - Ablazione granularità temporale (Q3: char-level o chunking appreso)
 - Probe diagnostici esplorativi (D7: non cambiano mai il verdetto dello stadio 1):
@@ -34,6 +30,12 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Done
 
+- 2026-08-18 — Bench velocità (4 config × 20M): DDP 2×T4 b16×2 + compile = **176k tok/s
+  (1,69×)** a batch globale e traiettoria invariati (val loss 3,669 vs 3,666 sweep) →
+  adottata come standard; batch 64 (2,03×) scartato: richiederebbe ri-sweep per +20%.
+  Due gotcha pagati: fused AdamW incompatibile col grad clipping AMP; sessione commit
+  appesa post-training (−10h quota) → fix `os._exit(0)`
+- 2026-08-18 — D8: budget stadio 1 congelato a 170M token/run (Q4 chiusa, curva dal pilot)
 - 2026-08-17 — Àncora BPB misurata: stories15M sul nostro val V2 @256 → loss 1,1511
   nats/token, **BPB 0,4407** (≡ val loss 1,252 col nostro tokenizer); coerente col README
   llama2.c (1,072 su V1); script riproducibile `src/eval/anchor_stories15m.py`
