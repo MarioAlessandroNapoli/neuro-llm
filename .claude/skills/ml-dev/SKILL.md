@@ -79,6 +79,48 @@ Griglia tipo stadio 1 (3 arch × 3 seed × 170M): ~2,5 h GPU.
 | Crash immediato `CUDA error: no kernel image` su tutte le run | `save_notebook` via API resetta l'acceleratore al default P100 (sm_60, non più supportato da PyTorch); `machineShape` viene ignorato/normalizzato a "Gpu". Fix: impostare **GPU T4 x2** dalla UI (Settings → Accelerator) e lanciare Save & Run All da lì; conferma T4 = `tokens_per_sec` ~100k |
 | Quota GPU che evapora senza run (−10h in una notte, 2026-08-18) | La sessione di commit del pilot (87 min, --hub-repo) è rimasta RUNNING dopo la fine del training: processo appeso allo shutdown dell'interprete (thread residui HF/W&B/dataloader; le run brevi senza --hub-repo uscivano pulite). `time_reserved` è la prenotazione del cap 12h e si rilascia solo a processo morto. Fix cablato: `os._exit(0)` a fine `main()` in train.py. Residuo noto (visto su 1 run su 5, 2026-08-18): con DDP il teardown può appendersi sporadicamente (rank secondario esce mentre il principale è ancora nell'upload HF) — a fine sessione multi-run verificare sempre la chiusura e stoppare a mano se lingera; nel runner tenere una cella finale `rm -rf checkpoints` per alleggerire il packaging. Controllo dopo ogni lancio: la versione in kaggle.com/me/sessions deve chiudersi da sola a fine run. Anche l'editor aperto con acceleratore attivo è una sessione interattiva che brucia quota: Stop session dopo Save & Run All. ATTENZIONE (verificato 2026-08-18): `time_reserved` traccia solo le sessioni interattive, NON i commit — un commit GPU può girare con reserved=0; per sapere se un commit sta girando fa fede W&B o la version history, mai la quota |
 
+## vast.ai — istanza a noleggio (fase griglia 1a)
+
+GPU singola a noleggio per smoke/sweep senza coda né quota. **Le coordinate (IP, porta,
+instance id) vivono SOLO in `~/.config/neuro-llm/vast.env`** (chmod 600): questo file di
+skill è nel repo pubblico — mai coordinate, token o chiavi qui dentro.
+
+```bash
+source ~/.config/neuro-llm/vast.env
+ssh -p $VAST_SSH_PORT root@$VAST_SSH_HOST          # chiave ~/.ssh/id_ed25519 (registrata su vast)
+```
+
+**Layout sull'istanza**: repo in `/workspace/neuro-llm`, venv `/venv/main` (da attivare:
+`python` nudo non è nel PATH), secrets in `/workspace/.hf_token` e `/workspace/.wandb_key`
+(chmod 600, arrivano via scp file-a-file, mai inline in comandi o log). Script di
+lancio `/workspace/vast_smoke.sh`, log `/workspace/smoke.log`.
+
+**Config di lancio su GPU singola**: `--batch-size 32` senza `--devices` — è la config
+storica della ricetta D6 (batch globale 32 invariato), niente DDP.
+
+**Gestione da remoto (senza UI vast):**
+
+```bash
+ssh -p $VAST_SSH_PORT root@$VAST_SSH_HOST 'tail -20 /workspace/smoke.log'   # progresso
+ssh -p $VAST_SSH_PORT root@$VAST_SSH_HOST 'pgrep -fl src.train'             # run attive
+ssh -p $VAST_SSH_PORT root@$VAST_SSH_HOST 'nvidia-smi'                      # GPU
+# lancio di un job lungo: nohup + redirect + STDIN CHIUSO, altrimenti l'ssh resta appeso
+ssh -p $VAST_SSH_PORT root@$VAST_SSH_HOST \
+  'cd /workspace && nohup bash script.sh > job.log 2>&1 < /dev/null & echo PID $!'
+```
+
+**Fatturazione — l'unico vero rischio operativo**: l'istanza fattura **anche da ferma e
+inattiva** (~0,14 $/h ≈ 3,5 $/notte); lo stop (⏸ dalla UI) ferma la GPU ma continua a
+fatturare lo storage. A fine fase l'istanza si **distrugge** (Destroy dalla UI, o
+`vastai destroy instance $VAST_INSTANCE_ID` se il CLI è configurato). Tutto ciò che
+serve conservare sta già su GitHub/W&B/HF: l'istanza è usa-e-getta.
+
+**Nuova istanza (l'attuale muore o si distrugge):** noleggio con template "PyTorch
+(Vast)" (filtri: verified, on-demand, ≥12 GB VRAM per i bracci a scan, reliability
+≥99%, banda ≥500 Mbps) → chiave SSH dalla UI dell'istanza → aggiornare `vast.env` →
+setup: clone del repo, `pip install -r requirements.txt` nel venv, scp dei due secret
+file, `snapshot_download` del dataset. ~5 minuti totali.
+
 ## Harness di valutazione (D7)
 
 Vive nella skill `eval` (codice `src/eval/`, artefatti `eval/`): generazione, giudice
