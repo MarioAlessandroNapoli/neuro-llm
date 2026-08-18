@@ -1,10 +1,19 @@
 from ..configs import ModelConfig
+from .hybrid import Hybrid, HybridAOConfig, HybridOAConfig
+from .linoss import DLinOSSConfig, DLinOSSPhiConfig, LinOSSConfig, OscLM
 from .transformer import Transformer
+from .wrnn import WRNNConfig, WRNNLM
 
 # Ogni architettura registra (classe modello, classe config): le varianti con parametri
 # propri (frequenze, smorzamento, dt) sottoclassano ModelConfig senza toccare le altre.
 ARCHS = {
     "transformer": (Transformer, ModelConfig),
+    "linoss": (OscLM, LinOSSConfig),
+    "dlinoss": (OscLM, DLinOSSConfig),
+    "dlinoss-phi": (OscLM, DLinOSSPhiConfig),
+    "hyb-oa": (Hybrid, HybridOAConfig),
+    "hyb-ao": (Hybrid, HybridAOConfig),
+    "wrnn": (WRNNLM, WRNNConfig),
 }
 
 
