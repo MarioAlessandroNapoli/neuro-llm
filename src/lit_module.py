@@ -25,15 +25,16 @@ class LMModule(L.LightningModule):
         self.log("train_ppl", loss.exp())
         now = time.perf_counter()
         if self._last_step_t is not None:
-            self.log("tokens_per_sec", x.numel() / (now - self._last_step_t))
+            # globale: ogni rank processa un micro-batch nello stesso intervallo
+            self.log("tokens_per_sec", x.numel() * self.trainer.world_size / (now - self._last_step_t))
         self._last_step_t = now
         return loss
 
     def validation_step(self, batch, _):
         x, y = batch
         loss = F.cross_entropy(self(x).transpose(1, 2), y)
-        self.log("val_loss", loss, prog_bar=True)
-        self.log("val_ppl", loss.exp())
+        self.log("val_loss", loss, prog_bar=True, sync_dist=True)
+        self.log("val_ppl", loss.exp(), sync_dist=True)
 
     def configure_optimizers(self):
         # Ricetta simmetrica per categoria (D6): decay solo sulle matrici dense;
@@ -53,6 +54,7 @@ class LMModule(L.LightningModule):
             ],
             lr=self.hparams.lr,
             betas=(0.9, 0.95),
+            fused=torch.cuda.is_available(),
         )
         warmup, total = self.hparams.warmup_steps, self.hparams.max_steps
 

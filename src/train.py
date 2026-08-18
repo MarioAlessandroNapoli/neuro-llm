@@ -49,12 +49,17 @@ class HubUpload(Callback):
             )
 
     def on_train_batch_end(self, trainer, *_):
-        if trainer.global_step > 0 and trainer.global_step % HUB_UPLOAD_EVERY_STEPS == 0:
+        if (
+            trainer.is_global_zero
+            and trainer.global_step > 0
+            and trainer.global_step % HUB_UPLOAD_EVERY_STEPS == 0
+        ):
             self._push()
 
     def on_train_end(self, trainer, pl_module):
-        trainer.save_checkpoint(self.ckpt_path)
-        self._push()
+        trainer.save_checkpoint(self.ckpt_path)  # su tutti i rank: ha barrier interno
+        if trainer.is_global_zero:
+            self._push()
 
 
 def resolve_ckpt(local_path: Path, hub_repo: str | None, run_name: str, resume: bool) -> str | None:
@@ -108,15 +113,19 @@ def main():
     parser.add_argument("--max-time", help="es. 00:11:00:00 per sessioni Kaggle")
     parser.add_argument("--num-workers", type=int, default=2)
     parser.add_argument("--no-wandb", action="store_true")
+    parser.add_argument("--devices", type=int, default=1, help="GPU in DDP; il batch efficace è batch_size × devices")
+    parser.add_argument("--compile", action="store_true", help="torch.compile del modello (solo CUDA)")
     args = parser.parse_args()
 
     L.seed_everything(args.seed, workers=True)
     model, cfg = build_model(args.arch)
+    if args.compile:
+        model.compile()  # in place: le chiavi dello state_dict restano pulite
     lr_tag = f"{args.lr:.0e}".replace("e-0", "e-")
     run_name = args.run_name or (
         f"{args.arch}-d{cfg.d_model}-L{cfg.n_layer}-t{args.tokens // 10**6}M-s{args.seed}-lr{lr_tag}"
     )
-    max_steps = args.tokens // (args.batch_size * cfg.seq_len)
+    max_steps = args.tokens // (args.batch_size * cfg.seq_len * args.devices)
 
     train_ds = TokenWindowDataset(args.data_dir / "train.bin", cfg.seq_len)
     val_ds = TokenWindowDataset(args.data_dir / "valid.bin", cfg.seq_len)
@@ -170,7 +179,9 @@ def main():
         })
 
     trainer = L.Trainer(
-        devices=1,
+        devices=args.devices,
+        strategy="ddp" if args.devices > 1 else "auto",
+        benchmark=True,
         max_steps=max_steps,
         max_time=args.max_time,
         precision=args.precision,
