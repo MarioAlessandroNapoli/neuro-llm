@@ -54,7 +54,8 @@ class LMModule(L.LightningModule):
             ],
             lr=self.hparams.lr,
             betas=(0.9, 0.95),
-            fused=torch.cuda.is_available(),
+            # niente fused: fa l'unscaling AMP internamente e Lightning rifiuta di
+            # applicare gradient_clip_val (RuntimeError al primo step, bench 2026-08-18)
         )
         warmup, total = self.hparams.warmup_steps, self.hparams.max_steps
 
