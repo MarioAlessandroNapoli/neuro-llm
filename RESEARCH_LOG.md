@@ -727,6 +727,23 @@ dlinoss-lp puro, senza consumatore con indirizzamento, gli stessi layer erano de
 (la gemella s2 è NaN — hazard confermato per la categoria ibridi a 3e-2 → coppie
 @1e-2 in corsa). Figura aggiornata (5° pannello): `docs/figures/2026-08-autopsia-spettrale-1b.png`.
 
+**Verdetto finale fase 1 (2026-08-19, notte) — parità, non vittoria; e la baseline era
+sotto-tarata.** La coppia hyb-oa-lp @1e-2 (1,5742/1,5729, seed al millesimo) era scesa
+sotto la baseline D11 (1,599); il controllo di parità totale (transformer alla ricetta
+esatta dell'ibrido, b16@1e-2) ha però dato **1,5708/1,5454 (media 1,558)**: il claim
+"batte la baseline" muore per mano del controllo pre-registrato. Verità acquisite:
+(a) **la baseline D11 non era al suo ottimo** — il batch è un iperparametro accoppiato
+alla lr (b16@3e-2 = 1,737/NaN: bordo più basso; b16@1e-2 = 1,558: meglio di b32@3e-2)
+e va sweepato insieme alla lr anche per la baseline; (b) il verdetto onesto è
+**parità entro il rumore** (1,574 vs 1,558, n=2, spread transformer-b16 0,025):
+enorme rispetto alla 1a (hyb-oa era morto), ma non un sorpasso; (c) la **gerarchia si
+è invertita** rispetto alla 1a in modo simmetrico (là ao 1,68 stabile e oa NaN; qui
+oa 1,573 stabile e ao 1,727+NaN): il "verdetto architetturale" della 1a era in realtà
+un verdetto di *ottimizzazione* — l'ipotesi filtro-che-sfoca è da ritirare; (d)
+l'ibrido a fine budget scende ancora mentre il transformer satura → la domanda vera
+passa all'**asintoto** (536M). Nessun numero della 1a cambia; cambia il riferimento
+per la 1b+: baseline onesta = min su (batch, lr), da ri-stabilire in D13.
+
 *Riproducibilità (bracci lp/lp-init 170M):* codice a commit `cd60dbc`; run W&B gruppo
 `grid-1b` (id = run name, es. `dlinoss-lp-d256-L8-t170M-s1-lr3e-2`), checkpoint su HF
 `neuro-llm-ckpt/<run_name>/last.ckpt`; ricetta: BPE 8k congelato (D3-tokenizer),
@@ -763,6 +780,10 @@ D11 1,599±0,007 (b32×2 su 4080), dlinoss classico 1,932 @3e-3.
 | lp-1..2 | 2026-08-19 | dlinoss-lp | 8,42M | 170M ×2 seed | 1-2 | 1,9498 / 1,9672 | Griglia 1b @3e-2 (lr della baseline: primo oscillatore puro a reggerla). Autopsia: degenerazione in filtro+feedforward |
 | lpi-1 | 2026-08-19 | dlinoss-lp-init | 8,42M | 170M | 1 | 1,9450 | Griglia 1b @3e-2, init r~U[0,7;0,9]. Stessa struttura e loss di lp → degenerazione robusta all'init; braccio chiuso a 1 seed |
 | hoalp-1 | 2026-08-19 | hyb-oa-lp | 8,55M | 170M | 1 | 1,7225 | Griglia 1b @3e-2 (bordo: s2 gemella NaN a step 4k — hazard). Morta di rete a step 16k e ripresa da HF. Curva ancora in discesa a fine budget. Autopsia: gradiente di sopravvivenza 8→17→34% verso l'attention |
+| hoalp2-1..2 | 2026-08-19 | hyb-oa-lp | 8,55M | 170M ×2 seed | 1-2 | 1,5742 / 1,5729 | Griglia 1b @1e-2 (un-gradino-sotto). Due seed al millesimo; curva in discesa a fine budget (candidato asintoto) |
+| haolp-1..2 | 2026-08-19 | hyb-ao-lp | 8,55M | 170M ×2 seed | 1-2 | 1,7268 / NaN | Griglia 1b @1e-2 (lr di categoria dallo sweep di oa — caveat: mai sweepata per ao). Gerarchia invertita rispetto alla 1a: ora è ao il fragile |
+| b16-3e2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,7371 / NaN | Controllo batch: a b16 la lr 3e-2 è oltre il tetto della baseline (batch piccolo = rumore alto = bordo più basso) |
+| b16-1e2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,5708 / 1,5454 | **Controllo di parità totale (ricetta dell'ibrido). Media 1,558: la baseline D11 era sotto-tarata** — b16@1e-2 batte b32@3e-2 (1,599). Spread tra seed 0,025 (≫ ε=0,007 di b32) |
 | ctrl3-1..2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,6918 / 1,7090 | **Controllo lr-matched** @3e-3 (la lr degli oscillatori): media 1,700. Non braccio di griglia; separa espressività da ottimizzazione nel gap oscillatori-vs-baseline |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
