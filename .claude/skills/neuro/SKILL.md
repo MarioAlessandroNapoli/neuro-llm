@@ -59,6 +59,15 @@ emergente, firma del guasto = perdita di smorzamento, hyb-oa morto all'init).
   media e range riportati; il segno del risultato si dichiara sempre, anche se negativo (D6).
 - **Baseline nostra**: mai numeri di terzi come termine di confronto (D5).
 
+**Documentazione e artefatti (skill `docs-and-artifacts`, orchestrata da qui).**
+Neuro decide il momento, quella skill il contenuto. Trigger da applicare senza
+eccezioni: fine sweep/braccio → tabella nel log; finding principale → pacchetto
+figura+script+riproducibilità+timeline in un commit; lezione ingegneristica → gotcha
++ script-evidenza; **fine ciclo/griglia → pacchetto di chiusura** (archiviazione,
+memoria di progetto, timeline, verifica artefatti) — che è anche il momento
+programmato per lo scarico del contesto di sessione. `docs/TIMELINE.md` porta le date:
+il progetto è giovane e la cronologia è parte del racconto scientifico.
+
 ## Comunicazione dei risultati
 
 Findings in registro narrativo umano: prima il modello di dominio, poi il comportamento
