@@ -8,18 +8,16 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- **Griglia 1a chiusa (2026-08-19)** — compute finito: **distruggere l'istanza vast**
-  (fattura anche da ferma). Controllo lr-matched (baseline@3e-3 = 1,700) letto: il gap
-  di hyb-ao (1,68) è **tutto tetto di ottimizzazione**, quello di dlinoss (1,93) è
-  anche espressività. Titolo riformulato in D11: due tasse distinte (addestrabilità ·
-  espressività) → bersagli 1b: omeostasi · selettività.
-- Findings registrati in D11: due-tasse; oblio necessario-non-sufficiente; gerarchia
-  inversa vince; gate phi FAIL per aritmetica; tema omeostasi per la 1b.
+- **Fase 1 della 1b (D12)** su RTX 3060 (0,054 $/h): sweep lr dlinoss-lp in corsa;
+  poi bracci 170M (lp, init post-autopsia, hyb-oa@3e-3) e implementazione
+  omeostasi + ibrido intercalato. 4080 stoppata (0,007 $/h storage), da riavviare
+  solo se servono gli ibridi veloci.
+- **Fase 0 chiusa** (esiti in D12): scan fuso adottato (9,7×, `NEURO_SCAN=hoo`; bug
+  backward Inductor trovato e aggirato), log-polare validata, bf16 respinto
+  (GradScaler = omeostata primitivo), regola pavimento-di-rumore negli A/B.
 
 ## Next
 
-- **Fase 0 della 1b (D12)**: parametrizzazione log-polare in OscMixer + spike
-  `torch.associative_scan` per fondere lo scan (A/B di training su GPU obbligatorio)
 - Validare il giudice con una chiamata reale (serve `ANTHROPIC_API_KEY` nell'ambiente:
   la build delle richieste è già verificata, manca solo il round-trip API)
 - Campagna giudice post-griglia: generazioni per tutti i bracci + baseline, scoring ed
@@ -38,6 +36,10 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Done
 
+- 2026-08-19 — **Griglia 1a chiusa e autopsiata** (D11+D12): due tasse (hyb-ao = solo
+  addestrabilità, dlinoss = anche espressività; controllo lr-matched 1,700), oblio
+  necessario-non-sufficiente, gerarchia inversa vince, gate phi FAIL; autopsia: r
+  tirato giù dal training, gerarchia timescale emergente, guasto = perdita smorzamento
 - 2026-08-18 — **Sei bracci implementati** (review avversariale: 3 difetti corretti);
   smoke+sweep completi su vast 3090 (~2 $); revisione D6-lr (tutte le categorie oltre il
   vecchio bordo); verdetti: linoss instabile (=risultato asse 2), wrnn negativo di

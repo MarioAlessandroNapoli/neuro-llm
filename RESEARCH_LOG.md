@@ -646,6 +646,28 @@ poco in training (mediane dei periodi ~4 token ovunque, si muovono solo le code)
 se le bande φ sopravvivessero, potrebbe essere inerzia, non utilità: il probe
 spettrale resta obbligatorio prima di ogni claim.
 
+**Esito fase 0 — apparato (2026-08-19, sera, su RTX 3060).**
+1. **Log-polare**: `dlinoss-lp` implementato (r = exp(−exp(ν)), θ = π·σ(θ̄), Δt fisso;
+   autovalori esatti r·e^{±iθ}, parità −0,9%); smoke di training sano.
+2. **Scan fuso: adottato, 9,7× sul modello intero** (10,5k → ~101k tok/s su 3060).
+   Strada tortuosa e istruttiva: il backward che Inductor genera per
+   `torch.associative_scan` (modo generic) è **rotto quando il combine contiene
+   matmul/einsum** — gradienti ~100% errati, solo compile+CUDA, invisibile a ogni test
+   eager-mode (bug di PyTorch, non nostro). Prima versione: +0,27 di val (7× il
+   rumore) e un seed NaN. Fix: combine 2×2 in aritmetica elementwise esplicita → 
+   gradienti corretti (2e-4 vs fp64), scan 1067→8 ms. A/B finale su 2 seed:
+   hoo 3,540/3,463 vs eager 3,660/3,624 — nessuna regressione (semmai meglio, entro
+   2-4× il rumore). Switch esplicito `NEURO_SCAN=hoo` nei lanci 1b, default eager.
+3. **bf16-mixed: respinto dall'A/B** (previsione teorica falsificata): NaN a step
+   ~300-319 a traiettoria già sana. Spiegazione: in 16-mixed il GradScaler controlla
+   inf/NaN nei gradienti e **salta lo step** — un omeostata primitivo che scarta i
+   colpi di coda della dinamica oscillatoria; bf16 non lo ha e il primo spike avvelena
+   i pesi. Ricetta 1b: resta 16-mixed (scan sempre fp32). Rima col tema omeostasi.
+4. **Regola di metodo acquisita: ogni A/B di training misura anche il pavimento di
+   rumore seed-a-seed** (qui 0,037): senza, il backward rotto sarebbe passato — o un
+   equivalente sano sarebbe stato respinto. Il criterio si fissa prima di vedere i
+   dati.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
