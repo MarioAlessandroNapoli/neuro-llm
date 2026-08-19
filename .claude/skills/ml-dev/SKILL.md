@@ -115,6 +115,11 @@ fatturare lo storage. A fine fase l'istanza si **distrugge** (Destroy dalla UI, 
 `vastai destroy instance $VAST_INSTANCE_ID` se il CLI è configurato). Tutto ciò che
 serve conservare sta già su GitHub/W&B/HF: l'istanza è usa-e-getta.
 
+**Registro costi**: a ogni distruzione di istanza (o quando l'utente comunica il saldo)
+si aggiorna la riga «Budget compute» in cima a `BOARD.md` — totale, spesi con
+attribuzione per fase, residui, data. Serve come dev log completo per eventuale
+sito/pubblicazione.
+
 **Nuova istanza (l'attuale muore o si distrugge):** noleggio con template "PyTorch
 (Vast)" (filtri: verified, on-demand, ≥12 GB VRAM per i bracci a scan, reliability
 ≥99%, banda ≥500 Mbps) → chiave SSH dalla UI dell'istanza → aggiornare `vast.env` →

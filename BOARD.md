@@ -3,6 +3,9 @@
 Stato e priorità del progetto. Regole di gestione nella skill `neuro`.
 Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non prossimo · Done = compresso.
 
+**Budget compute**: 10 $ — spesi 2,68 $ (griglia 1a completa: 3090 smoke+sweep+baseline
+~2 $, 4080 griglia+controlli ~0,68 $) · residui 7,32 $ (agg. 2026-08-19).
+
 ## Now
 
 - **Griglia 1a chiusa (2026-08-19)** — compute finito: **distruggere l'istanza vast**
