@@ -571,10 +571,85 @@ selettività/gating.
 
 ---
 
+### D12 — Design griglia 1b: due tasse, due bersagli (chiude Q5)
+
+**Decisione.** La 1b attacca la tassa di addestrabilità (l'unica che l'ibrido paga) e
+prepara il terreno con apparato migliore. Quattro passi in sequenza:
+
+- **Pre-step — autopsia spettrale dei checkpoint 1a** (locale, CPU, costo ~0): dai
+  pesi addestrati ricavare gli autovalori appresi (r, θ) per layer e confrontarli con
+  l'init; misurare la saturazione del clamp (parametri che spingono contro la finestra
+  di stabilità); confrontare il seed degenerato di hyb-ao (2,07) coi seed sani; leggere
+  i checkpoint pre-NaN di hyb-oa/dlinoss@1e-2 (upload periodico) per la firma
+  dell'instabilità; verificare con le norme di B/C se in hyb-ao il modello *usa* gli
+  oscillatori o li ha silenziati (controllo dell'interpretazione "l'ibrido non perde
+  nulla").
+- **Fase 0 — apparato** (prima di ogni run 1b): (a) parametrizzazione log-polare LRU
+  (r = exp(−exp(ν)): r < 1 per costruzione, update moltiplicativi ben condizionati al
+  bordo) cablata in OscMixer per tutti i bracci; (b) fusione dello scan — spike
+  `torch.associative_scan`, poi eventuale kernel Triton (bottleneck misurato: ~72
+  lanci sequenziali di kernel, revert 3a04dfe). Vincolo: ogni modifica validata con
+  A/B di training su GPU, non con equivalenza CPU.
+- **Fase 1 — bracci**: (a) dlinoss log-polare + sweep lr (quanto della tassa di
+  addestrabilità paga la sola parametrizzazione?); (b) omeostasi (regolazione attiva
+  di r dalle statistiche di attivazione, analogo dello scaling sinaptico) **contro il
+  controllo log-polare**, non contro il dlinoss 1a — altrimenti il merito della
+  regolazione attiva non è isolato (meccanismi-non-estetiche); (c) ibrido intercalato
+  A-O-A-O (terzo punto dell'asse gerarchia); (d) ripescaggio hyb-oa@3e-3 (già in D11).
+- **Fase 2 — asintoto**: i vincitori di fase 1 a 536M token contro la curva pilot
+  della baseline (1,509 a epoca piena).
+
+**Perché.** Il controllo lr-matched (ctrl3) mostra che a lr pari hyb-ao ≥ baseline: la
+strada più corta verso "gli oscillatori aiutano" passa dal rimuovere il tetto di lr,
+non dall'aggiungere capacità. La fusione dello scan (ibridi oggi a 50k tok/s vs 439k
+della baseline) riduce di ~4× il costo di ogni braccio futuro e rende economica la
+fase 2.
+
+**Scartato.** CUDA scritto a mano (il collo è il numero di lanci, non la matematica);
+attaccare subito la tassa di espressività con selettività/gating stile Mamba —
+dichiarata fuori scope, è il candidato naturale di una 1c.
+
+**Riconsiderare se.** L'autopsia spettrale smentisce le premesse (es. hyb-ao ha
+silenziato gli oscillatori: allora "ibrido ≥ baseline a lr pari" non dice nulla sugli
+oscillatori e la 1b va ridisegnata); o se log-polare da sola chiude la tassa di
+addestrabilità (allora l'omeostasi perde il bersaglio principale e resta solo come
+claim biologico).
+
+**Esito pre-step — autopsia spettrale (2026-08-19, 8 checkpoint HF).**
+1. **Il training tira r verso il basso, con forza**: dlinoss sano converge a r mediana
+   0,74 (layer 0) → 0,90 (layer 7) dall'init 0,95; orizzonti effettivi 4-10 token,
+   frazione r>0,99 ≤ 4%. Il modello scarta la memoria lunga che l'init gli regala e
+   tiene filtri locali — coerente con la tassa di espressività (un banco LTI non sa
+   *usare* il passato remoto per contenuto, quindi lo butta).
+2. **Emerge una gerarchia di scale temporali con la profondità** (r cresce
+   monotonicamente col layer, entrambi i seed dlinoss): eco diretta del gradiente di
+   timescale intrinseche lungo la gerarchia corticale (Murray et al. 2014). Non
+   pre-registrato; da citare come osservazione, non come conferma.
+3. **La firma del guasto è la perdita dello smorzamento**: dlinoss@1e-2 chiude con il
+   40-60% degli oscillatori dei layer alti a r>0,99 (mediana 1,0000) e ||B||,||C||
+   gonfiate ~3×; il seed degenerato di hyb-ao (2,07) mostra la stessa firma in forma
+   graduata (29% a r>0,99 nel solo ultimo layer). Stesso meccanismo, dose diversa →
+   l'omeostasi 1b ha un bersaglio misurabile: tenere r lontano da 1.
+4. **In hyb-ao gli oscillatori NON sono silenziati**: ||C|| ≈ ||B|| ≈ 30, come nel
+   dlinoss sano — la premessa di D12 regge (caveat: la norma non prova il contributo
+   funzionale; la prova forte sarebbe l'ablazione del mixer a eval).
+5. **hyb-oa è morto all'init**: al checkpoint step 3000 i suoi parametri spettrali
+   erano ancora alla distribuzione iniziale (frac r>0,99 = 10% = valore esatto
+   dell'init U[0,9;1]) e C ferma all'init (‖C‖=9,3 = valore atteso), mentre dlinoss
+   allo stesso step aveva già portato r a 0,80-0,90. La stabilità è una **corsa**:
+   imparare a smorzare prima di esplodere — con gli oscillatori in fondo allo stack a
+   lr 1e-2 la corsa si perde.
+Implicazioni di design accolte in fase 1: (e) braccio quasi gratis **init
+post-autopsia** (r ~ U[0,7;0,9]: partire dove il training converge elimina il
+transito pericoloso vicino al bordo); nota per il gate φ: le frequenze θ si muovono
+poco in training (mediane dei periodi ~4 token ovunque, si muovono solo le code) —
+se le bande φ sopravvivessero, potrebbe essere inerzia, non utilità: il probe
+spettrale resta obbligatorio prima di ogni claim.
+
+---
+
 ## Questioni aperte (fase di design, in corso)
 
-- **Q5 — Griglia 1b.** Quali combinazioni di assi esplorare dopo la 1a: si decide con la
-  tabella dei verdetti in mano (solo assi con segnale; clausola già in D9).
 - **Q3 — Granularità temporale come ablazione futura.** Char-level (~4× più passi, dipendenze
   stirate: test più severo per la memoria oscillatoria) o chunking appreso stile H-Net. Fuori
   dallo scope dello stadio 1; richiede baseline dedicate.

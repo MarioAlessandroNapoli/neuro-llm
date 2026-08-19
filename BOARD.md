@@ -15,6 +15,8 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Next
 
+- **Fase 0 della 1b (D12)**: parametrizzazione log-polare in OscMixer + spike
+  `torch.associative_scan` per fondere lo scan (A/B di training su GPU obbligatorio)
 - Validare il giudice con una chiamata reale (serve `ANTHROPIC_API_KEY` nell'ambiente:
   la build delle richieste è già verificata, manca solo il round-trip API)
 - Campagna giudice post-griglia: generazioni per tutti i bracci + baseline, scoring ed
@@ -22,9 +24,9 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Later
 
-- Griglia 1b (Q5): direzioni motivate dai findings D11 — omeostasi/regolazione del
-  campo oscillatorio, φ a 170M (gate fallito ma mai corso), wrnn con scarico (leak),
-  hyb-oa ripescato a 3e-3; gerarchia al char-level → si fonde con Q3
+- Griglia 1b, fasi 1-2 (D12): dlinoss log-polare + sweep lr · omeostasi vs controllo
+  log-polare · ibrido intercalato A-O · hyb-oa@3e-3 · init post-autopsia r~U[0,7;0,9] ·
+  asintoto 536M per i vincitori. Fuori scope dichiarato: selettività/gating (1c)
 - Stadio 2: BabyLM Strict-Small (10M parole) + valutazione BLiMP per la variante migliore
 - Ablazione granularità temporale (Q3: char-level o chunking appreso)
 - Probe diagnostici esplorativi (D7: non cambiano mai il verdetto dello stadio 1):
