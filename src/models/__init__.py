@@ -1,5 +1,5 @@
 from ..configs import ModelConfig
-from .hybrid import Hybrid, HybridAOConfig, HybridOAConfig
+from .hybrid import Hybrid, HybridAOConfig, HybridAOLPConfig, HybridOAConfig, HybridOALPConfig
 from .linoss import (
     DLinOSSConfig,
     DLinOSSLPConfig,
@@ -22,6 +22,8 @@ ARCHS = {
     "dlinoss-lp-init": (OscLM, DLinOSSLPInitConfig),
     "hyb-oa": (Hybrid, HybridOAConfig),
     "hyb-ao": (Hybrid, HybridAOConfig),
+    "hyb-oa-lp": (Hybrid, HybridOALPConfig),
+    "hyb-ao-lp": (Hybrid, HybridAOLPConfig),
     "wrnn": (WRNNLM, WRNNConfig),
 }
 

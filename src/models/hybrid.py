@@ -19,11 +19,22 @@ from .transformer import Block
 class HybridOAConfig(ModelConfig):
     m: int = 512
     osc_first: bool = True
+    log_polar: bool = False  # 1a: parametrizzazione classica (A,G) — congelata
 
 
 @dataclass
 class HybridAOConfig(HybridOAConfig):
     osc_first: bool = False
+
+
+@dataclass
+class HybridOALPConfig(HybridOAConfig):
+    log_polar: bool = True  # ricetta 1b (D12): log-polare come apparato
+
+
+@dataclass
+class HybridAOLPConfig(HybridAOConfig):
+    log_polar: bool = True
 
 
 class Hybrid(nn.Module):
@@ -33,7 +44,7 @@ class Hybrid(nn.Module):
         self.tok = nn.Embedding(cfg.vocab_size, cfg.d_model)
         self.pos = nn.Embedding(cfg.seq_len, cfg.d_model)
         half = cfg.n_layer // 2
-        osc = [OscBlock(cfg, cfg.m, damped=True, phi_init=False) for _ in range(half)]
+        osc = [OscBlock(cfg, cfg.m, damped=True, phi_init=False, log_polar=cfg.log_polar) for _ in range(half)]
         attn = [Block(cfg) for _ in range(cfg.n_layer - half)]
         self.blocks = nn.ModuleList(osc + attn if cfg.osc_first else attn + osc)
         self.ln_f = nn.LayerNorm(cfg.d_model)
