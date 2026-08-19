@@ -519,8 +519,8 @@ lr stabile della griglia, la run di griglia scende di un gradino: dlinoss → 3e
 (rilanciato), hyb-oa → registrato instabile alla lr pre-registrata (le due run NaN
 sono il suo dato; eventuale ripescaggio a 3e-3 è materia 1b, dichiarata).
 
-**Findings di griglia (2026-08-19, pomeriggio — parziali: mancano dlinoss s2-s3 e
-linoss-registro).** Il quadro con la baseline finalmente alla sua lr onesta:
+**Findings di griglia (2026-08-19).** Il quadro con la baseline finalmente alla sua
+lr onesta:
 1. **Titolo provvisorio dello stadio 1**: a parità di parametri, budget e lr per
    categoria, su TinyStories a 512 token **gli oscillatori non battono l'attention** —
    baseline 1,599±0,007 · hyb-ao 1,68 (seed sani) · dlinoss 1,93. Segno dichiarato,
@@ -542,6 +542,32 @@ linoss-registro).** Il quadro con la baseline finalmente alla sua lr onesta:
    attiva, non un init fortunato. Candidato primario per la 1b insieme a φ (gate
    fallito ma non falsificato: mai corso a 170M) e alla wrnn riparata (il suo campo
    senza scarico è lo stesso difetto: manca l'oblio).
+
+**Chiusura anticipata (decisione, 2026-08-19 sera).** dlinoss s2 interrotta a metà
+corsa (val 2,39, traiettoria coerente con s1) e s3/linoss-registro cancellate: nessun
+verdetto qui sopra cambierebbe con 3-4 ore in più di seed. Il **gate phi è FAIL per
+aritmetica**: con s1 = 1,932, la media 3-seed non può scendere sotto la soglia 1,606
+se non con seed che batterebbero la baseline stessa — dlinoss-phi resta materia 1b.
+Al posto della coda gira il **controllo lr-matched**: baseline @3e-3 × 170M × 2 seed
+(~15 min), per separare nel gap di hyb-ao (+11ε) il deficit di espressività (attention
+= richiamo per contenuto, che un sistema LTI non fa) dal tetto di ottimizzazione
+(hyb-ao corre a lr 10× più bassa della baseline). Se baseline@3e-3 ≈ 1,68 il gap è
+ottimizzazione; se ≈ 1,60 è espressività.
+
+**Esito del controllo (ctrl3-1..2): baseline@3e-3 = 1,692/1,709, media 1,700.** Il
+verdetto si sdoppia, e raffina il finding 1:
+- **hyb-ao (1,68 sui seed sani) ≥ baseline a lr pari (1,700)**: l'intero gap
+  dell'ibrido dalla baseline D11 è **tetto di ottimizzazione**, non espressività — a
+  parità di lr l'ibrido non perde nulla, anzi. Gli oscillatori in cima non costano
+  capacità; costano la lr che il resto del modello potrebbe permettersi (10×).
+- **dlinoss (1,932) resta a +0,23 anche dalla baseline lr-matched**: per l'oscillatore
+  puro il deficit di espressività è reale — coerente con l'ipotesi LTI (nessun
+  richiamo per contenuto), testabile col probe name-cloze.
+Il titolo dello stadio 1 si riformula: non "gli oscillatori perdono", ma **"gli
+oscillatori pagano due tasse distinte: una di addestrabilità (l'ibrido paga solo
+questa) e una di espressività (solo l'oscillatore puro)"**. Per la 1b la tassa di
+addestrabilità è il bersaglio dell'omeostasi; quella di espressività, della
+selettività/gating.
 
 ---
 
@@ -569,7 +595,8 @@ linoss-registro).** Il quadro con la baseline finalmente alla sua lr onesta:
 | hybao-1..3 | 2026-08-19 | hyb-ao | 8,55M | 170M ×3 seed | 1-3 | 1,6815 / 1,6795 / 2,0721 | Griglia 1a, lr 3e-3 (D11). Seed 3: instabilità parziale a metà run, mai recuperata — fragilità del braccio alla sua lr. Sui seed sani: +0,08 (~11ε) dalla baseline |
 | hyboa-x | 2026-08-19 | hyb-oa | 8,55M | 170M | 1-2 | NaN / NaN | Divergente alla lr pre-registrata 1e-2 (stabile a 20M): il bordo non regge a 170M (emendamento D11). Terzo seed non eseguito (informazione nulla) |
 | dlin-x | 2026-08-19 | dlinoss | 8,43M | 170M | 1 | NaN | Stesso pattern a lr 1e-2 → griglia rilanciata a 3e-3 (emendamento D11) |
-| dlin2-1 | 2026-08-19 | dlinoss | 8,43M | 170M | 1 | 1,9320 | Griglia 1a, lr 3e-3 (regola un-gradino-sotto, emendamento D11); +0,33 (+47ε) dalla baseline D11. Seed 2-3 in corsa |
+| dlin2-1 | 2026-08-19 | dlinoss | 8,43M | 170M | 1 | 1,9320 | Griglia 1a, lr 3e-3 (regola un-gradino-sotto, emendamento D11); +0,33 (+47ε) dalla baseline D11. Seed 2-3 interrotti (chiusura anticipata: nessun verdetto cambiava) |
+| ctrl3-1..2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,6918 / 1,7090 | **Controllo lr-matched** @3e-3 (la lr degli oscillatori): media 1,700. Non braccio di griglia; separa espressività da ottimizzazione nel gap oscillatori-vs-baseline |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo

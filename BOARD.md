@@ -5,12 +5,13 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- **Griglia 1a in chiusura (oggi ~15:30)**: fatti baseline 5 seed (1,599, ε=0,007),
-  hyb-ao 3 seed, verdetti NaN hyb-oa/dlinoss@bordo; in corsa dlinoss @3e-3 s2-s3,
-  poi linoss-registro 20M fp32 e gate phi (atteso FAIL → phi in 1b). A fine catena:
-  righe registro finali + **distruggere l'istanza vast** (fattura anche da ferma).
-- Findings parziali registrati in D11: oscillatori ≤ attention a parità; oblio
-  necessario-non-sufficiente; gerarchia inversa vince; tema omeostasi per la 1b.
+- **Griglia 1a chiusa (2026-08-19)** — compute finito: **distruggere l'istanza vast**
+  (fattura anche da ferma). Controllo lr-matched (baseline@3e-3 = 1,700) letto: il gap
+  di hyb-ao (1,68) è **tutto tetto di ottimizzazione**, quello di dlinoss (1,93) è
+  anche espressività. Titolo riformulato in D11: due tasse distinte (addestrabilità ·
+  espressività) → bersagli 1b: omeostasi · selettività.
+- Findings registrati in D11: due-tasse; oblio necessario-non-sufficiente; gerarchia
+  inversa vince; gate phi FAIL per aritmetica; tema omeostasi per la 1b.
 
 ## Next
 
