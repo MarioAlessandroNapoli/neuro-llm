@@ -13,7 +13,7 @@ decidere *quando* scatta (schedule sotto), questa skill dice *cosa e come* produ
 
 | Artefatto | Posizione | Regola |
 |---|---|---|
-| Figure | `docs/figures/AAAA-MM-<slug>.png` | Datate; stile paper (val nel titolo, niente box sui dati); MAI orfane: ogni PNG è citato dal RESEARCH_LOG |
+| Figure | `docs/figures/AAAA-MM-<slug>.png` (+ `-en`) | Datate; stile paper (val nel titolo, niente box sui dati); **bilingui**: lo script genera IT e EN (`[it|en|all]`, decimali "," vs "."); MAI orfane: ogni PNG è citato dal RESEARCH_LOG |
 | Script di analisi/figure | `scripts/` | Ogni figura è rigenerabile: script + checkpoint HF + run W&B bastano; header con uso e dipendenze (`uv run --with ...`) |
 | Timeline | `docs/TIMELINE.md` | Una riga datata (giorno + ora se nota) per milestone; si aggiorna nello stesso commit del milestone, non a posteriori |
 | Riproducibilità | blocco nel RESEARCH_LOG accanto al finding | Commit hash, nomi run W&B (gruppo), checkpoint HF, ricetta completa (token, batch, lr, precisione, `NEURO_SCAN`, torch, GPU, tok/s, costo) |
