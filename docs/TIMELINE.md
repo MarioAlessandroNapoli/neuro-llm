@@ -49,9 +49,15 @@ operativo nei commit. Aggiornata dalla skill `docs-and-artifacts`.
   layer alti), robusta a init e seed, stessa loss del classico (~1,95): la memoria LTI
   extra non compra nulla senza indirizzamento per contenuto → direzione selettività.
   Figura: `figures/2026-08-autopsia-spettrale-1b.png`.
-- **sera** Ibridi log-polari: sweep hyb-oa-lp = 2,146 @3e-2 (l'ordine "biologico"
-  riabilitato dalla parametrizzazione — era il braccio che moriva NaN); in corsa il
-  confronto gerarchia a 170M (hyb-oa-lp vs hyb-ao-lp).
+- **sera** Ibridi log-polari a 170M: **la gerarchia si inverte** — hyb-oa-lp (biologico,
+  morto in 1a) fa 1,5742/1,5729 @1e-2 (seed al millesimo), hyb-ao-lp (vincitore 1a)
+  1,727+NaN. Secondo finding di autopsia: la memoria LTI sopravvive in proporzione
+  alla vicinanza all'attention (8→17→34%) — "serve un consumatore che la indirizzi".
+- **notte** **Il controllo di parità totale uccide il claim di sorpasso e scopre la
+  baseline sotto-tarata**: transformer alla ricetta dell'ibrido (b16@1e-2) = 1,571/
+  1,545 (media 1,558 < 1,599 della D11). Verdetto fase 1: parità entro il rumore.
+  D13: baseline onesta = min(batch×lr); asintoto 536M in corsa (l'ibrido scendeva
+  ancora); selettività promossa a 1c; omeostasi archiviata (bersaglio evaporato).
 
 ## Compute e costi
 

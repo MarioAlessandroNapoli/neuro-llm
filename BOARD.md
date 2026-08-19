@@ -8,14 +8,12 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- **Fase 1 della 1b (D12)** su RTX 4070TiS (231k tok/s con scan fuso): sweep lp fatto
-  (tetto lr → 3e-2 = livello baseline, bordo 1e-1; dettagli in D12); **in corsa i
-  bracci 170M** (dlinoss-lp e lp-init @3e-2, hyb-oa @3e-3, ×3 seed, gruppo grid-1b,
-  fine ~2,5h). Al verdetto: bivio omeostasi (design dal modo di guasto reale) +
-  ibrido intercalato. 4080 stoppata (0,007 $/h storage); 3060 distrutta.
-- **Fase 0 chiusa** (esiti in D12): scan fuso adottato (9,7×, `NEURO_SCAN=hoo`; bug
-  backward Inductor trovato e aggirato), log-polare validata, bf16 respinto
-  (GradScaler = omeostata primitivo), regola pavimento-di-rumore negli A/B.
+- **Fase 2 asintoto in corsa** (4070TiS, ~2,5h): hyb-oa-lp vs transformer a ricetta di
+  parità (b16@1e-2), 536M ×2 seed + sonda b8. La domanda: le curve si incrociano?
+  A esito: verdetto D13, autopsia 536M, **stop/distruzione 4070**.
+- **Fase 1 chiusa** (D13): parità ibrido-baseline (1,574 vs 1,558) — il controllo di
+  parità ha ucciso il sorpasso e scoperto la baseline sotto-tarata; gerarchia
+  invertita; selettività → 1c; omeostasi archiviata.
 
 ## Next
 

@@ -754,6 +754,38 @@ D11 1,599±0,007 (b32×2 su 4080), dlinoss classico 1,932 @3e-3.
 
 ---
 
+### D13 — Chiusura griglia 1b: baseline onesta, asintoto, selettività (2026-08-19)
+
+**Decisione.** (a) **Baseline onesta**: il riferimento del progetto diventa il minimo
+su (batch × lr) — oggi 1,558 (b16@1e-2, 2 seed, spread 0,025); sonda b8@1e-2 in coda
+per sapere se il trend del batch continua; ogni confronto futuro usa la ricetta di
+parità totale (stesso batch, lr, token, eval), mai più solo la parità di parametri.
+(b) **Fase 2 asintoto in corsa**: hyb-oa-lp vs transformer a ricetta di parità
+(b16@1e-2), 536M token × 2 seed — la domanda viva: l'ibrido scendeva ancora dove il
+transformer saturava; le curve si incrociano? (c) **Selettività promossa a direzione
+della 1c**: motivata dai pesi (degenerazione filtro+feedforward nel puro; gradiente di
+sopravvivenza 8→17→34% verso l'attention nell'ibrido — la memoria LTI vale solo con
+un consumatore che la indirizza). (d) **Omeostasi archiviata come domanda biologica
+senza bersaglio ingegneristico**: la log-polare ha eliminato la deriva verso il
+cerchio (frac r>0,99 = 0% ovunque nelle autopsie 1b); resta legittima solo come test
+"regolazione attiva vs formato", non prioritaria.
+
+**Perché.** Il controllo di parità ha ucciso il claim di sorpasso (1,574 vs 1,558) ma
+ha scoperto la baseline sotto-tarata — lezione di metodo che vale da sola la fase.
+La gerarchia invertita (oa da morto a pari; ao da vincitore a fragile) dimostra che i
+verdetti architetturali della 1a erano in parte verdetti di ottimizzazione: prima di
+confrontare architetture bisogna dare a ciascuna la sua migliore dinamica.
+
+**Scartato.** Omeostasi come braccio 1c (bersaglio evaporato); sweep ao-lp dedicato
+(il suo segno a 1e-2 è chiaro e la direzione oa è quella viva); wrnn e φ restano
+fuori (invariati da D11/D12).
+
+**Riconsiderare se.** L'asintoto mostra incrocio delle curve (→ il claim di sorpasso
+rinasce a budget maggiore e la 1c si disegna attorno a quello); la sonda b8 scende
+ancora significativamente (→ la baseline onesta va ri-stabilita prima di ogni claim).
+
+---
+
 ## Questioni aperte (fase di design, in corso)
 
 - **Q3 — Granularità temporale come ablazione futura.** Char-level (~4× più passi, dipendenze
