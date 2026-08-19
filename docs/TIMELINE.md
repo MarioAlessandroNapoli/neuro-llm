@@ -56,8 +56,13 @@ operativo nei commit. Aggiornata dalla skill `docs-and-artifacts`.
 - **notte** **Il controllo di parità totale uccide il claim di sorpasso e scopre la
   baseline sotto-tarata**: transformer alla ricetta dell'ibrido (b16@1e-2) = 1,571/
   1,545 (media 1,558 < 1,599 della D11). Verdetto fase 1: parità entro il rumore.
-  D13: baseline onesta = min(batch×lr); asintoto 536M in corsa (l'ibrido scendeva
-  ancora); selettività promossa a 1c; omeostasi archiviata (bersaglio evaporato).
+  D13: baseline onesta = min(batch×lr); selettività promossa a 1c; omeostasi
+  archiviata (bersaglio evaporato).
+- **notte fonda** **Stadio 1 chiuso.** Asintoto 536M: niente incrocio — transformer
+  1,4965/1,4967, hyb-oa-lp 1,5040/1,5150: **parità strutturale a due budget**. Sonda
+  b8 = 1,681: trend batch invertito, baseline onesta 1,558 confermata. Autopsia 536M:
+  il front-end di filtri è legge, il gradiente "consumatore" era ricetta-specifico.
+  Tre giorni, ~10 $, un verdetto pulito e tre meccanismi documentati.
 
 ## Compute e costi
 

@@ -784,6 +784,24 @@ fuori (invariati da D11/D12).
 rinasce a budget maggiore e la 1c si disegna attorno a quello); la sonda b8 scende
 ancora significativamente (→ la baseline onesta va ri-stabilita prima di ogni claim).
 
+**Esito (2026-08-19, notte fonda) — entrambe le clausole si chiudono in negativo, il
+verdetto è definitivo.** (a) **Asintoto: niente incrocio** — transformer 1,4965/1,4967
+(spread 0,0002!) vs hyb-oa-lp 1,5040/1,5150 a 536M: il gap delle medie passa da 0,016
+(170M) a 0,013 (536M), stabile entro il rumore. La parità è *strutturale*, non un
+artefatto del budget. (b) **Sonda b8 = 1,6813**: il trend del batch si inverte (a b8
+il rumore batte il beneficio degli step extra) → b16@1e-2 è il punto dolce e la
+baseline onesta **1,558** è confermata difendibile. (c) **Autopsia 536M** (obbligo di
+skill): l'invariante di tutte le autopsie regge — banco di filtri al layer 0 (r 0,70,
+100% vivi) + potatura pesante + orizzonti corti — ma il *gradiente di sopravvivenza
+verso l'attention* del checkpoint @3e-2 **non replica** (qui 100/28/51/5%: superstiti
+nei layer 0-2, layer 3 morto): il finding "consumatore" è ridimensionato a
+osservazione ricetta-specifica; la posizione dei superstiti è idiosincratica (coerente
+con la valle piatta), solo il front-end è legge. **Titolo dello stadio 1**: a parità
+totale di ricetta, l'ibrido oscillatori-sotto-attention **eguaglia** il transformer a
+170M e 536M (parità robusta a due budget); l'oscillatore puro resta staccato (~+0,4);
+i meccanismi sono documentati dalle autopsie. La direzione 1c-selettività eredita la
+domanda: cosa serve alla memoria ricorrente per *superare*, non solo eguagliare.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
@@ -816,6 +834,9 @@ ancora significativamente (→ la baseline onesta va ri-stabilita prima di ogni 
 | haolp-1..2 | 2026-08-19 | hyb-ao-lp | 8,55M | 170M ×2 seed | 1-2 | 1,7268 / NaN | Griglia 1b @1e-2 (lr di categoria dallo sweep di oa — caveat: mai sweepata per ao). Gerarchia invertita rispetto alla 1a: ora è ao il fragile |
 | b16-3e2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,7371 / NaN | Controllo batch: a b16 la lr 3e-2 è oltre il tetto della baseline (batch piccolo = rumore alto = bordo più basso) |
 | b16-1e2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,5708 / 1,5454 | **Controllo di parità totale (ricetta dell'ibrido). Media 1,558: la baseline D11 era sotto-tarata** — b16@1e-2 batte b32@3e-2 (1,599). Spread tra seed 0,025 (≫ ε=0,007 di b32) |
+| as-t1..2 | 2026-08-19 | transformer | 8,5M | **536M** ×2 seed | 1-2 | 1,4965 / 1,4967 | Fase 2 asintoto, ricetta di parità b16@1e-2. Spread tra seed 0,0002 |
+| as-h1..2 | 2026-08-19 | hyb-oa-lp | 8,55M | **536M** ×2 seed | 1-2 | 1,5040 / 1,5150 | Fase 2 asintoto, stessa ricetta. **Niente incrocio**: gap medie 0,013 (era 0,016 a 170M) — parità stabile col budget |
+| b8-1 | 2026-08-19 | transformer | 8,5M | 170M | 1 | 1,6813 | Sonda batch: a b8 il trend si inverte (rumore > beneficio step) → **b16@1e-2 è il punto dolce, baseline onesta 1,558 confermata** |
 | ctrl3-1..2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,6918 / 1,7090 | **Controllo lr-matched** @3e-3 (la lr degli oscillatori): media 1,700. Non braccio di griglia; separa espressività da ottimizzazione nel gap oscillatori-vs-baseline |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 

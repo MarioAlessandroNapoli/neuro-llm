@@ -8,12 +8,11 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- **Fase 2 asintoto in corsa** (4070TiS, ~2,5h): hyb-oa-lp vs transformer a ricetta di
-  parità (b16@1e-2), 536M ×2 seed + sonda b8. La domanda: le curve si incrociano?
-  A esito: verdetto D13, autopsia 536M, **stop/distruzione 4070**.
-- **Fase 1 chiusa** (D13): parità ibrido-baseline (1,574 vs 1,558) — il controllo di
-  parità ha ucciso il sorpasso e scoperto la baseline sotto-tarata; gerarchia
-  invertita; selettività → 1c; omeostasi archiviata.
+- **Stadio 1 CHIUSO (D13, esito registrato)**: parità strutturale ibrido-transformer
+  a 170M e 536M (1,509 vs 1,497 all'asintoto); baseline onesta 1,558 confermata
+  (sonda b8 inverte il trend); autopsia 536M: front-end filtri = legge, gradiente
+  "consumatore" non replica. **Distruggere la 4070** (compute finito) e aggiornare
+  il ledger col saldo. Archiviazione contesto: a inizio prossima sessione.
 
 ## Next
 
