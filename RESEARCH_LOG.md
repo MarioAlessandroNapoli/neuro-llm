@@ -519,6 +519,30 @@ lr stabile della griglia, la run di griglia scende di un gradino: dlinoss → 3e
 (rilanciato), hyb-oa → registrato instabile alla lr pre-registrata (le due run NaN
 sono il suo dato; eventuale ripescaggio a 3e-3 è materia 1b, dichiarata).
 
+**Findings di griglia (2026-08-19, pomeriggio — parziali: mancano dlinoss s2-s3 e
+linoss-registro).** Il quadro con la baseline finalmente alla sua lr onesta:
+1. **Titolo provvisorio dello stadio 1**: a parità di parametri, budget e lr per
+   categoria, su TinyStories a 512 token **gli oscillatori non battono l'attention** —
+   baseline 1,599±0,007 · hyb-ao 1,68 (seed sani) · dlinoss 1,93. Segno dichiarato,
+   come D6-parità impone.
+2. **L'oblio è necessario ma non sufficiente (asse 2, ablazione più pulita della
+   griglia)**: linoss (|λ|=1, non può dimenticare) è inaddestrabile in ogni regime
+   provato; dlinoss, identico salvo lo smorzamento appreso, si addestra sempre. La
+   funzione computazionale dell'inibizione (Castellanos cap. 1) è confermata nel senso
+   forte — ma dimenticare bene non basta a vincere.
+3. **Gerarchia (asse 5): il verso "biologico" perde** (hyb-oa instabile/peggiore di
+   hyb-ao a ogni condizione provata). Ipotesi di lavoro registrata: sui token BPE — già
+   simboli — il filtro oscillatorio all'ingresso può solo sfocare le identità che
+   l'attention deve recuperare; il posto naturale del concetto è la granularità
+   char-level (Q3), dove l'input è un flusso quasi-continuo. Testabile col probe
+   name-cloze.
+4. **Tema emerso non pre-registrato: l'omeostasi mancante.** Il filo rosso operativo
+   (NaN al bordo, seed semi-esplosi, lr-bordo che non regge sulla distanza) è che i
+   nostri sistemi dinamici non si autoregolano: la metastabilità richiede regolazione
+   attiva, non un init fortunato. Candidato primario per la 1b insieme a φ (gate
+   fallito ma non falsificato: mai corso a 170M) e alla wrnn riparata (il suo campo
+   senza scarico è lo stesso difetto: manca l'oblio).
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
@@ -545,6 +569,7 @@ sono il suo dato; eventuale ripescaggio a 3e-3 è materia 1b, dichiarata).
 | hybao-1..3 | 2026-08-19 | hyb-ao | 8,55M | 170M ×3 seed | 1-3 | 1,6815 / 1,6795 / 2,0721 | Griglia 1a, lr 3e-3 (D11). Seed 3: instabilità parziale a metà run, mai recuperata — fragilità del braccio alla sua lr. Sui seed sani: +0,08 (~11ε) dalla baseline |
 | hyboa-x | 2026-08-19 | hyb-oa | 8,55M | 170M | 1-2 | NaN / NaN | Divergente alla lr pre-registrata 1e-2 (stabile a 20M): il bordo non regge a 170M (emendamento D11). Terzo seed non eseguito (informazione nulla) |
 | dlin-x | 2026-08-19 | dlinoss | 8,43M | 170M | 1 | NaN | Stesso pattern a lr 1e-2 → griglia rilanciata a 3e-3 (emendamento D11) |
+| dlin2-1 | 2026-08-19 | dlinoss | 8,43M | 170M | 1 | 1,9320 | Griglia 1a, lr 3e-3 (regola un-gradino-sotto, emendamento D11); +0,33 (+47ε) dalla baseline D11. Seed 2-3 in corsa |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo

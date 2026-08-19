@@ -5,10 +5,12 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- **Griglia 1a snellita (D11) — catena notturna su vast**: sonde transformer 1e-1/3e-1 →
-  baseline 5 seed @ lr nuova → hyb-ao/hyb-oa/dlinoss × 3 seed × 170M (hub) → linoss
-  20M fp32. Poi: righe registro + gate dlinoss-phi (parte solo con segnale dlinoss).
-  Istanza vast da **distruggere** a griglia finita (fattura anche da ferma).
+- **Griglia 1a in chiusura (oggi ~15:30)**: fatti baseline 5 seed (1,599, ε=0,007),
+  hyb-ao 3 seed, verdetti NaN hyb-oa/dlinoss@bordo; in corsa dlinoss @3e-3 s2-s3,
+  poi linoss-registro 20M fp32 e gate phi (atteso FAIL → phi in 1b). A fine catena:
+  righe registro finali + **distruggere l'istanza vast** (fattura anche da ferma).
+- Findings parziali registrati in D11: oscillatori ≤ attention a parità; oblio
+  necessario-non-sufficiente; gerarchia inversa vince; tema omeostasi per la 1b.
 
 ## Next
 
@@ -19,7 +21,9 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Later
 
-- Griglia 1b (Q5): combinazioni degli assi con segnale nella 1a
+- Griglia 1b (Q5): direzioni motivate dai findings D11 — omeostasi/regolazione del
+  campo oscillatorio, φ a 170M (gate fallito ma mai corso), wrnn con scarico (leak),
+  hyb-oa ripescato a 3e-3; gerarchia al char-level → si fonde con Q3
 - Stadio 2: BabyLM Strict-Small (10M parole) + valutazione BLiMP per la variante migliore
 - Ablazione granularità temporale (Q3: char-level o chunking appreso)
 - Probe diagnostici esplorativi (D7: non cambiano mai il verdetto dello stadio 1):
