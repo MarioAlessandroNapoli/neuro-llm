@@ -310,7 +310,8 @@ una sola cella della tabella; il verdetto è scritto qui, prima di qualunque num
 permutazione esatto sulla differenza delle medie, unilaterale, α=0,05 per braccio (con 3v3:
 la differenza osservata è la più estrema delle 20 permutazioni); **L=** = non significativo
 e |Δmedie| ≤ ε, con **ε = σ della baseline** misurata con 5 seed prima della griglia
-— **misurata (2026-08-18): ε = 0,017 nats** (5 seed a 170M, config D8: media 1,8266,
+— **misurata (2026-08-19, ricetta D11): ε = 0,007 nats** (5 seed a 170M, lr 3e-2, media
+1,599, registro base2-1..5). Storica (2026-08-18, lr 1e-3): ε = 0,017 (media 1,8266,
 range [1,8064, 1,8427], run base-1..5 nel registro);
 *indeterminato* (non significativo, |Δ| > ε) → escalation pre-registrata: +2 seed per
 braccio, una sola volta; se resta indeterminato si riporta come tale. Il familywise sui
@@ -451,7 +452,7 @@ suoi seed. Il paper non ha alcun task linguistico: gap confermato.
 **Percorso operativo (pre-registrato).** Smoke M2 per arch → smoke di velocità Kaggle
 (gruppo bench) → sweep lr per *tutti e sei* i bracci (3 lr × 20M × 1 seed, D6) →
 griglia 3 seed × 170M (D8), gruppo grid-stage1, checkpoint HF. Verdetti: asse loss
-(permutazione 3v3, ε=0,017) + asse Elo (campagna giudice in un'unica finestra Batches)
+(permutazione 3v3, ε=0,007 dalla baseline D11) + asse Elo (campagna giudice in un'unica finestra Batches)
 → tabella D7 per ogni braccio vs baseline; i confronti interni (dlinoss vs linoss,
 φ vs uniforme, oa vs ao) sono secondari, stesso test, dichiarati come tali. Costi:
 5 bracci veloci ≈ 5h GPU inclusi sweep; wrnn secondo smoke.
@@ -506,6 +507,18 @@ vuole misurare); sweep wrnn esteso; 170M per linoss.
 1b senza run; la sonda transformer 1e-1/3e-1 vincesse ancora sul bordo → si accetta il
 bordo residuo dichiarandolo (il rendimento marginale per decade è già in calo).
 
+**Emendamento (2026-08-19, mattina) — il bordo a 20M non regge a 170M.** Le sonde
+transformer hanno chiuso il suo bordo (1e-1 e 3e-1 → NaN, lr baseline = 3e-2). Ma in
+griglia hyb-oa@1e-2 (NaN 2/2 seed, terzo interrotto: informazione nulla) e
+dlinoss@1e-2 (NaN 1/1) sono divergenti sull'intera run: 8,5× più step ad alta lr
+fanno emergere instabilità invisibili a 20M. Colpiti esattamente i bracci congelati
+sull'ultimo lr stabile dello sweep; illesi quelli già un gradino sotto il proprio
+bordo (transformer, hyb-ao — che pure mostra fragilità: seed 3 a 2,07 vs 1,68 dei
+fratelli). **Regola aggiunta alla ricetta:** se il vincitore dello sweep è all'ultimo
+lr stabile della griglia, la run di griglia scende di un gradino: dlinoss → 3e-3
+(rilanciato), hyb-oa → registrato instabile alla lr pre-registrata (le due run NaN
+sono il suo dato; eventuale ripescaggio a 3e-3 è materia 1b, dichiarata).
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
@@ -528,6 +541,10 @@ bordo residuo dichiarandolo (il rendimento marginale per decade è già in calo)
 | base-3 | 2026-08-18 | transformer | 8,5M | 170M (D8) | 3 | 1,8114 | idem |
 | base-4 | 2026-08-18 | transformer | 8,5M | 170M (D8) | 4 | 1,8336 | idem (seed extra per σ) |
 | base-5 | 2026-08-18 | transformer | 8,5M | 170M (D8) | 5 | 1,8390 | idem (seed extra per σ). I 5 seed: media 1,8266, **σ = 0,017 = ε di D7** |
+| base2-1..5 | 2026-08-19 | transformer | 8,5M | 170M ×5 seed | 1-5 | 1,5910 / 1,6027 / 1,6006 / 1,5927 / 1,6089 | Baseline D11 (lr 3e-2, vast RTX 4080, GPU singola b32). **Media 1,599, σ = ε = 0,007.** Sostituisce base-1..5 come riferimento |
+| hybao-1..3 | 2026-08-19 | hyb-ao | 8,55M | 170M ×3 seed | 1-3 | 1,6815 / 1,6795 / 2,0721 | Griglia 1a, lr 3e-3 (D11). Seed 3: instabilità parziale a metà run, mai recuperata — fragilità del braccio alla sua lr. Sui seed sani: +0,08 (~11ε) dalla baseline |
+| hyboa-x | 2026-08-19 | hyb-oa | 8,55M | 170M | 1-2 | NaN / NaN | Divergente alla lr pre-registrata 1e-2 (stabile a 20M): il bordo non regge a 170M (emendamento D11). Terzo seed non eseguito (informazione nulla) |
+| dlin-x | 2026-08-19 | dlinoss | 8,43M | 170M | 1 | NaN | Stesso pattern a lr 1e-2 → griglia rilanciata a 3e-3 (emendamento D11) |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo
