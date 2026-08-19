@@ -698,6 +698,29 @@ nuovo è la potatura. **Il bersaglio "stabilità" dell'omeostasi è evaporato** 
 solo la domanda biologica (regolazione attiva vs formato), da ripesare in D13 col
 quadro completo.
 
+**Finding principale della 1b (2026-08-19, sera) — la degenerazione è l'ottimo, non
+un incidente.** dlinoss-lp-init s1 (init r ~ U[0,7;0,9]) chiude a **1,9450** con la
+**stessa struttura** di dlinoss-lp (init U[0,9;1]): layer 0 banco di filtri (r med
+0,78, ‖B‖,‖C‖ ~54), layer superiori potati (r→0,002-0,03) con un sopravvissuto
+parziale al layer 7. Init diverse, seed diversi, stessa destinazione, stessa loss
+(1,9450/1,9498/1,9672 vs classico 1,932): la riorganizzazione "filtro periferico +
+pila feedforward" è **l'ottimo dell'architettura LTI su questo compito**, robusto al
+punto di partenza. Braccio lp-init chiuso a 1 seed (nessuna informazione nel secondo);
+figura: `docs/figures/2026-08-autopsia-spettrale-1b.png`. Lettura: l'ipotesi
+"oscillazione distribuita su tutta la gerarchia" è falsificata dal gradiente stesso —
+il modello, libero di scegliere, converge verso un'architettura nota
+(filtro-in-periferia → elaborazione feedforward, coclea→cortex); ciò che manca alla
+pila per usare la memoria oltre il primo layer è l'indirizzamento per contenuto →
+motiva la direzione **selettività** (1c) sopra l'omeostasi.
+
+*Riproducibilità (bracci lp/lp-init 170M):* codice a commit `cd60dbc`; run W&B gruppo
+`grid-1b` (id = run name, es. `dlinoss-lp-d256-L8-t170M-s1-lr3e-2`), checkpoint su HF
+`neuro-llm-ckpt/<run_name>/last.ckpt`; ricetta: BPE 8k congelato (D3-tokenizer),
+170M token, batch 16×512, lr 3e-2 (da sweep 20M, bordo a 1e-1), 16-mixed con scan
+sempre fp32, `NEURO_SCAN=hoo` (scan fuso, esiti fase 0), torch 2.11.0+cu128,
+RTX 4070 Ti Super (~231k tok/s, ~15 min e ~0,03 $ per run). Riferimenti: baseline
+D11 1,599±0,007 (b32×2 su 4080), dlinoss classico 1,932 @3e-3.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
