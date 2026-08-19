@@ -124,7 +124,9 @@ sito/pubblicazione.
 (Vast)" (filtri: verified, on-demand, ≥12 GB VRAM per i bracci a scan, reliability
 ≥99%, banda ≥500 Mbps) → chiave SSH dalla UI dell'istanza → aggiornare `vast.env` →
 setup: clone del repo, `pip install -r requirements.txt` nel venv, scp dei due secret
-file, `snapshot_download` del dataset. ~5 minuti totali.
+file, e il dataset (senza, ogni run muore subito con `FileNotFoundError: data/train.bin`):
+`python -c "from huggingface_hub import snapshot_download; snapshot_download('MarioAlessandroNapoli/tinystories-tokenized', repo_type='dataset', local_dir='data')"`
+(da `/workspace/neuro-llm`, con `HF_TOKEN` esportato). ~5 minuti totali.
 
 ## Harness di valutazione (D7)
 
