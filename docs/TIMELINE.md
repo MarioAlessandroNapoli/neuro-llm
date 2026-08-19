@@ -64,6 +64,20 @@ operativo nei commit. Aggiornata dalla skill `docs-and-artifacts`.
   il front-end di filtri è legge, il gradiente "consumatore" era ricetta-specifico.
   Tre giorni, ~10 $, un verdetto pulito e tre meccanismi documentati.
 
+## Giorno 4 — 2026-08-20 (mercoledì): il giudice cieco
+
+- **notte** D14: canale giudice **in-sessione** — 188 corpi ciechi (`prepare-elo`),
+  **188 giudici Opus 5 indipendenti e naive** (un contesto vergine per verdetto,
+  workflow parallelo, 5,4 min, costo API zero), `resolve` deterministico fail-loud.
+  Generazione batchata (10 completamenti in un forward, ~10×); generazioni s1 su M2
+  (~30 min transformer, ~2,6h ibrido — lo scan senza cache costa in autoregressivo).
+- **notte** **Verdetto preliminare** (coppia asintoto s1, esplorativo): transformer 82 ·
+  ibrido 77 · tie 29 (sign test p=0,75); prompt netti 28 vs 30 (p=0,90). **Il giudice
+  cieco conferma la parità strutturale vista dalla loss.** Analisi tematica delle
+  motivazioni: modi di fallire identici e distribuiti a caso tra le architetture —
+  nessuna firma qualitativa; loop degenerativi quasi solo sui prompt lunghi (entrambi).
+  Limite scoperto: il bootstrap cluster pre-registrato degenera con 1 seed → sign test.
+
 ## Compute e costi
 
 3 GPU vast.ai usa-e-getta (3090 → 4080 → 3060 → 4070TiS), budget 10 $ (ledger in

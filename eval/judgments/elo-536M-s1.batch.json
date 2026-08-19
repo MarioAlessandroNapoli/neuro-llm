@@ -1,0 +1,6590 @@
+{
+ "batch_id": null,
+ "channel": "in-session",
+ "kind": "elo",
+ "n_requests": 188,
+ "model": "claude-opus-5",
+ "effort": "medium",
+ "meta": {
+  "r0000": {
+   "kind": "elo",
+   "prompt_id": "short-01",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     2,
+     9,
+     5,
+     3,
+     0,
+     8,
+     6,
+     7,
+     1
+    ],
+    "B": [
+     5,
+     4,
+     8,
+     1,
+     2,
+     3,
+     6,
+     9,
+     7,
+     0
+    ]
+   }
+  },
+  "r0001": {
+   "kind": "elo",
+   "prompt_id": "short-01",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     7,
+     0,
+     1,
+     2,
+     3,
+     8,
+     9,
+     6,
+     5
+    ],
+    "B": [
+     4,
+     7,
+     5,
+     9,
+     8,
+     6,
+     0,
+     3,
+     1,
+     2
+    ]
+   }
+  },
+  "r0002": {
+   "kind": "elo",
+   "prompt_id": "short-02",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     3,
+     7,
+     1,
+     2,
+     9,
+     4,
+     8,
+     5,
+     0
+    ],
+    "B": [
+     2,
+     5,
+     9,
+     6,
+     4,
+     7,
+     1,
+     0,
+     8,
+     3
+    ]
+   }
+  },
+  "r0003": {
+   "kind": "elo",
+   "prompt_id": "short-02",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     2,
+     9,
+     7,
+     0,
+     6,
+     8,
+     5,
+     3,
+     4
+    ],
+    "B": [
+     5,
+     2,
+     9,
+     4,
+     6,
+     8,
+     3,
+     1,
+     0,
+     7
+    ]
+   }
+  },
+  "r0004": {
+   "kind": "elo",
+   "prompt_id": "short-03",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     1,
+     5,
+     2,
+     7,
+     4,
+     9,
+     0,
+     3,
+     8
+    ],
+    "B": [
+     2,
+     7,
+     5,
+     3,
+     0,
+     9,
+     4,
+     6,
+     8,
+     1
+    ]
+   }
+  },
+  "r0005": {
+   "kind": "elo",
+   "prompt_id": "short-03",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     8,
+     7,
+     2,
+     0,
+     1,
+     3,
+     5,
+     9,
+     4
+    ],
+    "B": [
+     9,
+     1,
+     4,
+     2,
+     6,
+     0,
+     5,
+     7,
+     3,
+     8
+    ]
+   }
+  },
+  "r0006": {
+   "kind": "elo",
+   "prompt_id": "short-04",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     9,
+     0,
+     2,
+     6,
+     8,
+     5,
+     1,
+     7,
+     4
+    ],
+    "B": [
+     0,
+     5,
+     8,
+     2,
+     3,
+     9,
+     7,
+     1,
+     6,
+     4
+    ]
+   }
+  },
+  "r0007": {
+   "kind": "elo",
+   "prompt_id": "short-04",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     7,
+     8,
+     3,
+     1,
+     9,
+     6,
+     0,
+     4,
+     2
+    ],
+    "B": [
+     4,
+     3,
+     2,
+     8,
+     6,
+     7,
+     1,
+     5,
+     0,
+     9
+    ]
+   }
+  },
+  "r0008": {
+   "kind": "elo",
+   "prompt_id": "short-05",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     6,
+     9,
+     0,
+     1,
+     7,
+     4,
+     3,
+     5,
+     2
+    ],
+    "B": [
+     4,
+     2,
+     9,
+     8,
+     3,
+     5,
+     1,
+     7,
+     6,
+     0
+    ]
+   }
+  },
+  "r0009": {
+   "kind": "elo",
+   "prompt_id": "short-05",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     3,
+     2,
+     0,
+     4,
+     6,
+     5,
+     7,
+     1,
+     9
+    ],
+    "B": [
+     4,
+     0,
+     9,
+     5,
+     3,
+     8,
+     6,
+     7,
+     1,
+     2
+    ]
+   }
+  },
+  "r0010": {
+   "kind": "elo",
+   "prompt_id": "short-06",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     5,
+     8,
+     6,
+     1,
+     0,
+     2,
+     4,
+     3,
+     9
+    ],
+    "B": [
+     0,
+     7,
+     6,
+     3,
+     5,
+     2,
+     8,
+     4,
+     9,
+     1
+    ]
+   }
+  },
+  "r0011": {
+   "kind": "elo",
+   "prompt_id": "short-06",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     6,
+     0,
+     9,
+     1,
+     3,
+     7,
+     2,
+     4,
+     8
+    ],
+    "B": [
+     6,
+     8,
+     1,
+     7,
+     3,
+     2,
+     4,
+     5,
+     9,
+     0
+    ]
+   }
+  },
+  "r0012": {
+   "kind": "elo",
+   "prompt_id": "short-07",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     5,
+     8,
+     7,
+     2,
+     4,
+     9,
+     6,
+     1,
+     0
+    ],
+    "B": [
+     3,
+     7,
+     8,
+     9,
+     1,
+     0,
+     2,
+     5,
+     6,
+     4
+    ]
+   }
+  },
+  "r0013": {
+   "kind": "elo",
+   "prompt_id": "short-07",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     4,
+     5,
+     1,
+     6,
+     3,
+     8,
+     7,
+     0,
+     2
+    ],
+    "B": [
+     7,
+     8,
+     9,
+     0,
+     6,
+     5,
+     2,
+     1,
+     4,
+     3
+    ]
+   }
+  },
+  "r0014": {
+   "kind": "elo",
+   "prompt_id": "short-08",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     8,
+     3,
+     7,
+     0,
+     6,
+     2,
+     4,
+     9,
+     5
+    ],
+    "B": [
+     7,
+     6,
+     9,
+     2,
+     3,
+     4,
+     0,
+     1,
+     8,
+     5
+    ]
+   }
+  },
+  "r0015": {
+   "kind": "elo",
+   "prompt_id": "short-08",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     5,
+     2,
+     1,
+     8,
+     7,
+     3,
+     0,
+     9,
+     4
+    ],
+    "B": [
+     2,
+     6,
+     0,
+     4,
+     9,
+     7,
+     3,
+     5,
+     1,
+     8
+    ]
+   }
+  },
+  "r0016": {
+   "kind": "elo",
+   "prompt_id": "short-09",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     4,
+     6,
+     7,
+     5,
+     8,
+     2,
+     9,
+     0,
+     3
+    ],
+    "B": [
+     1,
+     8,
+     6,
+     7,
+     5,
+     0,
+     4,
+     2,
+     9,
+     3
+    ]
+   }
+  },
+  "r0017": {
+   "kind": "elo",
+   "prompt_id": "short-09",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     5,
+     6,
+     7,
+     1,
+     3,
+     9,
+     4,
+     8,
+     0
+    ],
+    "B": [
+     5,
+     3,
+     1,
+     4,
+     0,
+     6,
+     2,
+     8,
+     9,
+     7
+    ]
+   }
+  },
+  "r0018": {
+   "kind": "elo",
+   "prompt_id": "short-10",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     3,
+     6,
+     5,
+     1,
+     9,
+     8,
+     4,
+     7,
+     2
+    ],
+    "B": [
+     0,
+     2,
+     5,
+     7,
+     4,
+     1,
+     3,
+     8,
+     6,
+     9
+    ]
+   }
+  },
+  "r0019": {
+   "kind": "elo",
+   "prompt_id": "short-10",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     0,
+     8,
+     5,
+     6,
+     2,
+     1,
+     9,
+     7,
+     3
+    ],
+    "B": [
+     9,
+     3,
+     0,
+     7,
+     2,
+     1,
+     6,
+     5,
+     8,
+     4
+    ]
+   }
+  },
+  "r0020": {
+   "kind": "elo",
+   "prompt_id": "short-11",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     9,
+     2,
+     7,
+     6,
+     5,
+     8,
+     4,
+     0,
+     1
+    ],
+    "B": [
+     5,
+     2,
+     7,
+     4,
+     6,
+     3,
+     0,
+     9,
+     8,
+     1
+    ]
+   }
+  },
+  "r0021": {
+   "kind": "elo",
+   "prompt_id": "short-11",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     2,
+     3,
+     1,
+     4,
+     0,
+     7,
+     5,
+     8,
+     6
+    ],
+    "B": [
+     9,
+     2,
+     5,
+     3,
+     1,
+     7,
+     4,
+     0,
+     8,
+     6
+    ]
+   }
+  },
+  "r0022": {
+   "kind": "elo",
+   "prompt_id": "short-12",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     3,
+     0,
+     8,
+     2,
+     5,
+     6,
+     7,
+     9,
+     1
+    ],
+    "B": [
+     1,
+     9,
+     4,
+     8,
+     3,
+     0,
+     6,
+     7,
+     5,
+     2
+    ]
+   }
+  },
+  "r0023": {
+   "kind": "elo",
+   "prompt_id": "short-12",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     5,
+     3,
+     2,
+     1,
+     9,
+     7,
+     4,
+     6,
+     8
+    ],
+    "B": [
+     2,
+     6,
+     3,
+     0,
+     5,
+     8,
+     1,
+     9,
+     4,
+     7
+    ]
+   }
+  },
+  "r0024": {
+   "kind": "elo",
+   "prompt_id": "short-13",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     7,
+     3,
+     5,
+     2,
+     8,
+     9,
+     6,
+     0,
+     4
+    ],
+    "B": [
+     8,
+     7,
+     6,
+     3,
+     9,
+     1,
+     0,
+     2,
+     4,
+     5
+    ]
+   }
+  },
+  "r0025": {
+   "kind": "elo",
+   "prompt_id": "short-13",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     6,
+     7,
+     0,
+     3,
+     9,
+     5,
+     8,
+     4,
+     2
+    ],
+    "B": [
+     9,
+     4,
+     8,
+     5,
+     6,
+     2,
+     1,
+     7,
+     3,
+     0
+    ]
+   }
+  },
+  "r0026": {
+   "kind": "elo",
+   "prompt_id": "short-14",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     0,
+     7,
+     1,
+     4,
+     8,
+     6,
+     2,
+     5,
+     9
+    ],
+    "B": [
+     5,
+     7,
+     8,
+     4,
+     1,
+     0,
+     3,
+     6,
+     9,
+     2
+    ]
+   }
+  },
+  "r0027": {
+   "kind": "elo",
+   "prompt_id": "short-14",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     5,
+     8,
+     9,
+     2,
+     6,
+     3,
+     0,
+     1,
+     7
+    ],
+    "B": [
+     6,
+     0,
+     7,
+     8,
+     5,
+     1,
+     9,
+     3,
+     4,
+     2
+    ]
+   }
+  },
+  "r0028": {
+   "kind": "elo",
+   "prompt_id": "short-15",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     9,
+     6,
+     8,
+     7,
+     0,
+     2,
+     3,
+     4,
+     5
+    ],
+    "B": [
+     1,
+     0,
+     2,
+     4,
+     6,
+     5,
+     9,
+     3,
+     8,
+     7
+    ]
+   }
+  },
+  "r0029": {
+   "kind": "elo",
+   "prompt_id": "short-15",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     7,
+     3,
+     0,
+     1,
+     9,
+     6,
+     4,
+     5,
+     8
+    ],
+    "B": [
+     2,
+     3,
+     6,
+     0,
+     1,
+     5,
+     4,
+     7,
+     9,
+     8
+    ]
+   }
+  },
+  "r0030": {
+   "kind": "elo",
+   "prompt_id": "short-16",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     5,
+     2,
+     9,
+     3,
+     4,
+     8,
+     0,
+     1,
+     7
+    ],
+    "B": [
+     3,
+     0,
+     1,
+     5,
+     7,
+     2,
+     4,
+     8,
+     9,
+     6
+    ]
+   }
+  },
+  "r0031": {
+   "kind": "elo",
+   "prompt_id": "short-16",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     0,
+     3,
+     6,
+     1,
+     5,
+     4,
+     9,
+     2,
+     7
+    ],
+    "B": [
+     2,
+     7,
+     6,
+     0,
+     4,
+     8,
+     5,
+     9,
+     1,
+     3
+    ]
+   }
+  },
+  "r0032": {
+   "kind": "elo",
+   "prompt_id": "short-17",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     1,
+     5,
+     2,
+     6,
+     0,
+     8,
+     3,
+     9,
+     7
+    ],
+    "B": [
+     1,
+     5,
+     9,
+     7,
+     4,
+     8,
+     6,
+     2,
+     3,
+     0
+    ]
+   }
+  },
+  "r0033": {
+   "kind": "elo",
+   "prompt_id": "short-17",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     9,
+     7,
+     6,
+     5,
+     2,
+     8,
+     1,
+     3,
+     4
+    ],
+    "B": [
+     7,
+     6,
+     0,
+     4,
+     3,
+     8,
+     1,
+     9,
+     5,
+     2
+    ]
+   }
+  },
+  "r0034": {
+   "kind": "elo",
+   "prompt_id": "short-18",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     5,
+     7,
+     3,
+     8,
+     0,
+     2,
+     6,
+     9,
+     1
+    ],
+    "B": [
+     8,
+     1,
+     3,
+     9,
+     0,
+     5,
+     4,
+     6,
+     7,
+     2
+    ]
+   }
+  },
+  "r0035": {
+   "kind": "elo",
+   "prompt_id": "short-18",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     9,
+     8,
+     7,
+     3,
+     4,
+     0,
+     6,
+     1,
+     2
+    ],
+    "B": [
+     9,
+     5,
+     3,
+     2,
+     1,
+     8,
+     0,
+     7,
+     6,
+     4
+    ]
+   }
+  },
+  "r0036": {
+   "kind": "elo",
+   "prompt_id": "short-19",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     4,
+     5,
+     9,
+     1,
+     8,
+     2,
+     7,
+     6,
+     0
+    ],
+    "B": [
+     2,
+     5,
+     0,
+     4,
+     1,
+     9,
+     8,
+     6,
+     3,
+     7
+    ]
+   }
+  },
+  "r0037": {
+   "kind": "elo",
+   "prompt_id": "short-19",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     7,
+     1,
+     2,
+     4,
+     5,
+     3,
+     8,
+     0,
+     6
+    ],
+    "B": [
+     6,
+     1,
+     5,
+     9,
+     7,
+     8,
+     2,
+     3,
+     0,
+     4
+    ]
+   }
+  },
+  "r0038": {
+   "kind": "elo",
+   "prompt_id": "short-20",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     8,
+     5,
+     0,
+     9,
+     6,
+     7,
+     2,
+     1,
+     4
+    ],
+    "B": [
+     4,
+     5,
+     0,
+     6,
+     3,
+     2,
+     8,
+     9,
+     7,
+     1
+    ]
+   }
+  },
+  "r0039": {
+   "kind": "elo",
+   "prompt_id": "short-20",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     2,
+     6,
+     0,
+     5,
+     8,
+     3,
+     9,
+     7,
+     1
+    ],
+    "B": [
+     6,
+     8,
+     2,
+     3,
+     5,
+     7,
+     1,
+     4,
+     9,
+     0
+    ]
+   }
+  },
+  "r0040": {
+   "kind": "elo",
+   "prompt_id": "short-21",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     1,
+     3,
+     7,
+     8,
+     9,
+     5,
+     2,
+     6,
+     0
+    ],
+    "B": [
+     1,
+     3,
+     6,
+     5,
+     2,
+     0,
+     9,
+     4,
+     8,
+     7
+    ]
+   }
+  },
+  "r0041": {
+   "kind": "elo",
+   "prompt_id": "short-21",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     8,
+     5,
+     9,
+     6,
+     3,
+     7,
+     2,
+     1,
+     4
+    ],
+    "B": [
+     6,
+     4,
+     8,
+     3,
+     1,
+     0,
+     7,
+     5,
+     2,
+     9
+    ]
+   }
+  },
+  "r0042": {
+   "kind": "elo",
+   "prompt_id": "short-22",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     8,
+     5,
+     0,
+     6,
+     1,
+     7,
+     9,
+     4,
+     3
+    ],
+    "B": [
+     4,
+     0,
+     9,
+     6,
+     5,
+     1,
+     8,
+     2,
+     3,
+     7
+    ]
+   }
+  },
+  "r0043": {
+   "kind": "elo",
+   "prompt_id": "short-22",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     2,
+     8,
+     3,
+     6,
+     0,
+     4,
+     1,
+     9,
+     7
+    ],
+    "B": [
+     2,
+     4,
+     5,
+     3,
+     8,
+     9,
+     6,
+     1,
+     0,
+     7
+    ]
+   }
+  },
+  "r0044": {
+   "kind": "elo",
+   "prompt_id": "short-23",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     4,
+     8,
+     7,
+     9,
+     6,
+     1,
+     5,
+     2,
+     3
+    ],
+    "B": [
+     6,
+     5,
+     7,
+     8,
+     1,
+     4,
+     9,
+     0,
+     3,
+     2
+    ]
+   }
+  },
+  "r0045": {
+   "kind": "elo",
+   "prompt_id": "short-23",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     6,
+     5,
+     8,
+     7,
+     1,
+     4,
+     0,
+     3,
+     9
+    ],
+    "B": [
+     4,
+     9,
+     8,
+     6,
+     3,
+     1,
+     7,
+     0,
+     5,
+     2
+    ]
+   }
+  },
+  "r0046": {
+   "kind": "elo",
+   "prompt_id": "short-24",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     9,
+     2,
+     5,
+     1,
+     4,
+     6,
+     7,
+     3,
+     0
+    ],
+    "B": [
+     0,
+     1,
+     8,
+     4,
+     2,
+     3,
+     5,
+     6,
+     9,
+     7
+    ]
+   }
+  },
+  "r0047": {
+   "kind": "elo",
+   "prompt_id": "short-24",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     8,
+     5,
+     4,
+     1,
+     7,
+     6,
+     9,
+     3,
+     0
+    ],
+    "B": [
+     2,
+     3,
+     1,
+     0,
+     8,
+     5,
+     6,
+     7,
+     9,
+     4
+    ]
+   }
+  },
+  "r0048": {
+   "kind": "elo",
+   "prompt_id": "short-25",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     8,
+     4,
+     7,
+     5,
+     1,
+     6,
+     9,
+     0,
+     2
+    ],
+    "B": [
+     6,
+     2,
+     3,
+     8,
+     9,
+     5,
+     7,
+     0,
+     1,
+     4
+    ]
+   }
+  },
+  "r0049": {
+   "kind": "elo",
+   "prompt_id": "short-25",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     9,
+     4,
+     3,
+     6,
+     1,
+     0,
+     2,
+     7,
+     8
+    ],
+    "B": [
+     0,
+     4,
+     9,
+     1,
+     7,
+     2,
+     8,
+     3,
+     6,
+     5
+    ]
+   }
+  },
+  "r0050": {
+   "kind": "elo",
+   "prompt_id": "short-26",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     2,
+     0,
+     9,
+     7,
+     5,
+     1,
+     4,
+     8,
+     3
+    ],
+    "B": [
+     1,
+     3,
+     2,
+     8,
+     5,
+     7,
+     9,
+     0,
+     4,
+     6
+    ]
+   }
+  },
+  "r0051": {
+   "kind": "elo",
+   "prompt_id": "short-26",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     9,
+     6,
+     1,
+     0,
+     8,
+     7,
+     3,
+     4,
+     5
+    ],
+    "B": [
+     6,
+     0,
+     3,
+     4,
+     5,
+     1,
+     8,
+     7,
+     2,
+     9
+    ]
+   }
+  },
+  "r0052": {
+   "kind": "elo",
+   "prompt_id": "short-27",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     2,
+     4,
+     5,
+     6,
+     1,
+     9,
+     8,
+     3,
+     7
+    ],
+    "B": [
+     6,
+     5,
+     0,
+     1,
+     3,
+     2,
+     8,
+     4,
+     7,
+     9
+    ]
+   }
+  },
+  "r0053": {
+   "kind": "elo",
+   "prompt_id": "short-27",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     2,
+     9,
+     6,
+     3,
+     5,
+     1,
+     8,
+     7,
+     0
+    ],
+    "B": [
+     3,
+     2,
+     7,
+     8,
+     5,
+     6,
+     0,
+     4,
+     9,
+     1
+    ]
+   }
+  },
+  "r0054": {
+   "kind": "elo",
+   "prompt_id": "short-28",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     6,
+     4,
+     2,
+     3,
+     1,
+     7,
+     5,
+     9,
+     0
+    ],
+    "B": [
+     5,
+     6,
+     7,
+     4,
+     0,
+     8,
+     3,
+     1,
+     9,
+     2
+    ]
+   }
+  },
+  "r0055": {
+   "kind": "elo",
+   "prompt_id": "short-28",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     1,
+     8,
+     7,
+     9,
+     6,
+     4,
+     3,
+     2,
+     0
+    ],
+    "B": [
+     5,
+     6,
+     4,
+     7,
+     3,
+     9,
+     2,
+     8,
+     1,
+     0
+    ]
+   }
+  },
+  "r0056": {
+   "kind": "elo",
+   "prompt_id": "short-29",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     8,
+     4,
+     2,
+     1,
+     7,
+     9,
+     5,
+     0,
+     3
+    ],
+    "B": [
+     8,
+     7,
+     6,
+     1,
+     4,
+     5,
+     9,
+     0,
+     2,
+     3
+    ]
+   }
+  },
+  "r0057": {
+   "kind": "elo",
+   "prompt_id": "short-29",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     6,
+     8,
+     4,
+     9,
+     2,
+     3,
+     5,
+     0,
+     1
+    ],
+    "B": [
+     6,
+     9,
+     2,
+     3,
+     7,
+     4,
+     5,
+     8,
+     0,
+     1
+    ]
+   }
+  },
+  "r0058": {
+   "kind": "elo",
+   "prompt_id": "short-30",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     3,
+     1,
+     4,
+     6,
+     0,
+     5,
+     9,
+     2,
+     7
+    ],
+    "B": [
+     8,
+     6,
+     4,
+     9,
+     7,
+     1,
+     0,
+     2,
+     5,
+     3
+    ]
+   }
+  },
+  "r0059": {
+   "kind": "elo",
+   "prompt_id": "short-30",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     9,
+     5,
+     6,
+     2,
+     0,
+     3,
+     1,
+     8,
+     4
+    ],
+    "B": [
+     0,
+     2,
+     8,
+     3,
+     4,
+     1,
+     9,
+     6,
+     5,
+     7
+    ]
+   }
+  },
+  "r0060": {
+   "kind": "elo",
+   "prompt_id": "short-31",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     0,
+     8,
+     6,
+     4,
+     5,
+     7,
+     2,
+     3,
+     1
+    ],
+    "B": [
+     2,
+     7,
+     8,
+     6,
+     5,
+     1,
+     3,
+     0,
+     4,
+     9
+    ]
+   }
+  },
+  "r0061": {
+   "kind": "elo",
+   "prompt_id": "short-31",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     7,
+     5,
+     1,
+     9,
+     2,
+     4,
+     3,
+     0,
+     6
+    ],
+    "B": [
+     2,
+     3,
+     1,
+     6,
+     0,
+     4,
+     5,
+     8,
+     9,
+     7
+    ]
+   }
+  },
+  "r0062": {
+   "kind": "elo",
+   "prompt_id": "short-32",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     7,
+     3,
+     2,
+     8,
+     0,
+     1,
+     9,
+     5,
+     6
+    ],
+    "B": [
+     1,
+     2,
+     7,
+     6,
+     8,
+     5,
+     3,
+     9,
+     4,
+     0
+    ]
+   }
+  },
+  "r0063": {
+   "kind": "elo",
+   "prompt_id": "short-32",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     3,
+     7,
+     5,
+     6,
+     2,
+     4,
+     8,
+     9,
+     1
+    ],
+    "B": [
+     8,
+     6,
+     5,
+     9,
+     4,
+     0,
+     1,
+     7,
+     3,
+     2
+    ]
+   }
+  },
+  "r0064": {
+   "kind": "elo",
+   "prompt_id": "short-33",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     5,
+     0,
+     8,
+     3,
+     7,
+     2,
+     6,
+     4,
+     9
+    ],
+    "B": [
+     0,
+     2,
+     8,
+     6,
+     3,
+     5,
+     9,
+     4,
+     7,
+     1
+    ]
+   }
+  },
+  "r0065": {
+   "kind": "elo",
+   "prompt_id": "short-33",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     0,
+     1,
+     3,
+     8,
+     4,
+     5,
+     7,
+     6,
+     2
+    ],
+    "B": [
+     7,
+     4,
+     9,
+     5,
+     8,
+     0,
+     2,
+     6,
+     1,
+     3
+    ]
+   }
+  },
+  "r0066": {
+   "kind": "elo",
+   "prompt_id": "short-34",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     0,
+     7,
+     8,
+     1,
+     4,
+     3,
+     9,
+     2,
+     5
+    ],
+    "B": [
+     5,
+     8,
+     9,
+     0,
+     3,
+     2,
+     6,
+     7,
+     4,
+     1
+    ]
+   }
+  },
+  "r0067": {
+   "kind": "elo",
+   "prompt_id": "short-34",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     8,
+     2,
+     5,
+     0,
+     1,
+     3,
+     9,
+     6,
+     4
+    ],
+    "B": [
+     4,
+     0,
+     7,
+     3,
+     8,
+     2,
+     6,
+     5,
+     1,
+     9
+    ]
+   }
+  },
+  "r0068": {
+   "kind": "elo",
+   "prompt_id": "short-35",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     0,
+     9,
+     7,
+     2,
+     3,
+     4,
+     1,
+     6,
+     5
+    ],
+    "B": [
+     8,
+     6,
+     7,
+     3,
+     9,
+     0,
+     2,
+     4,
+     1,
+     5
+    ]
+   }
+  },
+  "r0069": {
+   "kind": "elo",
+   "prompt_id": "short-35",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     2,
+     9,
+     6,
+     4,
+     3,
+     8,
+     7,
+     0,
+     1
+    ],
+    "B": [
+     0,
+     6,
+     4,
+     3,
+     9,
+     5,
+     7,
+     2,
+     1,
+     8
+    ]
+   }
+  },
+  "r0070": {
+   "kind": "elo",
+   "prompt_id": "short-36",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     4,
+     7,
+     5,
+     0,
+     9,
+     2,
+     6,
+     3,
+     8
+    ],
+    "B": [
+     8,
+     3,
+     1,
+     2,
+     7,
+     4,
+     5,
+     6,
+     9,
+     0
+    ]
+   }
+  },
+  "r0071": {
+   "kind": "elo",
+   "prompt_id": "short-36",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     7,
+     1,
+     3,
+     0,
+     5,
+     8,
+     9,
+     6,
+     4
+    ],
+    "B": [
+     7,
+     4,
+     0,
+     3,
+     9,
+     2,
+     5,
+     1,
+     6,
+     8
+    ]
+   }
+  },
+  "r0072": {
+   "kind": "elo",
+   "prompt_id": "short-37",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     9,
+     5,
+     3,
+     0,
+     4,
+     1,
+     2,
+     6,
+     7
+    ],
+    "B": [
+     5,
+     1,
+     3,
+     8,
+     2,
+     9,
+     6,
+     7,
+     4,
+     0
+    ]
+   }
+  },
+  "r0073": {
+   "kind": "elo",
+   "prompt_id": "short-37",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     3,
+     4,
+     0,
+     7,
+     5,
+     1,
+     6,
+     2,
+     8
+    ],
+    "B": [
+     1,
+     6,
+     0,
+     7,
+     2,
+     9,
+     5,
+     8,
+     3,
+     4
+    ]
+   }
+  },
+  "r0074": {
+   "kind": "elo",
+   "prompt_id": "short-38",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     7,
+     5,
+     1,
+     4,
+     8,
+     9,
+     2,
+     3,
+     0
+    ],
+    "B": [
+     2,
+     9,
+     3,
+     5,
+     8,
+     1,
+     0,
+     7,
+     4,
+     6
+    ]
+   }
+  },
+  "r0075": {
+   "kind": "elo",
+   "prompt_id": "short-38",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     8,
+     3,
+     1,
+     6,
+     7,
+     5,
+     0,
+     4,
+     2
+    ],
+    "B": [
+     2,
+     1,
+     4,
+     9,
+     7,
+     5,
+     3,
+     6,
+     8,
+     0
+    ]
+   }
+  },
+  "r0076": {
+   "kind": "elo",
+   "prompt_id": "short-39",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     0,
+     2,
+     1,
+     6,
+     5,
+     4,
+     8,
+     3,
+     9
+    ],
+    "B": [
+     6,
+     0,
+     7,
+     3,
+     8,
+     9,
+     5,
+     4,
+     2,
+     1
+    ]
+   }
+  },
+  "r0077": {
+   "kind": "elo",
+   "prompt_id": "short-39",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     1,
+     9,
+     7,
+     0,
+     2,
+     3,
+     5,
+     6,
+     8
+    ],
+    "B": [
+     6,
+     9,
+     5,
+     7,
+     8,
+     0,
+     4,
+     1,
+     3,
+     2
+    ]
+   }
+  },
+  "r0078": {
+   "kind": "elo",
+   "prompt_id": "short-40",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     2,
+     9,
+     5,
+     1,
+     6,
+     8,
+     4,
+     3,
+     7
+    ],
+    "B": [
+     9,
+     5,
+     0,
+     7,
+     3,
+     2,
+     8,
+     4,
+     6,
+     1
+    ]
+   }
+  },
+  "r0079": {
+   "kind": "elo",
+   "prompt_id": "short-40",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     0,
+     2,
+     7,
+     3,
+     5,
+     6,
+     9,
+     1,
+     4
+    ],
+    "B": [
+     6,
+     4,
+     1,
+     3,
+     7,
+     2,
+     5,
+     9,
+     8,
+     0
+    ]
+   }
+  },
+  "r0080": {
+   "kind": "elo",
+   "prompt_id": "short-41",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     4,
+     6,
+     8,
+     1,
+     2,
+     3,
+     0,
+     5,
+     7
+    ],
+    "B": [
+     4,
+     3,
+     0,
+     2,
+     9,
+     8,
+     7,
+     1,
+     5,
+     6
+    ]
+   }
+  },
+  "r0081": {
+   "kind": "elo",
+   "prompt_id": "short-41",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     3,
+     8,
+     0,
+     4,
+     7,
+     9,
+     1,
+     2,
+     6
+    ],
+    "B": [
+     2,
+     5,
+     7,
+     4,
+     0,
+     6,
+     3,
+     1,
+     9,
+     8
+    ]
+   }
+  },
+  "r0082": {
+   "kind": "elo",
+   "prompt_id": "short-42",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     0,
+     9,
+     3,
+     6,
+     1,
+     7,
+     8,
+     5,
+     4
+    ],
+    "B": [
+     9,
+     3,
+     0,
+     7,
+     4,
+     5,
+     6,
+     1,
+     2,
+     8
+    ]
+   }
+  },
+  "r0083": {
+   "kind": "elo",
+   "prompt_id": "short-42",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     9,
+     2,
+     5,
+     0,
+     7,
+     6,
+     8,
+     4,
+     1
+    ],
+    "B": [
+     4,
+     9,
+     6,
+     0,
+     5,
+     8,
+     1,
+     2,
+     7,
+     3
+    ]
+   }
+  },
+  "r0084": {
+   "kind": "elo",
+   "prompt_id": "short-43",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     1,
+     5,
+     9,
+     2,
+     6,
+     0,
+     7,
+     8,
+     4
+    ],
+    "B": [
+     7,
+     5,
+     0,
+     4,
+     6,
+     9,
+     8,
+     2,
+     1,
+     3
+    ]
+   }
+  },
+  "r0085": {
+   "kind": "elo",
+   "prompt_id": "short-43",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     1,
+     8,
+     0,
+     7,
+     9,
+     3,
+     5,
+     6,
+     2
+    ],
+    "B": [
+     7,
+     2,
+     6,
+     4,
+     8,
+     3,
+     9,
+     5,
+     0,
+     1
+    ]
+   }
+  },
+  "r0086": {
+   "kind": "elo",
+   "prompt_id": "short-44",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     8,
+     2,
+     1,
+     7,
+     6,
+     9,
+     3,
+     5,
+     4
+    ],
+    "B": [
+     3,
+     4,
+     6,
+     0,
+     5,
+     8,
+     2,
+     7,
+     9,
+     1
+    ]
+   }
+  },
+  "r0087": {
+   "kind": "elo",
+   "prompt_id": "short-44",
+   "stratum": "short",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     0,
+     1,
+     8,
+     9,
+     7,
+     5,
+     6,
+     4,
+     3
+    ],
+    "B": [
+     0,
+     4,
+     6,
+     3,
+     7,
+     8,
+     2,
+     1,
+     5,
+     9
+    ]
+   }
+  },
+  "r0088": {
+   "kind": "elo",
+   "prompt_id": "long-01",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     9,
+     8,
+     3,
+     1,
+     7,
+     5,
+     0,
+     6,
+     4
+    ],
+    "B": [
+     9,
+     0,
+     4,
+     6,
+     7,
+     3,
+     1,
+     2,
+     8,
+     5
+    ]
+   }
+  },
+  "r0089": {
+   "kind": "elo",
+   "prompt_id": "long-01",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     1,
+     6,
+     7,
+     8,
+     2,
+     9,
+     0,
+     3,
+     5
+    ],
+    "B": [
+     9,
+     0,
+     6,
+     8,
+     7,
+     3,
+     2,
+     1,
+     4,
+     5
+    ]
+   }
+  },
+  "r0090": {
+   "kind": "elo",
+   "prompt_id": "long-02",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     5,
+     3,
+     1,
+     7,
+     0,
+     4,
+     9,
+     2,
+     6
+    ],
+    "B": [
+     2,
+     4,
+     9,
+     5,
+     7,
+     6,
+     1,
+     8,
+     0,
+     3
+    ]
+   }
+  },
+  "r0091": {
+   "kind": "elo",
+   "prompt_id": "long-02",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     0,
+     2,
+     3,
+     8,
+     5,
+     7,
+     4,
+     6,
+     9
+    ],
+    "B": [
+     8,
+     3,
+     5,
+     0,
+     7,
+     2,
+     1,
+     4,
+     6,
+     9
+    ]
+   }
+  },
+  "r0092": {
+   "kind": "elo",
+   "prompt_id": "long-03",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     3,
+     1,
+     6,
+     9,
+     8,
+     4,
+     5,
+     0,
+     2
+    ],
+    "B": [
+     2,
+     9,
+     3,
+     8,
+     5,
+     7,
+     0,
+     6,
+     1,
+     4
+    ]
+   }
+  },
+  "r0093": {
+   "kind": "elo",
+   "prompt_id": "long-03",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     1,
+     3,
+     5,
+     6,
+     7,
+     2,
+     9,
+     8,
+     4
+    ],
+    "B": [
+     1,
+     9,
+     3,
+     4,
+     5,
+     7,
+     0,
+     8,
+     2,
+     6
+    ]
+   }
+  },
+  "r0094": {
+   "kind": "elo",
+   "prompt_id": "long-04",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     6,
+     1,
+     3,
+     4,
+     5,
+     9,
+     0,
+     8,
+     7
+    ],
+    "B": [
+     7,
+     3,
+     4,
+     6,
+     0,
+     1,
+     9,
+     8,
+     2,
+     5
+    ]
+   }
+  },
+  "r0095": {
+   "kind": "elo",
+   "prompt_id": "long-04",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     6,
+     7,
+     0,
+     4,
+     1,
+     8,
+     5,
+     9,
+     2
+    ],
+    "B": [
+     6,
+     9,
+     3,
+     1,
+     5,
+     8,
+     7,
+     4,
+     2,
+     0
+    ]
+   }
+  },
+  "r0096": {
+   "kind": "elo",
+   "prompt_id": "long-05",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     4,
+     0,
+     7,
+     6,
+     3,
+     5,
+     9,
+     8,
+     1
+    ],
+    "B": [
+     7,
+     3,
+     6,
+     4,
+     0,
+     5,
+     2,
+     9,
+     8,
+     1
+    ]
+   }
+  },
+  "r0097": {
+   "kind": "elo",
+   "prompt_id": "long-05",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     6,
+     8,
+     5,
+     2,
+     1,
+     4,
+     3,
+     7,
+     9
+    ],
+    "B": [
+     4,
+     8,
+     0,
+     6,
+     9,
+     2,
+     7,
+     5,
+     1,
+     3
+    ]
+   }
+  },
+  "r0098": {
+   "kind": "elo",
+   "prompt_id": "long-06",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     2,
+     4,
+     9,
+     1,
+     6,
+     3,
+     0,
+     5,
+     8
+    ],
+    "B": [
+     7,
+     5,
+     9,
+     4,
+     6,
+     2,
+     1,
+     3,
+     8,
+     0
+    ]
+   }
+  },
+  "r0099": {
+   "kind": "elo",
+   "prompt_id": "long-06",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     3,
+     7,
+     8,
+     6,
+     4,
+     9,
+     1,
+     5,
+     0
+    ],
+    "B": [
+     8,
+     6,
+     4,
+     7,
+     1,
+     5,
+     3,
+     9,
+     0,
+     2
+    ]
+   }
+  },
+  "r0100": {
+   "kind": "elo",
+   "prompt_id": "long-07",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     3,
+     1,
+     5,
+     7,
+     9,
+     6,
+     0,
+     8,
+     2
+    ],
+    "B": [
+     1,
+     0,
+     2,
+     4,
+     7,
+     8,
+     9,
+     5,
+     6,
+     3
+    ]
+   }
+  },
+  "r0101": {
+   "kind": "elo",
+   "prompt_id": "long-07",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     7,
+     5,
+     1,
+     3,
+     0,
+     4,
+     8,
+     6,
+     9
+    ],
+    "B": [
+     8,
+     1,
+     2,
+     5,
+     6,
+     9,
+     3,
+     0,
+     7,
+     4
+    ]
+   }
+  },
+  "r0102": {
+   "kind": "elo",
+   "prompt_id": "long-08",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     7,
+     8,
+     2,
+     5,
+     4,
+     0,
+     9,
+     3,
+     6
+    ],
+    "B": [
+     3,
+     2,
+     8,
+     4,
+     7,
+     6,
+     0,
+     5,
+     1,
+     9
+    ]
+   }
+  },
+  "r0103": {
+   "kind": "elo",
+   "prompt_id": "long-08",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     1,
+     7,
+     0,
+     3,
+     4,
+     9,
+     6,
+     2,
+     5
+    ],
+    "B": [
+     6,
+     1,
+     0,
+     7,
+     2,
+     9,
+     8,
+     5,
+     3,
+     4
+    ]
+   }
+  },
+  "r0104": {
+   "kind": "elo",
+   "prompt_id": "long-09",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     1,
+     4,
+     0,
+     3,
+     7,
+     2,
+     5,
+     9,
+     6
+    ],
+    "B": [
+     1,
+     3,
+     2,
+     9,
+     8,
+     5,
+     6,
+     0,
+     7,
+     4
+    ]
+   }
+  },
+  "r0105": {
+   "kind": "elo",
+   "prompt_id": "long-09",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     6,
+     0,
+     7,
+     2,
+     4,
+     3,
+     5,
+     9,
+     8
+    ],
+    "B": [
+     1,
+     8,
+     5,
+     3,
+     4,
+     6,
+     2,
+     9,
+     0,
+     7
+    ]
+   }
+  },
+  "r0106": {
+   "kind": "elo",
+   "prompt_id": "long-10",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     3,
+     4,
+     6,
+     1,
+     7,
+     0,
+     2,
+     9,
+     5
+    ],
+    "B": [
+     6,
+     9,
+     8,
+     0,
+     2,
+     4,
+     3,
+     1,
+     7,
+     5
+    ]
+   }
+  },
+  "r0107": {
+   "kind": "elo",
+   "prompt_id": "long-10",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     5,
+     1,
+     2,
+     8,
+     3,
+     7,
+     0,
+     9,
+     6
+    ],
+    "B": [
+     9,
+     4,
+     8,
+     5,
+     6,
+     3,
+     1,
+     2,
+     7,
+     0
+    ]
+   }
+  },
+  "r0108": {
+   "kind": "elo",
+   "prompt_id": "long-11",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     8,
+     9,
+     3,
+     7,
+     6,
+     5,
+     1,
+     4,
+     0
+    ],
+    "B": [
+     3,
+     8,
+     2,
+     1,
+     7,
+     9,
+     0,
+     6,
+     4,
+     5
+    ]
+   }
+  },
+  "r0109": {
+   "kind": "elo",
+   "prompt_id": "long-11",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     1,
+     6,
+     5,
+     9,
+     3,
+     0,
+     4,
+     8,
+     2
+    ],
+    "B": [
+     2,
+     7,
+     3,
+     6,
+     0,
+     1,
+     8,
+     5,
+     9,
+     4
+    ]
+   }
+  },
+  "r0110": {
+   "kind": "elo",
+   "prompt_id": "long-12",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     0,
+     9,
+     4,
+     1,
+     5,
+     8,
+     3,
+     2,
+     6
+    ],
+    "B": [
+     9,
+     4,
+     1,
+     5,
+     0,
+     2,
+     7,
+     8,
+     3,
+     6
+    ]
+   }
+  },
+  "r0111": {
+   "kind": "elo",
+   "prompt_id": "long-12",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     4,
+     5,
+     1,
+     6,
+     9,
+     3,
+     0,
+     8,
+     2
+    ],
+    "B": [
+     6,
+     0,
+     3,
+     4,
+     5,
+     7,
+     1,
+     2,
+     8,
+     9
+    ]
+   }
+  },
+  "r0112": {
+   "kind": "elo",
+   "prompt_id": "long-13",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     9,
+     0,
+     1,
+     6,
+     4,
+     5,
+     2,
+     3,
+     8
+    ],
+    "B": [
+     4,
+     9,
+     2,
+     5,
+     8,
+     3,
+     0,
+     6,
+     1,
+     7
+    ]
+   }
+  },
+  "r0113": {
+   "kind": "elo",
+   "prompt_id": "long-13",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     2,
+     5,
+     4,
+     7,
+     6,
+     3,
+     0,
+     9,
+     1
+    ],
+    "B": [
+     7,
+     1,
+     8,
+     4,
+     3,
+     9,
+     0,
+     5,
+     6,
+     2
+    ]
+   }
+  },
+  "r0114": {
+   "kind": "elo",
+   "prompt_id": "long-14",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     3,
+     0,
+     9,
+     2,
+     1,
+     7,
+     5,
+     8,
+     4
+    ],
+    "B": [
+     4,
+     0,
+     1,
+     9,
+     6,
+     5,
+     7,
+     2,
+     3,
+     8
+    ]
+   }
+  },
+  "r0115": {
+   "kind": "elo",
+   "prompt_id": "long-14",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     0,
+     3,
+     6,
+     7,
+     2,
+     1,
+     5,
+     4,
+     9
+    ],
+    "B": [
+     9,
+     2,
+     6,
+     3,
+     5,
+     1,
+     7,
+     8,
+     4,
+     0
+    ]
+   }
+  },
+  "r0116": {
+   "kind": "elo",
+   "prompt_id": "long-15",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     5,
+     4,
+     9,
+     2,
+     8,
+     1,
+     3,
+     6,
+     7
+    ],
+    "B": [
+     1,
+     8,
+     3,
+     7,
+     0,
+     5,
+     4,
+     9,
+     6,
+     2
+    ]
+   }
+  },
+  "r0117": {
+   "kind": "elo",
+   "prompt_id": "long-15",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     8,
+     1,
+     3,
+     0,
+     9,
+     2,
+     4,
+     6,
+     7
+    ],
+    "B": [
+     1,
+     8,
+     0,
+     7,
+     6,
+     5,
+     2,
+     4,
+     9,
+     3
+    ]
+   }
+  },
+  "r0118": {
+   "kind": "elo",
+   "prompt_id": "long-16",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     0,
+     3,
+     7,
+     2,
+     8,
+     4,
+     1,
+     5,
+     9
+    ],
+    "B": [
+     0,
+     1,
+     4,
+     3,
+     6,
+     7,
+     8,
+     5,
+     9,
+     2
+    ]
+   }
+  },
+  "r0119": {
+   "kind": "elo",
+   "prompt_id": "long-16",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     8,
+     5,
+     6,
+     0,
+     1,
+     4,
+     9,
+     7,
+     3
+    ],
+    "B": [
+     8,
+     7,
+     5,
+     2,
+     3,
+     1,
+     6,
+     0,
+     4,
+     9
+    ]
+   }
+  },
+  "r0120": {
+   "kind": "elo",
+   "prompt_id": "long-17",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     0,
+     9,
+     8,
+     5,
+     2,
+     6,
+     7,
+     4,
+     3
+    ],
+    "B": [
+     9,
+     4,
+     6,
+     1,
+     2,
+     5,
+     7,
+     3,
+     0,
+     8
+    ]
+   }
+  },
+  "r0121": {
+   "kind": "elo",
+   "prompt_id": "long-17",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     0,
+     7,
+     5,
+     2,
+     3,
+     1,
+     9,
+     6,
+     8
+    ],
+    "B": [
+     4,
+     8,
+     3,
+     2,
+     5,
+     1,
+     0,
+     7,
+     6,
+     9
+    ]
+   }
+  },
+  "r0122": {
+   "kind": "elo",
+   "prompt_id": "long-18",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     9,
+     6,
+     1,
+     3,
+     8,
+     5,
+     2,
+     4,
+     7
+    ],
+    "B": [
+     0,
+     6,
+     2,
+     4,
+     9,
+     3,
+     1,
+     8,
+     5,
+     7
+    ]
+   }
+  },
+  "r0123": {
+   "kind": "elo",
+   "prompt_id": "long-18",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     6,
+     8,
+     2,
+     0,
+     1,
+     5,
+     4,
+     3,
+     9
+    ],
+    "B": [
+     7,
+     9,
+     5,
+     4,
+     3,
+     8,
+     2,
+     6,
+     1,
+     0
+    ]
+   }
+  },
+  "r0124": {
+   "kind": "elo",
+   "prompt_id": "long-19",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     7,
+     3,
+     9,
+     0,
+     6,
+     8,
+     5,
+     2,
+     1
+    ],
+    "B": [
+     6,
+     9,
+     2,
+     7,
+     1,
+     4,
+     3,
+     5,
+     8,
+     0
+    ]
+   }
+  },
+  "r0125": {
+   "kind": "elo",
+   "prompt_id": "long-19",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     5,
+     2,
+     9,
+     1,
+     4,
+     7,
+     6,
+     0,
+     3
+    ],
+    "B": [
+     6,
+     7,
+     4,
+     0,
+     9,
+     3,
+     8,
+     1,
+     5,
+     2
+    ]
+   }
+  },
+  "r0126": {
+   "kind": "elo",
+   "prompt_id": "long-20",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     7,
+     0,
+     8,
+     3,
+     6,
+     4,
+     5,
+     1,
+     9
+    ],
+    "B": [
+     9,
+     3,
+     0,
+     4,
+     5,
+     2,
+     7,
+     1,
+     6,
+     8
+    ]
+   }
+  },
+  "r0127": {
+   "kind": "elo",
+   "prompt_id": "long-20",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     1,
+     6,
+     7,
+     2,
+     3,
+     4,
+     5,
+     8,
+     9
+    ],
+    "B": [
+     9,
+     8,
+     2,
+     5,
+     3,
+     6,
+     0,
+     7,
+     4,
+     1
+    ]
+   }
+  },
+  "r0128": {
+   "kind": "elo",
+   "prompt_id": "long-21",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     8,
+     6,
+     1,
+     2,
+     7,
+     3,
+     4,
+     0,
+     9
+    ],
+    "B": [
+     4,
+     3,
+     1,
+     0,
+     7,
+     5,
+     2,
+     9,
+     6,
+     8
+    ]
+   }
+  },
+  "r0129": {
+   "kind": "elo",
+   "prompt_id": "long-21",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     9,
+     8,
+     3,
+     2,
+     7,
+     4,
+     6,
+     0,
+     1
+    ],
+    "B": [
+     0,
+     1,
+     3,
+     8,
+     6,
+     9,
+     5,
+     2,
+     7,
+     4
+    ]
+   }
+  },
+  "r0130": {
+   "kind": "elo",
+   "prompt_id": "long-22",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     5,
+     6,
+     2,
+     4,
+     1,
+     9,
+     7,
+     8,
+     0
+    ],
+    "B": [
+     6,
+     8,
+     1,
+     7,
+     9,
+     2,
+     5,
+     4,
+     3,
+     0
+    ]
+   }
+  },
+  "r0131": {
+   "kind": "elo",
+   "prompt_id": "long-22",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     1,
+     2,
+     8,
+     6,
+     0,
+     4,
+     5,
+     3,
+     7
+    ],
+    "B": [
+     4,
+     8,
+     2,
+     3,
+     0,
+     6,
+     7,
+     5,
+     9,
+     1
+    ]
+   }
+  },
+  "r0132": {
+   "kind": "elo",
+   "prompt_id": "long-23",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     9,
+     7,
+     8,
+     3,
+     0,
+     2,
+     1,
+     4,
+     6
+    ],
+    "B": [
+     0,
+     5,
+     1,
+     4,
+     2,
+     7,
+     8,
+     9,
+     6,
+     3
+    ]
+   }
+  },
+  "r0133": {
+   "kind": "elo",
+   "prompt_id": "long-23",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     1,
+     8,
+     4,
+     6,
+     3,
+     2,
+     5,
+     0,
+     9
+    ],
+    "B": [
+     4,
+     7,
+     8,
+     5,
+     9,
+     6,
+     2,
+     1,
+     0,
+     3
+    ]
+   }
+  },
+  "r0134": {
+   "kind": "elo",
+   "prompt_id": "long-24",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     7,
+     0,
+     3,
+     6,
+     4,
+     9,
+     5,
+     2,
+     1
+    ],
+    "B": [
+     6,
+     1,
+     0,
+     9,
+     8,
+     2,
+     4,
+     3,
+     5,
+     7
+    ]
+   }
+  },
+  "r0135": {
+   "kind": "elo",
+   "prompt_id": "long-24",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     6,
+     0,
+     3,
+     9,
+     4,
+     7,
+     5,
+     1,
+     8
+    ],
+    "B": [
+     3,
+     2,
+     0,
+     5,
+     1,
+     6,
+     9,
+     7,
+     4,
+     8
+    ]
+   }
+  },
+  "r0136": {
+   "kind": "elo",
+   "prompt_id": "long-25",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     0,
+     2,
+     1,
+     9,
+     7,
+     3,
+     6,
+     4,
+     5
+    ],
+    "B": [
+     1,
+     4,
+     0,
+     7,
+     5,
+     3,
+     6,
+     9,
+     8,
+     2
+    ]
+   }
+  },
+  "r0137": {
+   "kind": "elo",
+   "prompt_id": "long-25",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     9,
+     2,
+     8,
+     5,
+     4,
+     3,
+     6,
+     7,
+     0
+    ],
+    "B": [
+     8,
+     5,
+     4,
+     6,
+     7,
+     9,
+     0,
+     2,
+     3,
+     1
+    ]
+   }
+  },
+  "r0138": {
+   "kind": "elo",
+   "prompt_id": "long-26",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     2,
+     7,
+     1,
+     3,
+     5,
+     4,
+     9,
+     6,
+     0
+    ],
+    "B": [
+     6,
+     9,
+     0,
+     2,
+     4,
+     7,
+     1,
+     3,
+     8,
+     5
+    ]
+   }
+  },
+  "r0139": {
+   "kind": "elo",
+   "prompt_id": "long-26",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     9,
+     4,
+     1,
+     0,
+     5,
+     2,
+     8,
+     6,
+     3
+    ],
+    "B": [
+     0,
+     9,
+     1,
+     2,
+     6,
+     3,
+     5,
+     4,
+     8,
+     7
+    ]
+   }
+  },
+  "r0140": {
+   "kind": "elo",
+   "prompt_id": "long-27",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     2,
+     3,
+     4,
+     7,
+     8,
+     0,
+     1,
+     9,
+     6
+    ],
+    "B": [
+     5,
+     0,
+     2,
+     4,
+     7,
+     6,
+     1,
+     9,
+     3,
+     8
+    ]
+   }
+  },
+  "r0141": {
+   "kind": "elo",
+   "prompt_id": "long-27",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     0,
+     1,
+     8,
+     5,
+     2,
+     9,
+     6,
+     7,
+     3
+    ],
+    "B": [
+     7,
+     5,
+     8,
+     4,
+     2,
+     0,
+     1,
+     3,
+     6,
+     9
+    ]
+   }
+  },
+  "r0142": {
+   "kind": "elo",
+   "prompt_id": "long-28",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     2,
+     7,
+     0,
+     3,
+     6,
+     4,
+     9,
+     5,
+     8
+    ],
+    "B": [
+     8,
+     0,
+     6,
+     5,
+     2,
+     1,
+     3,
+     4,
+     9,
+     7
+    ]
+   }
+  },
+  "r0143": {
+   "kind": "elo",
+   "prompt_id": "long-28",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     1,
+     6,
+     0,
+     7,
+     2,
+     9,
+     5,
+     3,
+     8
+    ],
+    "B": [
+     0,
+     4,
+     9,
+     7,
+     2,
+     6,
+     8,
+     1,
+     5,
+     3
+    ]
+   }
+  },
+  "r0144": {
+   "kind": "elo",
+   "prompt_id": "long-29",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     7,
+     2,
+     1,
+     4,
+     3,
+     0,
+     5,
+     8,
+     6
+    ],
+    "B": [
+     3,
+     1,
+     7,
+     0,
+     5,
+     4,
+     2,
+     9,
+     6,
+     8
+    ]
+   }
+  },
+  "r0145": {
+   "kind": "elo",
+   "prompt_id": "long-29",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     1,
+     9,
+     3,
+     6,
+     8,
+     0,
+     4,
+     7,
+     2
+    ],
+    "B": [
+     1,
+     8,
+     6,
+     0,
+     5,
+     2,
+     4,
+     7,
+     9,
+     3
+    ]
+   }
+  },
+  "r0146": {
+   "kind": "elo",
+   "prompt_id": "long-30",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     0,
+     1,
+     7,
+     8,
+     9,
+     3,
+     5,
+     4,
+     2
+    ],
+    "B": [
+     6,
+     8,
+     3,
+     1,
+     0,
+     5,
+     2,
+     4,
+     7,
+     9
+    ]
+   }
+  },
+  "r0147": {
+   "kind": "elo",
+   "prompt_id": "long-30",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     5,
+     0,
+     1,
+     4,
+     2,
+     3,
+     8,
+     6,
+     7
+    ],
+    "B": [
+     4,
+     9,
+     6,
+     8,
+     0,
+     7,
+     1,
+     2,
+     5,
+     3
+    ]
+   }
+  },
+  "r0148": {
+   "kind": "elo",
+   "prompt_id": "long-31",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     7,
+     6,
+     2,
+     4,
+     8,
+     9,
+     1,
+     5,
+     3
+    ],
+    "B": [
+     6,
+     3,
+     9,
+     1,
+     4,
+     0,
+     2,
+     7,
+     8,
+     5
+    ]
+   }
+  },
+  "r0149": {
+   "kind": "elo",
+   "prompt_id": "long-31",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     6,
+     7,
+     3,
+     0,
+     2,
+     4,
+     5,
+     8,
+     1
+    ],
+    "B": [
+     1,
+     9,
+     4,
+     3,
+     8,
+     5,
+     6,
+     2,
+     7,
+     0
+    ]
+   }
+  },
+  "r0150": {
+   "kind": "elo",
+   "prompt_id": "long-32",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     7,
+     6,
+     9,
+     0,
+     4,
+     2,
+     5,
+     8,
+     3
+    ],
+    "B": [
+     6,
+     4,
+     2,
+     0,
+     1,
+     8,
+     7,
+     5,
+     9,
+     3
+    ]
+   }
+  },
+  "r0151": {
+   "kind": "elo",
+   "prompt_id": "long-32",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     3,
+     8,
+     4,
+     0,
+     9,
+     7,
+     5,
+     1,
+     2
+    ],
+    "B": [
+     2,
+     9,
+     1,
+     0,
+     4,
+     6,
+     3,
+     7,
+     5,
+     8
+    ]
+   }
+  },
+  "r0152": {
+   "kind": "elo",
+   "prompt_id": "long-33",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     2,
+     3,
+     7,
+     0,
+     5,
+     4,
+     1,
+     9,
+     6
+    ],
+    "B": [
+     1,
+     9,
+     8,
+     2,
+     5,
+     3,
+     0,
+     7,
+     4,
+     6
+    ]
+   }
+  },
+  "r0153": {
+   "kind": "elo",
+   "prompt_id": "long-33",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     1,
+     4,
+     6,
+     5,
+     3,
+     9,
+     7,
+     8,
+     0
+    ],
+    "B": [
+     7,
+     9,
+     2,
+     8,
+     6,
+     5,
+     4,
+     0,
+     1,
+     3
+    ]
+   }
+  },
+  "r0154": {
+   "kind": "elo",
+   "prompt_id": "long-34",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     0,
+     8,
+     7,
+     5,
+     3,
+     2,
+     9,
+     6,
+     1
+    ],
+    "B": [
+     7,
+     4,
+     3,
+     5,
+     8,
+     2,
+     1,
+     6,
+     0,
+     9
+    ]
+   }
+  },
+  "r0155": {
+   "kind": "elo",
+   "prompt_id": "long-34",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     0,
+     8,
+     3,
+     4,
+     9,
+     7,
+     5,
+     2,
+     6
+    ],
+    "B": [
+     4,
+     6,
+     8,
+     9,
+     1,
+     7,
+     0,
+     5,
+     2,
+     3
+    ]
+   }
+  },
+  "r0156": {
+   "kind": "elo",
+   "prompt_id": "long-35",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     8,
+     2,
+     0,
+     9,
+     4,
+     1,
+     3,
+     6,
+     7
+    ],
+    "B": [
+     8,
+     5,
+     4,
+     2,
+     6,
+     1,
+     3,
+     0,
+     9,
+     7
+    ]
+   }
+  },
+  "r0157": {
+   "kind": "elo",
+   "prompt_id": "long-35",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     0,
+     3,
+     7,
+     9,
+     8,
+     2,
+     4,
+     6,
+     1
+    ],
+    "B": [
+     1,
+     9,
+     6,
+     3,
+     8,
+     7,
+     0,
+     5,
+     2,
+     4
+    ]
+   }
+  },
+  "r0158": {
+   "kind": "elo",
+   "prompt_id": "long-36",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     9,
+     5,
+     6,
+     1,
+     8,
+     0,
+     3,
+     2,
+     7
+    ],
+    "B": [
+     8,
+     7,
+     1,
+     6,
+     2,
+     5,
+     4,
+     0,
+     9,
+     3
+    ]
+   }
+  },
+  "r0159": {
+   "kind": "elo",
+   "prompt_id": "long-36",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     4,
+     5,
+     7,
+     0,
+     9,
+     2,
+     8,
+     3,
+     1
+    ],
+    "B": [
+     8,
+     0,
+     9,
+     1,
+     7,
+     5,
+     2,
+     6,
+     4,
+     3
+    ]
+   }
+  },
+  "r0160": {
+   "kind": "elo",
+   "prompt_id": "long-37",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     4,
+     0,
+     2,
+     1,
+     3,
+     5,
+     6,
+     8,
+     9
+    ],
+    "B": [
+     3,
+     8,
+     9,
+     6,
+     5,
+     7,
+     4,
+     1,
+     2,
+     0
+    ]
+   }
+  },
+  "r0161": {
+   "kind": "elo",
+   "prompt_id": "long-37",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     5,
+     2,
+     1,
+     8,
+     7,
+     0,
+     6,
+     9,
+     4
+    ],
+    "B": [
+     8,
+     6,
+     9,
+     0,
+     7,
+     2,
+     1,
+     5,
+     3,
+     4
+    ]
+   }
+  },
+  "r0162": {
+   "kind": "elo",
+   "prompt_id": "long-38",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     5,
+     9,
+     7,
+     4,
+     1,
+     6,
+     8,
+     0,
+     2,
+     3
+    ],
+    "B": [
+     4,
+     3,
+     8,
+     2,
+     9,
+     6,
+     0,
+     1,
+     7,
+     5
+    ]
+   }
+  },
+  "r0163": {
+   "kind": "elo",
+   "prompt_id": "long-38",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     1,
+     4,
+     2,
+     6,
+     5,
+     7,
+     8,
+     9,
+     3
+    ],
+    "B": [
+     3,
+     0,
+     4,
+     2,
+     8,
+     6,
+     1,
+     5,
+     7,
+     9
+    ]
+   }
+  },
+  "r0164": {
+   "kind": "elo",
+   "prompt_id": "long-39",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     6,
+     1,
+     7,
+     4,
+     2,
+     3,
+     8,
+     9,
+     0,
+     5
+    ],
+    "B": [
+     3,
+     9,
+     4,
+     5,
+     0,
+     2,
+     1,
+     8,
+     6,
+     7
+    ]
+   }
+  },
+  "r0165": {
+   "kind": "elo",
+   "prompt_id": "long-39",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     7,
+     1,
+     8,
+     9,
+     3,
+     0,
+     5,
+     6,
+     4
+    ],
+    "B": [
+     0,
+     7,
+     8,
+     2,
+     4,
+     3,
+     5,
+     1,
+     9,
+     6
+    ]
+   }
+  },
+  "r0166": {
+   "kind": "elo",
+   "prompt_id": "long-40",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     9,
+     7,
+     0,
+     8,
+     1,
+     4,
+     5,
+     6,
+     3
+    ],
+    "B": [
+     8,
+     5,
+     0,
+     6,
+     3,
+     9,
+     2,
+     7,
+     1,
+     4
+    ]
+   }
+  },
+  "r0167": {
+   "kind": "elo",
+   "prompt_id": "long-40",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     5,
+     9,
+     0,
+     4,
+     8,
+     6,
+     3,
+     2,
+     1
+    ],
+    "B": [
+     6,
+     3,
+     4,
+     0,
+     8,
+     7,
+     5,
+     1,
+     9,
+     2
+    ]
+   }
+  },
+  "r0168": {
+   "kind": "elo",
+   "prompt_id": "long-41",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     8,
+     7,
+     0,
+     5,
+     4,
+     1,
+     3,
+     6,
+     2
+    ],
+    "B": [
+     1,
+     8,
+     9,
+     5,
+     7,
+     3,
+     0,
+     2,
+     6,
+     4
+    ]
+   }
+  },
+  "r0169": {
+   "kind": "elo",
+   "prompt_id": "long-41",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     6,
+     4,
+     7,
+     3,
+     5,
+     9,
+     2,
+     0,
+     1
+    ],
+    "B": [
+     6,
+     4,
+     8,
+     2,
+     3,
+     7,
+     9,
+     1,
+     5,
+     0
+    ]
+   }
+  },
+  "r0170": {
+   "kind": "elo",
+   "prompt_id": "long-42",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     8,
+     4,
+     9,
+     2,
+     1,
+     0,
+     5,
+     7,
+     6
+    ],
+    "B": [
+     3,
+     8,
+     1,
+     7,
+     2,
+     6,
+     9,
+     5,
+     0,
+     4
+    ]
+   }
+  },
+  "r0171": {
+   "kind": "elo",
+   "prompt_id": "long-42",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     4,
+     7,
+     2,
+     8,
+     1,
+     5,
+     3,
+     6,
+     0
+    ],
+    "B": [
+     9,
+     5,
+     2,
+     4,
+     0,
+     1,
+     6,
+     3,
+     7,
+     8
+    ]
+   }
+  },
+  "r0172": {
+   "kind": "elo",
+   "prompt_id": "long-43",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     5,
+     7,
+     8,
+     0,
+     1,
+     2,
+     4,
+     9,
+     6
+    ],
+    "B": [
+     1,
+     9,
+     3,
+     5,
+     6,
+     4,
+     8,
+     7,
+     2,
+     0
+    ]
+   }
+  },
+  "r0173": {
+   "kind": "elo",
+   "prompt_id": "long-43",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     4,
+     6,
+     9,
+     1,
+     2,
+     7,
+     0,
+     5,
+     3
+    ],
+    "B": [
+     1,
+     3,
+     4,
+     7,
+     5,
+     9,
+     8,
+     0,
+     6,
+     2
+    ]
+   }
+  },
+  "r0174": {
+   "kind": "elo",
+   "prompt_id": "long-44",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     5,
+     0,
+     7,
+     6,
+     3,
+     4,
+     9,
+     8,
+     1
+    ],
+    "B": [
+     5,
+     1,
+     6,
+     2,
+     7,
+     9,
+     0,
+     3,
+     8,
+     4
+    ]
+   }
+  },
+  "r0175": {
+   "kind": "elo",
+   "prompt_id": "long-44",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     5,
+     7,
+     3,
+     1,
+     4,
+     9,
+     8,
+     0,
+     6
+    ],
+    "B": [
+     3,
+     4,
+     1,
+     6,
+     9,
+     8,
+     5,
+     7,
+     0,
+     2
+    ]
+   }
+  },
+  "r0176": {
+   "kind": "elo",
+   "prompt_id": "long-45",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     7,
+     8,
+     4,
+     1,
+     6,
+     0,
+     5,
+     9,
+     2
+    ],
+    "B": [
+     8,
+     6,
+     0,
+     9,
+     5,
+     7,
+     4,
+     3,
+     1,
+     2
+    ]
+   }
+  },
+  "r0177": {
+   "kind": "elo",
+   "prompt_id": "long-45",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     9,
+     3,
+     5,
+     8,
+     0,
+     4,
+     1,
+     7,
+     2,
+     6
+    ],
+    "B": [
+     6,
+     8,
+     3,
+     1,
+     5,
+     2,
+     9,
+     0,
+     7,
+     4
+    ]
+   }
+  },
+  "r0178": {
+   "kind": "elo",
+   "prompt_id": "long-46",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     1,
+     2,
+     5,
+     6,
+     7,
+     4,
+     9,
+     3,
+     8,
+     0
+    ],
+    "B": [
+     0,
+     2,
+     3,
+     9,
+     6,
+     5,
+     4,
+     7,
+     1,
+     8
+    ]
+   }
+  },
+  "r0179": {
+   "kind": "elo",
+   "prompt_id": "long-46",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     1,
+     7,
+     6,
+     5,
+     3,
+     8,
+     9,
+     4,
+     0
+    ],
+    "B": [
+     8,
+     3,
+     6,
+     4,
+     0,
+     9,
+     7,
+     2,
+     5,
+     1
+    ]
+   }
+  },
+  "r0180": {
+   "kind": "elo",
+   "prompt_id": "long-47",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     7,
+     2,
+     1,
+     9,
+     5,
+     0,
+     6,
+     4,
+     3,
+     8
+    ],
+    "B": [
+     3,
+     4,
+     0,
+     2,
+     1,
+     9,
+     8,
+     6,
+     5,
+     7
+    ]
+   }
+  },
+  "r0181": {
+   "kind": "elo",
+   "prompt_id": "long-47",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     0,
+     6,
+     8,
+     3,
+     7,
+     2,
+     1,
+     9,
+     5,
+     4
+    ],
+    "B": [
+     0,
+     2,
+     9,
+     4,
+     3,
+     8,
+     6,
+     1,
+     5,
+     7
+    ]
+   }
+  },
+  "r0182": {
+   "kind": "elo",
+   "prompt_id": "long-48",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     7,
+     6,
+     0,
+     3,
+     1,
+     2,
+     9,
+     8,
+     5
+    ],
+    "B": [
+     4,
+     9,
+     8,
+     7,
+     5,
+     0,
+     3,
+     1,
+     6,
+     2
+    ]
+   }
+  },
+  "r0183": {
+   "kind": "elo",
+   "prompt_id": "long-48",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     2,
+     6,
+     0,
+     3,
+     8,
+     1,
+     5,
+     4,
+     9,
+     7
+    ],
+    "B": [
+     1,
+     8,
+     6,
+     3,
+     9,
+     4,
+     5,
+     0,
+     7,
+     2
+    ]
+   }
+  },
+  "r0184": {
+   "kind": "elo",
+   "prompt_id": "long-49",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     8,
+     4,
+     7,
+     3,
+     2,
+     1,
+     6,
+     0,
+     5,
+     9
+    ],
+    "B": [
+     3,
+     6,
+     5,
+     8,
+     7,
+     4,
+     1,
+     0,
+     9,
+     2
+    ]
+   }
+  },
+  "r0185": {
+   "kind": "elo",
+   "prompt_id": "long-49",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     3,
+     8,
+     0,
+     6,
+     1,
+     2,
+     7,
+     9,
+     5,
+     4
+    ],
+    "B": [
+     8,
+     6,
+     7,
+     5,
+     0,
+     2,
+     3,
+     4,
+     9,
+     1
+    ]
+   }
+  },
+  "r0186": {
+   "kind": "elo",
+   "prompt_id": "long-50",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 0,
+   "display_a": "transformer-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     9,
+     2,
+     8,
+     5,
+     3,
+     0,
+     1,
+     7,
+     6
+    ],
+    "B": [
+     1,
+     7,
+     2,
+     9,
+     8,
+     0,
+     5,
+     4,
+     6,
+     3
+    ]
+   }
+  },
+  "r0187": {
+   "kind": "elo",
+   "prompt_id": "long-50",
+   "stratum": "long",
+   "run_a": "transformer-b16-t536M-s1-lr1e-2",
+   "run_b": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "order": 1,
+   "display_a": "hyb-oa-lp-b16-t536M-s1-lr1e-2",
+   "perms": {
+    "A": [
+     4,
+     6,
+     5,
+     3,
+     0,
+     9,
+     1,
+     2,
+     7,
+     8
+    ],
+    "B": [
+     4,
+     2,
+     3,
+     9,
+     6,
+     5,
+     8,
+     0,
+     7,
+     1
+    ]
+   }
+  }
+ }
+}

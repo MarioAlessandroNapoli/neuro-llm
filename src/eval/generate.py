@@ -30,19 +30,29 @@ def completion_seed(arch: str, run_seed: int, prompt_id: str, k: int) -> int:
 
 
 @torch.no_grad()
-def generate_one(model, prompt_ids: list[int], seed: int, eot_id: int, seq_len: int, device) -> list[int]:
-    gen = torch.Generator().manual_seed(seed)
-    ids = torch.tensor([prompt_ids], device=device)
-    out = []
+def generate_batch(model, prompt_ids: list[int], seeds: list[int], eot_id: int,
+                   seq_len: int, device) -> list[list[int]]:
+    """I K completamenti di uno stesso prompt in un solo batch: ogni riga campiona dal
+    proprio Generator CPU (stessa semantica del caso batch-1); una riga che tocca EOT
+    continua a scorrere ma il suo output è già chiuso."""
+    gens = [torch.Generator().manual_seed(s) for s in seeds]
+    ids = torch.tensor([prompt_ids] * len(seeds), device=device)
+    outs = [[] for _ in seeds]
+    done = [False] * len(seeds)
     for _ in range(MAX_NEW_TOKENS):
         logits = model(ids[:, -seq_len:])[:, -1]
         probs = F.softmax(logits.float() / TEMPERATURE, dim=-1).cpu()
-        nxt = torch.multinomial(probs, 1, generator=gen).item()
-        if nxt == eot_id:
+        nxts = [torch.multinomial(probs[i], 1, generator=g).item() for i, g in enumerate(gens)]
+        for i, nxt in enumerate(nxts):
+            if not done[i]:
+                if nxt == eot_id:
+                    done[i] = True
+                else:
+                    outs[i].append(nxt)
+        if all(done):
             break
-        out.append(nxt)
-        ids = torch.cat([ids, torch.tensor([[nxt]], device=device)], dim=1)
-    return out
+        ids = torch.cat([ids, torch.tensor(nxts, device=device).unsqueeze(1)], dim=1)
+    return outs
 
 
 def main():
@@ -88,11 +98,9 @@ def main():
     generations = []
     for p in prompts:
         prompt_ids = tok.encode(p["text"]).ids
-        completions = []
-        for k in range(args.completions):
-            seed = completion_seed(args.arch, args.seed, p["id"], k)
-            new_ids = generate_one(model, prompt_ids, seed, eot_id, cfg.seq_len, device)
-            completions.append(tok.decode(new_ids))
+        seeds = [completion_seed(args.arch, args.seed, p["id"], k) for k in range(args.completions)]
+        completions = [tok.decode(ids) for ids in
+                       generate_batch(model, prompt_ids, seeds, eot_id, cfg.seq_len, device)]
         generations.append({"prompt_id": p["id"], "stratum": p["stratum"], "completions": completions})
         print(f"{p['id']}: {args.completions} completamenti "
               f"(mediana {sorted(len(c) for c in completions)[len(completions) // 2]} char)")

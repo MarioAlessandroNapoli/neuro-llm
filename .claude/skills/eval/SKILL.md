@@ -18,10 +18,24 @@ di verdetto, numerosità) stanno in RESEARCH_LOG § D7: qui c'è solo il come. C
 
 Cambiarli invalida ogni confronto già fatto (sono apparato di misura come il tokenizer, D3).
 
-## Ciclo di valutazione
+## Due canali per il giudice (stesso giudice: Opus 5, effort medium)
 
-Prerequisito per il giudice: `ANTHROPIC_API_KEY` nell'ambiente (giudice = `claude-opus-5`,
-effort medium, Batches API −50%).
+- **In-sessione (D14, default)**: nessuna chiave richiesta. `prepare-elo --a --b --tag`
+  scrive i 188 corpi ciechi in `eval/judgments/<tag>.bodies/` (byte-identici al canale
+  API) + sidecar sigillato; un workflow lancia un giudice-subagent Opus 5 *per corpo*
+  (contesto vergine, solo `_system.txt` verbatim + il suo file, `model: 'opus'`,
+  `effort: 'medium'`); i verdetti `{cid, verdict, rationale}` vanno in
+  `<tag>.verdicts.jsonl`; `resolve --tag` valida fail-loud e scrive `<tag>.results.jsonl`.
+  **Nessuno legge mai il sidecar**: né i giudici né l'orchestratore — solo `resolve`.
+  Con 1 coppia di run il bootstrap cluster di `analysis elo` degenera (CI zero): usare
+  il sign test sui verdetti; la regola E± vale da ≥2 seed per braccio.
+- **Batches API**: prerequisito `ANTHROPIC_API_KEY` nell'ambiente (−50% di costo).
+
+La generazione batcha i 10 completamenti di un prompt in un forward (generatori CPU
+per-riga: semantica invariata). Su M2 l'ibrido resta lento (~2,6h/run, scan senza cache
+in autoregressivo): campagne multi-run → istanza GPU.
+
+## Ciclo di valutazione
 
 ```
 # 1. Generazione (per ogni run della griglia; ~min su GPU, più lento su M2)

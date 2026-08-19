@@ -475,6 +475,56 @@ domanda: cosa serve alla memoria ricorrente per *superare*, non solo eguagliare.
 
 ---
 
+### D14 — Giudice D7 in-sessione: emendamento di canale, non di giudice (2026-08-20)
+
+**Decisione.** Il giudizio pairwise D7-valutazione si esegue anche via **giudici-subagent
+in-sessione**: `prepare-elo` scrive i 188 corpi ciechi su file (byte-identici a quelli del
+canale Batches: stesse permutazioni seedate, doppio ordine A/B), un workflow lancia un
+giudice **Opus 5, effort medium** (modello ed effort pre-registrati, invariati) *per
+verdetto*, ognuno in contesto vergine col solo prompt di sistema D7 verbatim e il suo
+corpo; `resolve` (codice deterministico, fail-loud su qualunque cid mancante o fuori
+enum) rimappa display→run e produce lo stesso `.results.jsonl` del canale API. La mappa
+sigillata non è mai letta né dai giudici né dall'orchestratore.
+
+**Perché.** (a) Nessuna `ANTHROPIC_API_KEY` richiesta; costo API zero. (b) Cecità
+*rafforzata*: i giudici-subagent non conoscono il progetto, le architetture né le loss —
+il giudice Batches condivideva almeno il contesto del prompt di sistema, questi nemmeno
+sanno che esiste un confronto in corso. (c) Ogni verdetto è un contesto indipendente:
+nessuna contaminazione tra giudizi. **Modifica contestuale alla generazione**: i 10
+completamenti di uno stesso prompt escono in un solo forward batchato (generatori CPU
+per-riga: semantica di campionamento invariata, ~10× meno forward); introdotta prima
+della prima generazione 536M, quindi nessuna àncora invalidata.
+
+**Scartato.** Giudice = orchestratore in-sessione (io): cieco sui testi ma sa troppo
+(loss, priori di parità); scartato a favore dei subagent naive. Batches API: resta il
+canale di riferimento se servirà una campagna con chiave.
+
+**Limite statistico scoperto.** Il bootstrap pre-registrato di `analysis elo` è
+clusterizzato sui seed: con **una sola coppia di run** il ricampionamento è degenere
+(CI di larghezza zero, verdetto E± privo di senso). Per giri a coppia singola la
+statistica corretta è il **sign test** sui verdetti (per-match e, cluster-safe,
+per-prompt sui vincitori netti nei due ordini). La regola E+/E=/E− pre-registrata resta
+valida per campagne ≥2 seed per braccio.
+
+**Esito preliminare (esplorativo: 1 coppia s1-s1, budget 536M fuori dal pre-registrato
+D8).** 188 verdetti: transformer 82 · ibrido 77 · tie 29 (sign test p=0,75); vincitori
+netti per prompt 28 vs 30 su 94 (p=0,90); nessun segnale per strato (short p=1,00,
+long p=0,75). **Il giudice cieco conferma la parità strutturale vista dalla loss** —
+due misure indipendenti convergono. Coerenza del giudice: 60/94 prompt concordi nei due
+ordini, 9 flip netti. Analisi tematica delle 188 motivazioni: i modi di fallire sono
+**gli stessi, distribuiti a caso** (lessico dei giudici perfettamente simmetrico: chi
+perde "deriva e sputa word salad", chi vince "resta ancorato", indipendentemente
+dall'architettura); i loop degenerativi vivono quasi solo sui prompt lunghi (29/100 vs
+3/88); qualità assoluta bassa per entrambi (~78% delle motivazioni apre con "both sets
+are degraded" — regime atteso a 8,5M parametri, temp 1,0).
+
+**Riconsiderare se.** Una campagna ≥2 seed per braccio (generazioni su GPU) ribalta o
+raffina il verdetto; oppure se un giudizio su modelli distanti (es. ibrido vs oscillatore
+puro) mostra che il giudice non discrimina nemmeno differenze di loss grandi (sanity
+check del potere del giudice, mai ancora misurato).
+
+---
+
 ## Questioni aperte (fase di design, in corso)
 
 - **Q3 — Granularità temporale come ablazione futura.** Char-level (~4× più passi, dipendenze
@@ -509,6 +559,7 @@ domanda: cosa serve alla memoria ricorrente per *superare*, non solo eguagliare.
 | as-h1..2 | 2026-08-19 | hyb-oa-lp | 8,55M | **536M** ×2 seed | 1-2 | 1,5040 / 1,5150 | Fase 2 asintoto, stessa ricetta. **Niente incrocio**: gap medie 0,013 (era 0,016 a 170M) — parità stabile col budget |
 | b8-1 | 2026-08-19 | transformer | 8,5M | 170M | 1 | 1,6813 | Sonda batch: a b8 il trend si inverte (rumore > beneficio step) → **b16@1e-2 è il punto dolce, baseline onesta 1,558 confermata** |
 | ctrl3-1..2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,6918 / 1,7090 | **Controllo lr-matched** @3e-3 (la lr degli oscillatori): media 1,700. Non braccio di griglia; separa espressività da ottimizzazione nel gap oscillatori-vs-baseline |
+| judge-s1 | 2026-08-20 | as-t1 vs as-h1 | — | — | 1 | — | **Giudizio cieco D14** (non training): 188 giudici Opus 5 in-sessione, doppio ordine. t 82 · h 77 · tie 29 (p=0,75); prompt netti 28 vs 30 (p=0,90) → **parità qualitativa, conferma la loss**. Preliminare (1 coppia, 536M). Artefatti: eval/judgments/elo-536M-s1.* |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo

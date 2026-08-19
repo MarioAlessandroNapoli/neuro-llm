@@ -199,6 +199,62 @@ def submit(requests: list[dict], meta: dict, tag: str, kind: str, dry_run: bool)
     print(f"batch {batch.id} sottomesso: {len(requests)} richieste, sidecar {sidecar.name}")
 
 
+def prepare(requests: list[dict], meta: dict, tag: str, kind: str):
+    """Canale in-sessione (D14): stessi corpi ciechi del batch API, ma scritti su file
+    per giudici-subagent. La mappa display→run resta sigillata nel sidecar: la apre
+    solo `resolve`, mai un giudice né l'orchestratore."""
+    JUDGMENTS_DIR.mkdir(exist_ok=True)
+    sidecar = JUDGMENTS_DIR / f"{tag}.batch.json"
+    if sidecar.exists():
+        raise SystemExit(f"{sidecar} esiste già: tag '{tag}' già sottomesso")
+    bodies_dir = JUDGMENTS_DIR / f"{tag}.bodies"
+    bodies_dir.mkdir()
+    for r in requests:
+        (bodies_dir / f"{r['custom_id']}.txt").write_text(r["params"]["messages"][0]["content"])
+    (bodies_dir / "_system.txt").write_text(requests[0]["params"]["system"])
+    sidecar.write_text(json.dumps({"batch_id": None, "channel": "in-session", "kind": kind,
+                                   "n_requests": len(requests), "model": JUDGE_MODEL,
+                                   "effort": EFFORT, "meta": meta}, ensure_ascii=False, indent=1))
+    print(f"{len(requests)} corpi ciechi in {bodies_dir}/ (sistema in _system.txt), sidecar {sidecar.name}")
+
+
+def resolve(tag: str):
+    """Valida i verdetti in-sessione (<tag>.verdicts.jsonl: {cid, verdict, rationale}) e
+    scrive <tag>.results.jsonl nello stesso schema di `fetch`. Fail-loud su cid mancanti,
+    duplicati, sconosciuti o verdetti fuori enum."""
+    sidecar = json.loads((JUDGMENTS_DIR / f"{tag}.batch.json").read_text())
+    if sidecar["channel"] != "in-session" or sidecar["kind"] != "elo":
+        raise SystemExit(f"tag '{tag}': resolve supporta solo elo in-sessione")
+    by_cid, errors = {}, []
+    for line in (JUDGMENTS_DIR / f"{tag}.verdicts.jsonl").read_text().splitlines():
+        if not line.strip():
+            continue
+        v = json.loads(line)
+        if v["cid"] in by_cid:
+            errors.append(f"{v['cid']}: duplicato")
+        elif v["verdict"] not in ("A", "B", "tie"):
+            errors.append(f"{v['cid']}: verdict '{v['verdict']}' fuori enum")
+        by_cid[v["cid"]] = v
+    missing = sorted(set(sidecar["meta"]) - set(by_cid))
+    unknown = sorted(set(by_cid) - set(sidecar["meta"]))
+    errors += [f"{c}: verdetto mancante" for c in missing] + [f"{c}: cid sconosciuto" for c in unknown]
+    if errors:
+        raise SystemExit(f"{len(errors)} problemi su {sidecar['n_requests']} richieste:\n" + "\n".join(errors))
+
+    records = []
+    for cid, m in sidecar["meta"].items():
+        v = by_cid[cid]["verdict"]
+        winner = "tie" if v == "tie" else ("a" if (v == "A") == (m["display_a"] == m["run_a"]) else "b")
+        records.append({
+            "kind": "elo", "prompt_id": m["prompt_id"], "stratum": m["stratum"],
+            "run_a": m["run_a"], "run_b": m["run_b"], "order": m["order"],
+            "winner": winner, "rationale": by_cid[cid]["rationale"],
+        })
+    out = JUDGMENTS_DIR / f"{tag}.results.jsonl"
+    out.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in records) + "\n")
+    print(f"scritti {len(records)} record in {out}")
+
+
 def fetch(tag: str):
     import anthropic
 
@@ -265,6 +321,14 @@ def main():
     p.add_argument("--tag")
     p.add_argument("--dry-run", action="store_true")
 
+    p = sub.add_parser("prepare-elo", help="corpi ciechi su file per il giudice in-sessione")
+    p.add_argument("--a", type=Path, required=True)
+    p.add_argument("--b", type=Path, required=True)
+    p.add_argument("--tag")
+
+    p = sub.add_parser("resolve", help="valida i verdetti in-sessione e scrive i results")
+    p.add_argument("--tag", required=True)
+
     p = sub.add_parser("fetch", help="stato del batch; se concluso, scarica e valida i risultati")
     p.add_argument("--tag", required=True)
 
@@ -277,6 +341,12 @@ def main():
         doc_a, doc_b = _load_generations(args.a), _load_generations(args.b)
         requests, meta = build_elo_requests(doc_a, doc_b)
         submit(requests, meta, args.tag or f"elo-{doc_a['run_name']}--{doc_b['run_name']}", "elo", args.dry_run)
+    elif args.cmd == "prepare-elo":
+        doc_a, doc_b = _load_generations(args.a), _load_generations(args.b)
+        requests, meta = build_elo_requests(doc_a, doc_b)
+        prepare(requests, meta, args.tag or f"elo-{doc_a['run_name']}--{doc_b['run_name']}", "elo")
+    elif args.cmd == "resolve":
+        resolve(args.tag)
     elif args.cmd == "fetch":
         fetch(args.tag)
 

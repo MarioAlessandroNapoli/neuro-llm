@@ -9,15 +9,16 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- (vuoto — stadio 1 chiuso, contesto archiviato; la prossima sessione apre con la
-  scelta: campagna giudice D7-valutazione o design 1c-selettività)
+- (vuoto — giudizio preliminare D14 chiuso; prossimo: design 1c-selettività o campagna
+  giudice completa)
 
 ## Next
 
-- Validare il giudice con una chiamata reale (serve `ANTHROPIC_API_KEY` nell'ambiente:
-  la build delle richieste è già verificata, manca solo il round-trip API)
-- Campagna giudice post-griglia: generazioni per tutti i bracci + baseline, scoring ed
-  Elo in un'unica finestra Batches (skill `eval`), poi tabella verdetti D7 per braccio
+- Campagna giudice completa (D14): generazioni ≥2 seed per braccio su istanza GPU vast
+  (M2 troppo lento: ~2h/run per l'ibrido), poi Elo con la regola E± pre-registrata
+  (il bootstrap cluster richiede ≥2 seed) + scoring assoluto e self-agreement
+- Sanity check del potere del giudice: una coppia a loss distanti (es. ibrido 1,57 vs
+  dlinoss-lp 1,95) — il giudice cieco la distingue? Mai misurato (D14-riconsiderare)
 
 ## Later
 
@@ -32,6 +33,10 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Done
 
+- 2026-08-20 (notte) — **Giudizio cieco preliminare D14**: canale in-sessione (188
+  giudici Opus 5 naive, costo API zero), coppia asintoto s1 → **parità qualitativa**
+  (82/77/29, p=0,75), modi di fallire identici tra le architetture; conferma
+  indipendente della parità vista dalla loss. Generazione batchata (~10×)
 - 2026-08-19 (notte) — **STADIO 1 CHIUSO** (D13 + esiti): parità strutturale
   ibrido-transformer a 170M e 536M (1,509 vs 1,497); baseline onesta 1,558; tre
   meccanismi da autopsia; 3,42 $ totali. Archivio: docs/archive/2026-08-griglia-1a.md

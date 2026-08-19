@@ -11,3 +11,4 @@ lightning_logs/
 kaggle.json
 *.pem
 .netrc
+eval/judgments/*.bodies/
