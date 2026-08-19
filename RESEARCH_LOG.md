@@ -668,6 +668,16 @@ spettrale resta obbligatorio prima di ogni claim.
    equivalente sano sarebbe stato respinto. Il criterio si fissa prima di vedere i
    dati.
 
+**Primo esito fase 1 — sweep lr dlinoss-lp @20M (2026-08-19, RTX 4070TiS, 231k
+tok/s):** 3e-3 → 2,642 · 1e-2 → 2,386 · **3e-2 → 2,282** · 1e-1 → NaN. La sola
+parametrizzazione log-polare porta il tetto di lr dell'oscillatore puro **al livello
+della baseline** (3e-2, un ordine sopra il 3e-3 forzato in 1a; il bordo è 1e-1, come
+per il transformer): a 20M la tassa di addestrabilità è pagata dal formato, senza
+regolazione attiva. In corsa i 3 seed a 170M @3e-2 (con lp-init e ripescaggio hyb-oa,
+gruppo grid-1b, batch 16 come lo sweep): sono loro il verdetto — il bordo 20M che non
+regge a 170M è già successo una volta (emendamento D11). Il bivio omeostasi si decide
+su quell'esito.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
