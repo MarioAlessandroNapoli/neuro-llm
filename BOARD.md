@@ -3,18 +3,14 @@
 Stato e priorità del progetto. Regole di gestione nella skill `neuro`.
 Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non prossimo · Done = compresso.
 
-**Budget compute**: 10 $ — spesi 3,42 $ (griglia 1a: 3090 ~2 $ + 4080 ~0,68 $;
-**fase 0 + griglia 1b + asintoto 536M completi: 3060+4070 ~0,74 $**) · residui 6,58 $
-(agg. 2026-08-19, notte — stadio 1 chiuso). 4070 distrutta; 4080 ancora stoppata a
-0,007 $/h (~0,17 $/giorno): distruggere se non riparte nulla a breve.
+**Budget compute**: 10 $ — spesi 3,42 $ (1a: 3090+4080 ~2,68 $ · 1b+asintoto:
+3060+4070 ~0,74 $) · residui 6,58 $. **Zero istanze attive** (tutte distrutte,
+2026-08-19 notte).
 
 ## Now
 
-- **Stadio 1 CHIUSO (D13, esito registrato)**: parità strutturale ibrido-transformer
-  a 170M e 536M (1,509 vs 1,497 all'asintoto); baseline onesta 1,558 confermata
-  (sonda b8 inverte il trend); autopsia 536M: front-end filtri = legge, gradiente
-  "consumatore" non replica. **Distruggere la 4070** (compute finito) e aggiornare
-  il ledger col saldo. Archiviazione contesto: a inizio prossima sessione.
+- (vuoto — stadio 1 chiuso, contesto archiviato; la prossima sessione apre con la
+  scelta: campagna giudice D7-valutazione o design 1c-selettività)
 
 ## Next
 
@@ -35,6 +31,11 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
   (per dlinoss-phi: verifica se la struttura a bande sopravvive al training)
 
 ## Done
+
+- 2026-08-19 (notte) — **STADIO 1 CHIUSO** (D13 + esiti): parità strutturale
+  ibrido-transformer a 170M e 536M (1,509 vs 1,497); baseline onesta 1,558; tre
+  meccanismi da autopsia; 3,42 $ totali. Archivio: docs/archive/2026-08-griglia-1a.md
+  e 2026-08-griglia-1b-e-fase0.md; cronologia in docs/TIMELINE.md
 
 - 2026-08-19 — **Griglia 1a chiusa e autopsiata** (D11+D12): due tasse (hyb-ao = solo
   addestrabilità, dlinoss = anche espressività; controllo lr-matched 1,700), oblio
