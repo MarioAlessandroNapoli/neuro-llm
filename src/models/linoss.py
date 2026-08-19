@@ -9,6 +9,7 @@ niente position embedding (l'ordine è nella ricorrenza).
 """
 
 import math
+import os
 from dataclasses import dataclass
 
 import torch
@@ -16,6 +17,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from ..configs import ModelConfig
+
+# Implementazione dello scan: "eager" (loop log2(t) con cat, validata in griglia 1a) o
+# "hoo" (torch.associative_scan, ~4,5× più veloce sotto compile — bench fase 0 su 3060:
+# fwd+bwd 1084→240 ms a shape reali; accuratezza vs fp64 sequenziale identica, 2,7e-2
+# relativo entrambe). Nessun fallback: valore ignoto = errore.
+SCAN_IMPL = os.environ.get("NEURO_SCAN", "eager")
+if SCAN_IMPL not in ("eager", "hoo"):
+    raise ValueError(f"NEURO_SCAN='{SCAN_IMPL}' sconosciuto: usare 'eager' o 'hoo'")
+if SCAN_IMPL == "hoo":
+    from torch._higher_order_ops.associative_scan import associative_scan
 
 PHI = (1 + 5**0.5) / 2
 # Periodi centrali delle bande dell'init aurea (D10): Fibonacci, in token.
@@ -30,6 +41,7 @@ class LinOSSConfig(ModelConfig):
     m: int = 512  # oscillatori per layer = 2·d_model → B,C ≈ i 4d² dell'attention (parità D6)
     damped: bool = False
     phi_init: bool = False
+    log_polar: bool = False
 
 
 @dataclass
@@ -40,6 +52,11 @@ class DLinOSSConfig(LinOSSConfig):
 @dataclass
 class DLinOSSPhiConfig(DLinOSSConfig):
     phi_init: bool = True
+
+
+@dataclass
+class DLinOSSLPConfig(DLinOSSConfig):
+    log_polar: bool = True
 
 
 def prefix_scan(M, f):
@@ -55,6 +72,8 @@ def prefix_scan(M, f):
     GradScaler. B, C e FFN restano in fp16.
     """
     with torch.autocast(device_type=f.device.type, enabled=False):
+        if SCAN_IMPL == "hoo":
+            return _scan_hoo_fp32(M.float(), f.float())
         return _scan_fp32(M.float(), f.float())
 
 
@@ -70,6 +89,18 @@ def _scan_fp32(M, f):
     return f
 
 
+def _hoo_combine(a, b):
+    aM, af = a
+    bM, bf = b
+    return bM @ aM, torch.einsum("mij,bmj->bmi", bM, af) + bf
+
+
+def _scan_hoo_fp32(M, f):
+    fT = f.movedim(1, 0).contiguous()  # (t, b, m, 2): stessa dim di scan di M
+    _, out = associative_scan(_hoo_combine, (M, fT), dim=0, combine_mode="generic")
+    return out.movedim(0, 1)
+
+
 def phi_angles(m: int):
     band = torch.arange(m) % len(PHI_PERIODS)
     periods = torch.tensor(PHI_PERIODS, dtype=torch.float32)[band]
@@ -78,11 +109,22 @@ def phi_angles(m: int):
 
 
 class OscMixer(nn.Module):
-    def __init__(self, d_model: int, m: int, damped: bool, phi_init: bool):
+    def __init__(self, d_model: int, m: int, damped: bool, phi_init: bool, log_polar: bool = False):
         super().__init__()
         self.damped = damped
+        self.log_polar = log_polar
         self.B = nn.Linear(d_model, m)
         self.C = nn.Linear(m, d_model)
+        if log_polar:
+            # Parametrizzazione log-polare (LRU, arXiv:2303.06349): r = exp(−exp(ν)) < 1
+            # per costruzione, θ = π·σ(θ̄) ∈ (0, π) — niente clamp, update moltiplicativi
+            # ben condizionati al bordo. Δt fisso a DT_INIT; (A, G) derivati nel forward
+            # con la stessa inversione dell'init.
+            r = torch.empty(m).uniform_(RING_R_MIN, RING_R_MAX)
+            theta = phi_angles(m) if phi_init else torch.empty(m).uniform_(0.0, math.pi)
+            self.nu_raw = nn.Parameter((-r.log()).log())
+            self.theta_raw = nn.Parameter((theta / (math.pi - theta)).log())
+            return
         if not damped:
             self.A_raw = nn.Parameter(torch.empty(m).uniform_(0.0, 1.0))
             return
@@ -97,12 +139,21 @@ class OscMixer(nn.Module):
         self.dt_raw = nn.Parameter(torch.zeros(m))  # σ(0) = DT_INIT
 
     def state_parameters(self):
+        if self.log_polar:
+            return [self.nu_raw, self.theta_raw]
         return [self.A_raw] + ([self.G_raw, self.dt_raw] if self.damped else [])
 
     def forward(self, u):
         t = u.shape[1]
         bu = self.B(u)  # (b, t, m)
-        if self.damped:
+        if self.log_polar:
+            r = torch.exp(-self.nu_raw.exp())
+            theta = math.pi * torch.sigmoid(self.theta_raw)
+            S = r.square()
+            dt = torch.full_like(r, DT_INIT)
+            # λ = r·e^{±iθ} esatto: dt²SA = S+1−2r·cosθ ⇒ traccia 2r·cosθ, det S = r²
+            A = (S + 1 - 2 * r * torch.cos(theta)) / (dt.square() * S)
+        elif self.damped:
             dt = torch.sigmoid(self.dt_raw)
             S = 1 / (1 + dt * F.relu(self.G_raw))
             # Finestra di stabilità (autovalori complessi coniugati, |λ|=√S ≤ 1):
@@ -123,11 +174,11 @@ class OscMixer(nn.Module):
 
 
 class OscBlock(nn.Module):
-    def __init__(self, cfg: ModelConfig, m: int, damped: bool, phi_init: bool):
+    def __init__(self, cfg: ModelConfig, m: int, damped: bool, phi_init: bool, log_polar: bool = False):
         super().__init__()
         self.ln1 = nn.LayerNorm(cfg.d_model)
         self.ln2 = nn.LayerNorm(cfg.d_model)
-        self.mixer = OscMixer(cfg.d_model, m, damped, phi_init)
+        self.mixer = OscMixer(cfg.d_model, m, damped, phi_init, log_polar)
         self.mlp = nn.Sequential(
             nn.Linear(cfg.d_model, 4 * cfg.d_model),
             nn.GELU(),
@@ -145,7 +196,8 @@ class OscLM(nn.Module):
         self.cfg = cfg
         self.tok = nn.Embedding(cfg.vocab_size, cfg.d_model)
         self.blocks = nn.ModuleList(
-            OscBlock(cfg, cfg.m, cfg.damped, cfg.phi_init) for _ in range(cfg.n_layer)
+            OscBlock(cfg, cfg.m, cfg.damped, cfg.phi_init, cfg.log_polar)
+            for _ in range(cfg.n_layer)
         )
         self.ln_f = nn.LayerNorm(cfg.d_model)
         self.head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)

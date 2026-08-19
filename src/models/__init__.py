@@ -1,6 +1,6 @@
 from ..configs import ModelConfig
 from .hybrid import Hybrid, HybridAOConfig, HybridOAConfig
-from .linoss import DLinOSSConfig, DLinOSSPhiConfig, LinOSSConfig, OscLM
+from .linoss import DLinOSSConfig, DLinOSSLPConfig, DLinOSSPhiConfig, LinOSSConfig, OscLM
 from .transformer import Transformer
 from .wrnn import WRNNConfig, WRNNLM
 
@@ -11,6 +11,7 @@ ARCHS = {
     "linoss": (OscLM, LinOSSConfig),
     "dlinoss": (OscLM, DLinOSSConfig),
     "dlinoss-phi": (OscLM, DLinOSSPhiConfig),
+    "dlinoss-lp": (OscLM, DLinOSSLPConfig),
     "hyb-oa": (Hybrid, HybridOAConfig),
     "hyb-ao": (Hybrid, HybridAOConfig),
     "wrnn": (WRNNLM, WRNNConfig),
