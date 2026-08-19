@@ -673,10 +673,30 @@ tok/s):** 3e-3 → 2,642 · 1e-2 → 2,386 · **3e-2 → 2,282** · 1e-1 → NaN
 parametrizzazione log-polare porta il tetto di lr dell'oscillatore puro **al livello
 della baseline** (3e-2, un ordine sopra il 3e-3 forzato in 1a; il bordo è 1e-1, come
 per il transformer): a 20M la tassa di addestrabilità è pagata dal formato, senza
-regolazione attiva. In corsa i 3 seed a 170M @3e-2 (con lp-init e ripescaggio hyb-oa,
-gruppo grid-1b, batch 16 come lo sweep): sono loro il verdetto — il bordo 20M che non
-regge a 170M è già successo una volta (emendamento D11). Il bivio omeostasi si decide
-su quell'esito.
+regolazione attiva. Bracci 170M in gruppo grid-1b, batch 16 come lo sweep. Emendamenti
+in corsa: **2 seed per braccio** (decisione a s1/s2 lp quasi identici: 1,9498/1,9672 —
+la stabilità è dimostrata, il terzo seed non cambia verdetti) e **niente ripescaggio
+hyb-oa col mixer vecchio** — mai confermare cose nuove con apparato vecchio: al suo
+posto hyb-oa-lp (ibrido log-polare) con proprio mini-sweep lr.
+
+**Verdetto dlinoss-lp @3e-2 × 170M (s1 1,9498 · s2 1,9672, media 1,958):** il tetto
+regge sulla distanza — primo oscillatore puro addestrato alla lr della baseline, zero
+NaN. Ma la loss non migliora sul classico@3e-3 (1,932): l'addestrabilità guadagnata
+non compra perplexity → il collo residuo è tutta espressività.
+
+**Autopsia dlinoss-lp (entrambi i seed, quadro identico):** a lr piena l'architettura
+degenera spontaneamente in **"banco di filtri all'ingresso + pila feedforward"**:
+layer 0 sano (r med ~0,79, periodi ~9 tok con coda di quasi-integratori a p90 ~75k,
+‖B‖,‖C‖ raddoppiate a ~57: capacità temporale concentrata lì); layer 1-7 con r
+collassato a ~0,002 (memoria di un token) — alcuni silenziati del tutto (‖B‖,‖C‖≈0,
+scavalcati dal residual), altri riciclati come trasformazioni istantanee. Stessa loss
+del classico che tiene r distribuiti (0,74-0,90): valle piatta — **oltre un layer di
+filtraggio temporale, la memoria LTI extra non compra nulla** (tassa di espressività
+nella sua forma più cruda). E il modo di guasto a 3e-2 non è più l'esplosione (frac
+r>0,99 = 0% ovunque): la log-polare elimina la deriva verso il cerchio; il fenomeno
+nuovo è la potatura. **Il bersaglio "stabilità" dell'omeostasi è evaporato** — resta
+solo la domanda biologica (regolazione attiva vs formato), da ripesare in D13 col
+quadro completo.
 
 ---
 
