@@ -90,15 +90,30 @@ def _scan_fp32(M, f):
 
 
 def _hoo_combine(a, b):
-    aM, af = a
-    bM, bf = b
-    return bM @ aM, torch.einsum("mij,bmj->bmi", bM, af) + bf
+    # Prodotto 2×2 in aritmetica esplicita, SOLO op elementwise: con matmul/einsum nel
+    # combine il backward generato da Inductor è rotto (gradienti ~100% errati, solo
+    # compile+CUDA — misurato in fase 0; il modo "pointwise" produce NaN). La forma
+    # elementwise ha gradienti corretti (2e-4 vs fp64) e fonde in pochi kernel:
+    # scan 1067→8 ms fwd+bwd a shape reali su 3060.
+    a11, a12, a21, a22, af1, af2 = a
+    b11, b12, b21, b22, bf1, bf2 = b
+    return (
+        b11 * a11 + b12 * a21,
+        b11 * a12 + b12 * a22,
+        b21 * a11 + b22 * a21,
+        b21 * a12 + b22 * a22,
+        b11 * af1 + b12 * af2 + bf1,
+        b21 * af1 + b22 * af2 + bf2,
+    )
 
 
 def _scan_hoo_fp32(M, f):
-    fT = f.movedim(1, 0).contiguous()  # (t, b, m, 2): stessa dim di scan di M
-    _, out = associative_scan(_hoo_combine, (M, fT), dim=0, combine_mode="generic")
-    return out.movedim(0, 1)
+    fT = f.movedim(1, 0)  # (t, b, m, 2): stessa dim di scan di M
+    m11, m12 = M[:, :, 0, 0].unsqueeze(1), M[:, :, 0, 1].unsqueeze(1)
+    m21, m22 = M[:, :, 1, 0].unsqueeze(1), M[:, :, 1, 1].unsqueeze(1)
+    xs = (m11, m12, m21, m22, fT[..., 0].contiguous(), fT[..., 1].contiguous())
+    out = associative_scan(_hoo_combine, xs, dim=0, combine_mode="generic")
+    return torch.stack([out[4], out[5]], dim=-1).movedim(0, 1)
 
 
 def phi_angles(m: int):
