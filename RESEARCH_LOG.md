@@ -713,6 +713,20 @@ il modello, libero di scegliere, converge verso un'architettura nota
 pila per usare la memoria oltre il primo layer è l'indirizzamento per contenuto →
 motiva la direzione **selettività** (1c) sopra l'omeostasi.
 
+**Secondo finding dell'autopsia (2026-08-19, sera) — la memoria LTI sopravvive solo
+dove ha un consumatore capace di indirizzarla.** hyb-oa-lp s1 @3e-2 chiude a **1,7225**
+(l'ordine "biologico" riabilitato: in 1a moriva NaN; ora a +0,04 dal vincitore hyb-ao
+e con la curva ancora in discesa a fine budget → candidato asintoto). Autopsia dei 4
+layer oscillatori (identica a step 15k e a fine run, quindi struttura stabile): layer
+0 banco di filtri come nel puro ma a memoria *più corta* (r 0,69 ≈ 3 token: l'attention
+sopra copre il lungo raggio — divisione del lavoro); e la potatura si ammorbidisce
+avvicinandosi all'attention: sopravvissuti r>0,5 = 8% → 17% → **34%** al layer 3
+(quello che alimenta l'attention), con ‖C‖ crescente in parallelo (14→21→27). Nel
+dlinoss-lp puro, senza consumatore con indirizzamento, gli stessi layer erano deserti.
+È la tesi della selettività letta nei pesi. Caveat: un solo seed, alla lr di bordo
+(la gemella s2 è NaN — hazard confermato per la categoria ibridi a 3e-2 → coppie
+@1e-2 in corsa). Figura aggiornata (5° pannello): `docs/figures/2026-08-autopsia-spettrale-1b.png`.
+
 *Riproducibilità (bracci lp/lp-init 170M):* codice a commit `cd60dbc`; run W&B gruppo
 `grid-1b` (id = run name, es. `dlinoss-lp-d256-L8-t170M-s1-lr3e-2`), checkpoint su HF
 `neuro-llm-ckpt/<run_name>/last.ckpt`; ricetta: BPE 8k congelato (D3-tokenizer),
@@ -746,6 +760,9 @@ D11 1,599±0,007 (b32×2 su 4080), dlinoss classico 1,932 @3e-3.
 | hyboa-x | 2026-08-19 | hyb-oa | 8,55M | 170M | 1-2 | NaN / NaN | Divergente alla lr pre-registrata 1e-2 (stabile a 20M): il bordo non regge a 170M (emendamento D11). Terzo seed non eseguito (informazione nulla) |
 | dlin-x | 2026-08-19 | dlinoss | 8,43M | 170M | 1 | NaN | Stesso pattern a lr 1e-2 → griglia rilanciata a 3e-3 (emendamento D11) |
 | dlin2-1 | 2026-08-19 | dlinoss | 8,43M | 170M | 1 | 1,9320 | Griglia 1a, lr 3e-3 (regola un-gradino-sotto, emendamento D11); +0,33 (+47ε) dalla baseline D11. Seed 2-3 interrotti (chiusura anticipata: nessun verdetto cambiava) |
+| lp-1..2 | 2026-08-19 | dlinoss-lp | 8,42M | 170M ×2 seed | 1-2 | 1,9498 / 1,9672 | Griglia 1b @3e-2 (lr della baseline: primo oscillatore puro a reggerla). Autopsia: degenerazione in filtro+feedforward |
+| lpi-1 | 2026-08-19 | dlinoss-lp-init | 8,42M | 170M | 1 | 1,9450 | Griglia 1b @3e-2, init r~U[0,7;0,9]. Stessa struttura e loss di lp → degenerazione robusta all'init; braccio chiuso a 1 seed |
+| hoalp-1 | 2026-08-19 | hyb-oa-lp | 8,55M | 170M | 1 | 1,7225 | Griglia 1b @3e-2 (bordo: s2 gemella NaN a step 4k — hazard). Morta di rete a step 16k e ripresa da HF. Curva ancora in discesa a fine budget. Autopsia: gradiente di sopravvivenza 8→17→34% verso l'attention |
 | ctrl3-1..2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,6918 / 1,7090 | **Controllo lr-matched** @3e-3 (la lr degli oscillatori): media 1,700. Non braccio di griglia; separa espressività da ottimizzazione nel gap oscillatori-vs-baseline |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 

@@ -19,6 +19,7 @@ MODELS = [
     ("dlinoss-lp-d256-L8-t170M-s1-lr3e-2", {"it": "dlinoss-lp @3e-2 (s1)", "en": "dlinoss-lp @3e-2 (s1)"}, "lp", 1.9498),
     ("dlinoss-lp-d256-L8-t170M-s2-lr3e-2", {"it": "dlinoss-lp @3e-2 (s2)", "en": "dlinoss-lp @3e-2 (s2)"}, "lp", 1.9672),
     ("dlinoss-lp-init-d256-L8-t170M-s1-lr3e-2", {"it": "dlinoss-lp-init @3e-2 (s1)", "en": "dlinoss-lp-init @3e-2 (s1)"}, "lp", 1.9450),
+    ("hyb-oa-lp-d256-L8-t170M-s1-lr3e-2", {"it": "hyb-oa-lp @3e-2 (osc 0-3, attn 4-7)", "en": "hyb-oa-lp @3e-2 (osc 0-3, attn 4-7)"}, "lp", 1.7225),
 ]
 
 TEXT = {
