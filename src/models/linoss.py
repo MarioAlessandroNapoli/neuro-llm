@@ -42,6 +42,8 @@ class LinOSSConfig(ModelConfig):
     damped: bool = False
     phi_init: bool = False
     log_polar: bool = False
+    ring_r_min: float = RING_R_MIN
+    ring_r_max: float = RING_R_MAX
 
 
 @dataclass
@@ -57,6 +59,14 @@ class DLinOSSPhiConfig(DLinOSSConfig):
 @dataclass
 class DLinOSSLPConfig(DLinOSSConfig):
     log_polar: bool = True
+
+
+@dataclass
+class DLinOSSLPInitConfig(DLinOSSLPConfig):
+    # Init post-autopsia (D12, fase 1e): partire dove il training comunque converge
+    # (r mediana 0,74-0,90 nei checkpoint 1a) elimina il transito vicino al bordo.
+    ring_r_min: float = 0.7
+    ring_r_max: float = 0.9
 
 
 def prefix_scan(M, f):
@@ -124,7 +134,10 @@ def phi_angles(m: int):
 
 
 class OscMixer(nn.Module):
-    def __init__(self, d_model: int, m: int, damped: bool, phi_init: bool, log_polar: bool = False):
+    def __init__(
+        self, d_model: int, m: int, damped: bool, phi_init: bool,
+        log_polar: bool = False, ring: tuple = (RING_R_MIN, RING_R_MAX),
+    ):
         super().__init__()
         self.damped = damped
         self.log_polar = log_polar
@@ -135,7 +148,7 @@ class OscMixer(nn.Module):
             # per costruzione, θ = π·σ(θ̄) ∈ (0, π) — niente clamp, update moltiplicativi
             # ben condizionati al bordo. Δt fisso a DT_INIT; (A, G) derivati nel forward
             # con la stessa inversione dell'init.
-            r = torch.empty(m).uniform_(RING_R_MIN, RING_R_MAX)
+            r = torch.empty(m).uniform_(*ring)
             theta = phi_angles(m) if phi_init else torch.empty(m).uniform_(0.0, math.pi)
             self.nu_raw = nn.Parameter((-r.log()).log())
             self.theta_raw = nn.Parameter((theta / (math.pi - theta)).log())
@@ -145,7 +158,7 @@ class OscMixer(nn.Module):
             return
         # Inversione esatta autovaloli→(A, G) a Δt=0.5: S=r², G=(1/S−1)/Δt,
         # A=(S+1−2r·cosθ)/(Δt²S); A≥0 garantito da r²+1−2r·cosθ ≥ (r−1)².
-        r = torch.empty(m).uniform_(RING_R_MIN, RING_R_MAX)
+        r = torch.empty(m).uniform_(*ring)
         theta = phi_angles(m) if phi_init else torch.empty(m).uniform_(0.0, math.pi)
         dt = torch.full((m,), DT_INIT)
         S = r.square()
@@ -189,11 +202,14 @@ class OscMixer(nn.Module):
 
 
 class OscBlock(nn.Module):
-    def __init__(self, cfg: ModelConfig, m: int, damped: bool, phi_init: bool, log_polar: bool = False):
+    def __init__(
+        self, cfg: ModelConfig, m: int, damped: bool, phi_init: bool,
+        log_polar: bool = False, ring: tuple = (RING_R_MIN, RING_R_MAX),
+    ):
         super().__init__()
         self.ln1 = nn.LayerNorm(cfg.d_model)
         self.ln2 = nn.LayerNorm(cfg.d_model)
-        self.mixer = OscMixer(cfg.d_model, m, damped, phi_init, log_polar)
+        self.mixer = OscMixer(cfg.d_model, m, damped, phi_init, log_polar, ring)
         self.mlp = nn.Sequential(
             nn.Linear(cfg.d_model, 4 * cfg.d_model),
             nn.GELU(),
@@ -211,7 +227,8 @@ class OscLM(nn.Module):
         self.cfg = cfg
         self.tok = nn.Embedding(cfg.vocab_size, cfg.d_model)
         self.blocks = nn.ModuleList(
-            OscBlock(cfg, cfg.m, cfg.damped, cfg.phi_init, cfg.log_polar)
+            OscBlock(cfg, cfg.m, cfg.damped, cfg.phi_init, cfg.log_polar,
+                     (cfg.ring_r_min, cfg.ring_r_max))
             for _ in range(cfg.n_layer)
         )
         self.ln_f = nn.LayerNorm(cfg.d_model)
