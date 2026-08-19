@@ -37,6 +37,18 @@ Esempio già fatto: il setup infrastrutturale vive in `docs/archive/2026-08-setu
 **Registro esperimenti.** Ogni run con valore scientifico aggiunge una riga alla tabella
 in fondo al RESEARCH_LOG (dettagli su W&B, qui solo l'essenziale). Gli smoke non contano.
 
+**Autopsia dei modelli (step fondamentale, mai opzionale).** A chiusura di ogni ciclo di
+esperimenti — e sempre prima di disegnare il ciclo successivo — si aprono i pesi dei
+checkpoint e si guarda cosa il training ha *fatto*, non solo quanto ha perso: parametri
+interpretabili (per gli oscillatori: r, θ, saturazione dei clamp), norme dei percorsi
+(un modulo può vincere perché lavora o perché è stato silenziato), confronto init→appreso,
+e i checkpoint delle run fallite/degenerate, che sono dati e non scarti (la firma del
+guasto pesa le ipotesi quanto un braccio riuscito). I nostri modelli sono piccoli e
+osservabili: l'autopsia è oro a costo ~zero (CPU locale, pesi su HF) e ogni suo esito va
+nel RESEARCH_LOG come pre-step del design successivo. Esempio canonico: l'autopsia
+spettrale della 1a in D12-design-1b (r tirato giù dal training, gerarchia di timescale
+emergente, firma del guasto = perdita di smorzamento, hyb-oa morto all'init).
+
 ## Principi da far rispettare (non negoziabili senza revisione esplicita)
 
 - **Meccanismi, non estetiche** (lezione HRM/TRM): ogni claim "neuro" deve avere
