@@ -46,6 +46,7 @@ def main():
     parser.add_argument("--download", action="store_true",
                         help="scarica i txt dal repo pubblico HF se assenti (istanze nuove)")
     args = parser.parse_args()
+    args.data_dir.mkdir(parents=True, exist_ok=True)
 
     for split, fname in FILES.items():
         src = args.data_dir / fname
