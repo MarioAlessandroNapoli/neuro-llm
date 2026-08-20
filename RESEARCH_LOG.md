@@ -859,6 +859,24 @@ risultata inerte due volte, leggere a fase un orologio che vince da fermo non è
 la domanda); scala frase incondizionata (rischio no-signal su TinyStories, e SOMBRERO
 mostra che forzare confini linguistici alti degrada).
 
+**Emendamento post-bonifica (stessa sera).** La verifica sui vocabolari adiacenti
+(rassegna § fronte 5) restituisce tre pezzi del claim alla letteratura: CoPE 2024
+(posizione = conteggio di eventi, gate che si apre sui separatori), FoX ICLR 2025 (il
+gate rende RoPE rimovibile a parità + estrapola 4× — lo schema argomentativo è già
+pubblicato), GRAPE/Selective-RoPE (decay = posizione, formalizzato), Segatron 2021
+(PE boundary-relative costruito a mano). **Vuoto verificato: "reset di stato =
+posizione"** — il claim si riformula: *il reset ai confini produce spontaneamente una
+coordinata posizionale locale, emergente (non progettata), su stato ricorrente (non
+bias sui logit); l'estrapolazione va attribuita causalmente alla località della
+coordinata*, non esibita come fattore (FoX ha già il 4×). C1 si arricchisce dei due
+controlli obbligati: (a) probe della posizione ASSOLUTA dagli stati (attesa: bassa in
+hard, alta in cb — il complemento della probe locale già fatta); (b) braccio
+`cb-rel` alla Segatron: transformer con PE boundary-relative esplicito — se eguaglia
+hard, il reset È la coordinata; se hard vince, il claim si restringe (igiene di stato
+oltre la coordinata). Citazioni obbligate in rassegna § fronte 5. Il nostro claim di
+partenza è un raffinamento dichiarato di Haviv 2022 (NoPE conta i predecessori): col
+reset il conteggio riparte dal confine.
+
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
 gate-appreso = euristica-spazi (il livello 1 non è contributo: lo si dichiara e ci si

@@ -215,5 +215,64 @@ reset alti devono coincidere con eventi di consolidamento distinguibili nello st
 
 ---
 
-*Report generati da 4 agenti (2 Opus, 2 Sonnet) con ricerca web, 2026-08-20 sera.
-Decisione derivata: D17 nel RESEARCH_LOG.*
+---
+
+## Fronte 5 (bonifica vocabolari adiacenti, stessa sera) — posizione contestuale e decay-as-position
+
+Verifica di novità sui lessici NON coperti dai fronti 1-4. Metodo: arXiv full-text +
+grafo citazioni Semantic Scholar (89 citanti di CoPE/FoX letti a titolo/abstract).
+
+**Occupato, senza sconti:**
+1. *"Posizione = conteggio di eventi selezionati dal contenuto, ed estrapola"* →
+   **CoPE** (Meta, mag 2024, arXiv:2405.18719): gate σ(q·k) per coppia, posizione =
+   cumsum dei gate, cap p_max; estrapola (~2×); **il gate si apre spontaneamente sui
+   newline/separatori** (loro Fig. 4). Attention pura, nessuna ablazione NoPE.
+   Discendenza: PaTH (2505.16381), RePo (2512.14391), CABLE (2503.08067).
+2. *"Il meccanismo rende il PE rimovibile a parità + estrapola 4×"* → **FoX /
+   Forgetting Transformer** (ICLR 2025, arXiv:2503.02130): forget gate scalare
+   per testa nei logit softmax ("ALiBi appreso e data-dependent"); 760M, train 16k →
+   val 65k; **tabella: FoX senza RoPE 6.62 vs con 6.63** — lo schema argomentativo
+   "X rende il PE superfluo ed estrapola" è già pubblicato. Ma NON rivendicano che il
+   gate sia posizionale (framing "rilevanza").
+3. *"Decay = posizione"* → **GRAPE** (arXiv:2512.07805): FoX e ALiBi casi speciali
+   esatti di azioni di gruppo posizionali; **Selective RoPE** (arXiv:2511.17388):
+   negli SSM "la parte reale dimentica, la parte immaginaria posiziona" — stesso
+   autovalore. Nessun confine, nessun reset, nessuna estrapolazione riportata.
+4. *"Coordinata = posizione dal confine linguistico"* → **Segatron** (AAAI 2021,
+   arXiv:2004.14996): PE costruito a mano come tripla [token-nella-frase, frase,
+   paragrafo], indice che riparte a ogni frase. Niente estrapolazione, niente
+   ablazione, niente ricorrenza — ma va citato in evidenza.
+Base da cui ripartire: **Haviv 2022** (arXiv:2203.16634) — i NoPE imparano la
+posizione contando i predecessori via mask causale. Il nostro claim è il raffinamento:
+*col reset, il conteggio riparte dall'ultimo confine — ed è la località che estrapola.*
+
+**Vuoto verificato**: "state reset = posizione" — 25 risultati arXiv su "state reset",
+nessuno ML-posizionale; l'intra-document masking (Zhao 2024, arXiv:2402.13991) è
+studiato solo come igiene informativa; MegaByte (full text) non riparte con posizioni
+patch-relative; Synergy (2507.12769) osserva "meglio senza PE" in un byte-model con
+confini appresi ma senza meccanismo né estrapolazione.
+
+**Riformulazione che regge la revisione**: in un LM a byte con SSM, il reset dello
+stato ai confini di parola produce **spontaneamente** una coordinata posizionale
+locale (distanza dall'ultimo confine) non progettata come PE; sufficiente a rendere il
+position embedding rimovibile a parità e, a differenza sua, estrapola 2048→8192.
+Vs CoPE/FoX: **discontinuità di stato ricorrente** (non bias continuo sui logit) e
+coordinata **emergente da una scelta presa per altri motivi** (non un modulo
+posizionale disegnato). Il fattore 4× da solo non è notizia (FoX lo ha già): la
+notizia è l'**attribuzione causale** — estrapola *perché* la coordinata è locale al
+confine — che si dimostra solo con probing e ablazione.
+
+**Due controlli obbligati dal claim riformulato**:
+(a) *probing alla Haviv*: distanza-dal-confine decodificabile dallo stato E posizione
+assoluta non (o molto meno) — senza, "meccanismo posizionale" è interpretazione;
+(b) *controllo alla Segatron*: transformer con PE boundary-relative esplicito (indice
+che riparte a ogni parola) — se eguaglia hard, il reset È quella coordinata; se hard
+vince comunque, la coordinata non è tutta la storia e il claim si restringe.
+
+**Citazioni obbligate (ordine di pericolosità)**: CoPE · FoX · Segatron · Haviv 2022 ·
+GRAPE · Selective RoPE · PaTH · Zhao 2024 · Synergy.
+
+---
+
+*Report generati da 5 agenti (3 Opus, 2 Sonnet) con ricerca web, 2026-08-20 sera.
+Decisione derivata: D17 nel RESEARCH_LOG (+ emendamento post-bonifica).*
