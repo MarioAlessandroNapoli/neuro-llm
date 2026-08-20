@@ -781,6 +781,20 @@ che a phase precession continua. Caveat dichiarati: 2 seed per braccio; hard su 
 32-true (quantificato dal controllo); budget 700M — l'asintoto B2 (2,2B, in corsa)
 dice se il gap è di pendenza o di punto fisso.
 
+**Test di estrapolazione in lunghezza (pre-registrato 2026-08-20, esecuzione post-B2
+su 5090).** Domanda: il reset-su-confini è solo un modo alternativo di codificare la
+posizione, o compra una proprietà che il position embedding appreso non può avere?
+Protocollo: checkpoint B2 valutati a finestre 2048/4096/8192 senza riaddestrare
+(`scripts/eval_estrapolazione.py`), nats/byte per bucket di posizione da 2048.
+Predizioni: (a) cb è **strutturalmente incapace** oltre 2048 (la tabella non ha
+indici — il test lo dichiara, quello è il risultato); (b) hard **degrada con grazia**
+(coordinata rampa-dal-confine, invariante per traslazione: bucket >2048 ≈ bucket
+<2048); (c) osc0 è il caso interessante intermedio (fasi LTI mai viste a
+distanze >2048 — l'estrapolazione delle fasi è il test della qualità dell'orologio).
+Verdetto: se (b) regge, il "fancy re-encoding" è falsificato — a parità di parametri
+il meccanismo compra robustezza fuori distribuzione; se hard degrada quanto crolla
+osc0/nopos, l'ipotesi scettica vince e si scrive col medesimo inchiostro.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)

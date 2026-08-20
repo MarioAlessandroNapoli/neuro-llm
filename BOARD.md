@@ -17,7 +17,9 @@ stima giornata ~1,5-2 $, consuntivo a fine fase. **Istanze attive: 2** (3090 rif
 - **B2 asintoto in corsa su 5090** (fB2-{cb,osc0,hard}-s{1,2}, 2,2B byte = 1 epoca,
   due code parallele; fine ~23:00): il gap del reset è pendenza o punto fisso?
   Primo esito: fB2-cb-s1 = 0,3879
-- Dopo: autopsia fase B + figure fase A/B + consuntivo ledger, distruzione 5090
+- Dopo: **test estrapolazione 2048→4096/8192 sui checkpoint B2** (pre-registrato in
+  D16, script pronto) + autopsia fase B + figure fase A/B + consuntivo ledger,
+  distruzione 5090
 
 ## Next
 
