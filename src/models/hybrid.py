@@ -10,7 +10,7 @@ from dataclasses import dataclass
 import torch
 import torch.nn as nn
 
-from ..configs import ModelConfig
+from ..configs import CHAR_BASELINE_BACKBONE_PARAMS, CHAR_PARITY_TOL, CHAR_SEQ_LEN, CHAR_VOCAB, ModelConfig
 from .linoss import OscBlock
 from .transformer import Block
 
@@ -20,6 +20,7 @@ class HybridOAConfig(ModelConfig):
     m: int = 512
     osc_first: bool = True
     log_polar: bool = False  # 1a: parametrizzazione classica (A,G) — congelata
+    n_osc: int = -1  # -1 = n_layer//2 (griglie 1a/1b); la griglia char (D16) lo fissa
 
 
 @dataclass
@@ -37,15 +38,28 @@ class HybridAOLPConfig(HybridAOConfig):
     log_polar: bool = True
 
 
+@dataclass
+class CharOsc0Config(HybridOALPConfig):
+    # Fase A griglia char (D16): banco oscillatorio al layer 0 come codice di posizione,
+    # 7 layer di attention SENZA position embedding sopra.
+    vocab_size: int = CHAR_VOCAB
+    seq_len: int = CHAR_SEQ_LEN
+    byte_level: bool = True
+    use_pos: bool = False
+    n_osc: int = 1
+    parity_ref: int = CHAR_BASELINE_BACKBONE_PARAMS
+    parity_tol: float = CHAR_PARITY_TOL
+
+
 class Hybrid(nn.Module):
     def __init__(self, cfg: HybridOAConfig):
         super().__init__()
         self.cfg = cfg
         self.tok = nn.Embedding(cfg.vocab_size, cfg.d_model)
-        self.pos = nn.Embedding(cfg.seq_len, cfg.d_model)
-        half = cfg.n_layer // 2
-        osc = [OscBlock(cfg, cfg.m, damped=True, phi_init=False, log_polar=cfg.log_polar) for _ in range(half)]
-        attn = [Block(cfg) for _ in range(cfg.n_layer - half)]
+        self.pos = nn.Embedding(cfg.seq_len, cfg.d_model) if cfg.use_pos else None
+        n_osc = cfg.n_layer // 2 if cfg.n_osc == -1 else cfg.n_osc
+        osc = [OscBlock(cfg, cfg.m, damped=True, phi_init=False, log_polar=cfg.log_polar) for _ in range(n_osc)]
+        attn = [Block(cfg) for _ in range(cfg.n_layer - n_osc)]
         self.blocks = nn.ModuleList(osc + attn if cfg.osc_first else attn + osc)
         self.ln_f = nn.LayerNorm(cfg.d_model)
         self.head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)
@@ -58,7 +72,9 @@ class Hybrid(nn.Module):
         ]
 
     def forward(self, idx):
-        x = self.tok(idx) + self.pos(torch.arange(idx.shape[1], device=idx.device))
+        x = self.tok(idx)
+        if self.pos is not None:
+            x = x + self.pos(torch.arange(idx.shape[1], device=idx.device))
         for blk in self.blocks:
             x = blk(x)
         return self.head(self.ln_f(x))

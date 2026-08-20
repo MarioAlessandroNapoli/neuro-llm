@@ -18,7 +18,9 @@ from lightning.pytorch.callbacks import Callback, ModelCheckpoint
 from lightning.pytorch.loggers import WandbLogger
 from torch.utils.data import DataLoader
 
-from .configs import BASELINE_BACKBONE_PARAMS, EOT_TOKEN, PARITY_TOL
+import numpy as np
+
+from .configs import EOT_TOKEN
 from .data import TokenWindowDataset
 from .lit_module import LMModule
 from .models import build_model
@@ -100,7 +102,8 @@ def check_ckpt_compat(ckpt_path: str, max_steps: int, lr: float):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--arch", required=True)
-    parser.add_argument("--tokens", type=int, required=True, help="budget di token di training")
+    parser.add_argument("--tokens", type=int, required=True,
+                        help="budget di training nell'unità dell'arch: token BPE, o byte per le arch char (D15)")
     parser.add_argument("--seed", type=int, required=True, help="parte dell'identità della run")
     parser.add_argument("--resume", action="store_true", help="riprendi dal checkpoint di questa run")
     parser.add_argument("--group", help="gruppo W&B: sweep-lr | grid-stage1")
@@ -127,8 +130,9 @@ def main():
     )
     max_steps = args.tokens // (args.batch_size * cfg.seq_len * args.devices)
 
-    train_ds = TokenWindowDataset(args.data_dir / "train.bin", cfg.seq_len)
-    val_ds = TokenWindowDataset(args.data_dir / "valid.bin", cfg.seq_len)
+    suffix, dtype = ("_bytes", np.uint8) if cfg.byte_level else ("", np.uint16)
+    train_ds = TokenWindowDataset(args.data_dir / f"train{suffix}.bin", cfg.seq_len, dtype)
+    val_ds = TokenWindowDataset(args.data_dir / f"valid{suffix}.bin", cfg.seq_len, dtype)
     loader_kwargs = dict(
         batch_size=args.batch_size,
         num_workers=args.num_workers,
@@ -139,22 +143,25 @@ def main():
     train_dl = DataLoader(train_ds, shuffle=True, **loader_kwargs)
     val_dl = DataLoader(val_ds, **loader_kwargs)
 
-    tok_path = args.data_dir / "tokenizer.json"
-    vocab = json.loads(tok_path.read_text())["model"]["vocab"]
-    if len(vocab) != cfg.vocab_size or vocab[EOT_TOKEN] != 0:
-        raise SystemExit(
-            f"tokenizer incoerente con D3: vocab {len(vocab)} vs {cfg.vocab_size}, "
-            f"id di {EOT_TOKEN} = {vocab.get(EOT_TOKEN)} (atteso 0)"
-        )
-    tokenizer_sha = hashlib.sha256(tok_path.read_bytes()).hexdigest()[:16]
+    if cfg.byte_level:
+        tokenizer_sha = "bytes-v1"  # D15: byte grezzi, nessun tokenizer da verificare
+    else:
+        tok_path = args.data_dir / "tokenizer.json"
+        vocab = json.loads(tok_path.read_text())["model"]["vocab"]
+        if len(vocab) != cfg.vocab_size or vocab[EOT_TOKEN] != 0:
+            raise SystemExit(
+                f"tokenizer incoerente con D3: vocab {len(vocab)} vs {cfg.vocab_size}, "
+                f"id di {EOT_TOKEN} = {vocab.get(EOT_TOKEN)} (atteso 0)"
+            )
+        tokenizer_sha = hashlib.sha256(tok_path.read_bytes()).hexdigest()[:16]
 
     n_params = sum(p.numel() for p in model.parameters())
     n_backbone = n_params - cfg.vocab_size * cfg.d_model
-    drift = (n_backbone - BASELINE_BACKBONE_PARAMS) / BASELINE_BACKBONE_PARAMS
-    if abs(drift) > PARITY_TOL:
+    drift = (n_backbone - cfg.parity_ref) / cfg.parity_ref
+    if abs(drift) > cfg.parity_tol:
         raise SystemExit(
-            f"parità violata (D6): backbone {n_backbone:,} vs riferimento "
-            f"{BASELINE_BACKBONE_PARAMS:,} ({drift:+.1%}, tolleranza ±{PARITY_TOL:.0%})"
+            f"parità violata (D6/D15): backbone {n_backbone:,} vs riferimento "
+            f"{cfg.parity_ref:,} ({drift:+.1%}, tolleranza ±{cfg.parity_tol:.0%})"
         )
     print(
         f"{run_name}: {n_params/1e6:.2f}M parametri ({n_backbone/1e6:.2f}M backbone, "

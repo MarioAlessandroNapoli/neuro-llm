@@ -6,10 +6,10 @@ from torch.utils.data import Dataset
 
 
 class TokenWindowDataset(Dataset):
-    """Finestre contigue di token da un .bin uint16 memmappato."""
+    """Finestre contigue di token da un .bin memmappato (uint16 BPE; uint8 byte, D15)."""
 
-    def __init__(self, bin_path: Path, seq_len: int):
-        self.tokens = np.memmap(bin_path, dtype=np.uint16, mode="r")
+    def __init__(self, bin_path: Path, seq_len: int, dtype=np.uint16):
+        self.tokens = np.memmap(bin_path, dtype=dtype, mode="r")
         self.seq_len = seq_len
 
     def __len__(self):

@@ -620,9 +620,13 @@ migliore — allora il filone indirizzamento va riformulato prima di spendere ol
 
 **Backbone char.** Byte grezzi UTF-8, vocab 256; il delimitatore letterale
 `<|endoftext|>` del testo grezzo si sostituisce col byte 0x00 (mai presente nel testo)
-come EOT. d256, L8, head tied; **seq_len 1024 byte** (≈ metà finestra-testo dello
-stadio 1: 512 token ≈ 2130 byte — l'estensione a 2048 è un punto di arrivo dopo il
-collaudo, non di partenza: l'attention paga ×4). Parametri: ~65k embedding + ~6,3M
+come EOT. d256, L8, head tied; **seq_len 2048 byte**, deciso dall'analisi del dataset
+(2026-08-20): storie TinyStories p50=720 byte, p90=1090, p99=2200 — 2048 contiene
+intera il 98,6% delle storie (1024 solo l'88%, e soprattutto tronca il protocollo del
+giudice: i prompt lunghi D7 arrivano a 1383 byte + ~900 di generazione = 2283
+richiesti; a 2048 lo scorrimento perde solo ~235 byte di coda del prefisso a fine
+generazione, dichiarato e uguale per tutti i bracci). 2048 ≈ la finestra-testo dello
+stadio 1 (512 token ≈ 2130 byte): confronto cross-stadio a finestra quasi pari. Parametri: ~65k embedding + ~6,3M
 corpo (+262k pos, solo dove previsto) ≈ **6,4-6,6M**; parità lasca ±10% tra bracci
 (D15). Budget: **B1 = 700M byte** (≈ testo dei 170M token di stadio 1), **B2 = 2,2B
 byte** (1 epoca) per i vincitori — protocollo pendenza a due punti obbligatorio.

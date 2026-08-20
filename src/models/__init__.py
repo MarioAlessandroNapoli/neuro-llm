@@ -1,5 +1,5 @@
-from ..configs import ModelConfig
-from .hybrid import Hybrid, HybridAOConfig, HybridAOLPConfig, HybridOAConfig, HybridOALPConfig
+from ..configs import CharTransformerConfig, CharTransformerNoPosConfig, ModelConfig
+from .hybrid import CharOsc0Config, Hybrid, HybridAOConfig, HybridAOLPConfig, HybridOAConfig, HybridOALPConfig
 from .linoss import (
     DLinOSSConfig,
     DLinOSSLPConfig,
@@ -25,6 +25,10 @@ ARCHS = {
     "hyb-oa-lp": (Hybrid, HybridOALPConfig),
     "hyb-ao-lp": (Hybrid, HybridAOLPConfig),
     "wrnn": (WRNNLM, WRNNConfig),
+    # Griglia char, fase A (D15/D16): byte grezzi, vocab 256, seq 2048
+    "char-transformer": (Transformer, CharTransformerConfig),
+    "char-transformer-nopos": (Transformer, CharTransformerNoPosConfig),
+    "char-osc0": (Hybrid, CharOsc0Config),
 }
 
 
