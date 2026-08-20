@@ -1,4 +1,6 @@
-from ..configs import CharTransformerConfig, CharTransformerNoPosConfig, ModelConfig
+from ..configs import (
+    CharTransformerConfig, CharTransformerNoPosConfig, CharTransformerRelConfig, ModelConfig,
+)
 from .hybrid import (
     CharHybConfig,
     CharHybHardConfig,
@@ -40,6 +42,7 @@ ARCHS = {
     # Griglia char, fase A (D15/D16): byte grezzi, vocab 256, seq 2048
     "char-transformer": (Transformer, CharTransformerConfig),
     "char-transformer-nopos": (Transformer, CharTransformerNoPosConfig),
+    "char-transformer-rel": (Transformer, CharTransformerRelConfig),
     "char-osc0": (Hybrid, CharOsc0Config),
     # Griglia char, fase B (D16): reset-su-confini sull'ibrido oa log-polare
     "char-hyb": (Hybrid, CharHybConfig),

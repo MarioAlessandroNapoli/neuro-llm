@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from ..configs import ModelConfig
+from ..configs import CHAR_BOUNDARY_BYTES, CHAR_REL_POS_MAX, ModelConfig
 
 
 class Block(nn.Module):
@@ -33,7 +33,13 @@ class Transformer(nn.Module):
         super().__init__()
         self.cfg = cfg
         self.tok = nn.Embedding(cfg.vocab_size, cfg.d_model)
-        self.pos = nn.Embedding(cfg.seq_len, cfg.d_model) if cfg.use_pos else None
+        if cfg.rel_pos:
+            self.pos = nn.Embedding(CHAR_REL_POS_MAX, cfg.d_model)
+            lut = torch.zeros(cfg.vocab_size, dtype=torch.bool)
+            lut[list(CHAR_BOUNDARY_BYTES)] = True
+            self.register_buffer("boundary_lut", lut, persistent=False)
+        else:
+            self.pos = nn.Embedding(cfg.seq_len, cfg.d_model) if cfg.use_pos else None
         self.blocks = nn.ModuleList(Block(cfg) for _ in range(cfg.n_layer))
         self.ln_f = nn.LayerNorm(cfg.d_model)
         self.head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)
@@ -46,7 +52,14 @@ class Transformer(nn.Module):
 
     def forward(self, idx):
         x = self.tok(idx)
-        if self.pos is not None:
+        if self.cfg.rel_pos:
+            # Distanza dall'ultimo confine (confine stesso = 0), cap alla tabella:
+            # last_b via cummax degli indici dei confini (-1 se nessuno ancora visto).
+            t = idx.shape[1]
+            ar = torch.arange(t, device=idx.device)
+            last_b = torch.where(self.boundary_lut[idx], ar, ar.new_tensor(-1)).cummax(dim=1).values
+            x = x + self.pos((ar - last_b).clamp(max=CHAR_REL_POS_MAX - 1))
+        elif self.pos is not None:
             x = x + self.pos(torch.arange(idx.shape[1], device=idx.device))
         for blk in self.blocks:
             x = blk(x)

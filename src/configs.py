@@ -30,6 +30,7 @@ class ModelConfig:
     n_head: int = 8
     byte_level: bool = False
     use_pos: bool = True
+    rel_pos: bool = False  # C1 cb-rel (D17): pos emb indicizzato dalla distanza dal confine
     parity_ref: int = BASELINE_BACKBONE_PARAMS
     parity_tol: float = PARITY_TOL
 
@@ -46,3 +47,16 @@ class CharTransformerConfig(ModelConfig):
 @dataclass
 class CharTransformerNoPosConfig(CharTransformerConfig):
     use_pos: bool = False
+
+
+# Cap della tabella rel-pos: la coordinata è la distanza dall'ultimo confine (parole
+# TinyStories ≤ ~15 byte; 64 copre anche le code senza sprecare tabella).
+CHAR_REL_POS_MAX = 64
+
+
+@dataclass
+class CharTransformerRelConfig(CharTransformerConfig):
+    # C1 cb-rel (controllo alla Segatron, D17 post-bonifica): la SOLA coordinata
+    # "posizione dal confine" come pos emb esplicito — se eguaglia hard, il reset È
+    # quella coordinata; se hard vince, il claim si restringe.
+    rel_pos: bool = True
