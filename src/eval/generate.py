@@ -20,8 +20,25 @@ from .prompts import EVAL_DIR, DATA_DIR, load_prompt_set
 
 GENERATIONS_DIR = EVAL_DIR / "generations"
 MAX_NEW_TOKENS = 200
+MAX_NEW_BYTES = 900  # ≈ 200 token BPE (4,2 byte/token): stesso testo massimo del protocollo D7
 N_COMPLETIONS = 10
 TEMPERATURE = 1.0
+
+
+class ByteCodec:
+    """Codec identità per le arch char (D15): testo ↔ byte UTF-8, EOT = 0x00."""
+
+    def encode(self, text: str):
+        class _E:
+            ids = list(text.encode())
+        return _E()
+
+    def decode(self, ids: list[int]) -> str:
+        return bytes(ids).decode(errors="replace")
+
+    def token_to_id(self, token: str) -> int:
+        assert token == EOT_TOKEN
+        return 0
 
 
 def completion_seed(arch: str, run_seed: int, prompt_id: str, k: int) -> int:
@@ -31,7 +48,7 @@ def completion_seed(arch: str, run_seed: int, prompt_id: str, k: int) -> int:
 
 @torch.no_grad()
 def generate_batch(model, prompt_ids: list[int], seeds: list[int], eot_id: int,
-                   seq_len: int, device) -> list[list[int]]:
+                   seq_len: int, device, max_new: int = MAX_NEW_TOKENS) -> list[list[int]]:
     """I K completamenti di uno stesso prompt in un solo batch: ogni riga campiona dal
     proprio Generator CPU (stessa semantica del caso batch-1); una riga che tocca EOT
     continua a scorrere ma il suo output è già chiuso."""
@@ -39,7 +56,7 @@ def generate_batch(model, prompt_ids: list[int], seeds: list[int], eot_id: int,
     ids = torch.tensor([prompt_ids] * len(seeds), device=device)
     outs = [[] for _ in seeds]
     done = [False] * len(seeds)
-    for _ in range(MAX_NEW_TOKENS):
+    for _ in range(max_new):
         logits = model(ids[:, -seq_len:])[:, -1]
         probs = F.softmax(logits.float() / TEMPERATURE, dim=-1).cpu()
         nxts = [torch.multinomial(probs[i], 1, generator=g).item() for i, g in enumerate(gens)]
@@ -68,11 +85,15 @@ def main():
     parser.add_argument("--completions", type=int, default=N_COMPLETIONS)
     args = parser.parse_args()
 
-    from tokenizers import Tokenizer
-
-    tok = Tokenizer.from_file(str(DATA_DIR / "tokenizer.json"))
-    eot_id = tok.token_to_id(EOT_TOKEN)
     model, cfg = build_model(args.arch)
+    if cfg.byte_level:
+        tok = ByteCodec()
+    else:
+        from tokenizers import Tokenizer
+
+        tok = Tokenizer.from_file(str(DATA_DIR / "tokenizer.json"))
+    eot_id = tok.token_to_id(EOT_TOKEN)
+    max_new = MAX_NEW_BYTES if cfg.byte_level else MAX_NEW_TOKENS
 
     ckpt_sha = None
     if args.random_init:
@@ -100,7 +121,7 @@ def main():
         prompt_ids = tok.encode(p["text"]).ids
         seeds = [completion_seed(args.arch, args.seed, p["id"], k) for k in range(args.completions)]
         completions = [tok.decode(ids) for ids in
-                       generate_batch(model, prompt_ids, seeds, eot_id, cfg.seq_len, device)]
+                       generate_batch(model, prompt_ids, seeds, eot_id, cfg.seq_len, device, max_new)]
         generations.append({"prompt_id": p["id"], "stratum": p["stratum"], "completions": completions})
         print(f"{p['id']}: {args.completions} completamenti "
               f"(mediana {sorted(len(c) for c in completions)[len(completions) // 2]} char)")
@@ -112,7 +133,7 @@ def main():
         "ckpt_sha256": ckpt_sha,
         "random_init": args.random_init,
         "protocol": {"temperature": TEMPERATURE, "completions": args.completions,
-                     "max_new_tokens": MAX_NEW_TOKENS},
+                     "max_new_tokens": max_new},
         "generations": generations,
     }
     GENERATIONS_DIR.mkdir(exist_ok=True)
