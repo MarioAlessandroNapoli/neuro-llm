@@ -9,19 +9,21 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- (vuoto — giudizio preliminare D14 chiuso; prossimo: design 1c-selettività o campagna
-  giudice completa)
+- Design griglia 1c-selettività: rassegna completata
+  (`docs/2026-08-rassegna-continuazione-1c.md` — 5 candidate classificate, prima
+  scelta proposta: 1c-int-lettura + controllo θ≡0 + sonde sintetiche); da discutere
+  e congelare in una D15
 
 ## Next
 
 - Campagna giudice completa (D14): generazioni ≥2 seed per braccio su istanza GPU vast
   (M2 troppo lento: ~2h/run per l'ibrido), poi Elo con la regola E± pre-registrata
   (il bootstrap cluster richiede ≥2 seed) + scoring assoluto e self-agreement
-- Sanity check del potere del giudice: una coppia a loss distanti (es. ibrido 1,57 vs
-  dlinoss-lp 1,95) — il giudice cieco la distingue? Mai misurato (D14-riconsiderare)
 
 ## Later
 
+- Sanity check del potere del giudice cieco (D14-riconsiderare): una coppia a loss
+  distanti (es. ibrido 1,57 vs dlinoss-lp 1,95) — il giudice la distingue? Mai misurato
 - Griglia 1b, fasi 1-2 (D12): dlinoss log-polare + sweep lr · omeostasi vs controllo
   log-polare · ibrido intercalato A-O · hyb-oa@3e-3 · init post-autopsia r~U[0,7;0,9] ·
   asintoto 536M per i vincitori. Fuori scope dichiarato: selettività/gating (1c)
