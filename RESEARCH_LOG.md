@@ -859,6 +859,20 @@ risultata inerte due volte, leggere a fase un orologio che vince da fermo non è
 la domanda); scala frase incondizionata (rischio no-signal su TinyStories, e SOMBRERO
 mostra che forzare confini linguistici alti degrada).
 
+**Autopsia del gate (fase B, stessa sera — domanda dell'utente: "sta convergendo a
+una tokenizzazione classica?").** No — e la storia "reset a eventi" va corretta. Su
+fB-hard-s2 (`scripts/autopsia_gate.py`, 32 finestre): il gate spara OVUNQUE (p media
+~0,5 anche dentro le parole; recall 1,0 ma precision 0,24 sui confini letterali), con
+modulazione ai confini (p 0,55→0,83 a L0) e 2-11 gruppi su 64 "portatori" (p<0,1,
+memoria che scavalca le parole). Non è un tokenizer implicito (sarebbe: silenzio
+intra-parola, colpo secco agli spazi — e comunque heu dimostra che quello vale zero):
+è **oblio selettivo continuo per-canale, modulato dai confini** — il gradiente ha
+trasformato il nostro rilevatore di confini in un gate selettivo alla Mamba, con in
+più la struttura linguistica. Terza convergenza evolutiva (dopo τ≈7 spontaneo e
+S4→Mamba=lti→hard). Il claim si raffina: "oblio selettivo appreso, allineato ai
+confini"; la domanda per C2 si sposta: è la modulazione-ai-confini a essere portante,
+o basta il decay selettivo? (controllo naturale: stesso gate cieco al contenuto).
+
 **Emendamento post-bonifica (stessa sera).** La verifica sui vocabolari adiacenti
 (rassegna § fronte 5) restituisce tre pezzi del claim alla letteratura: CoPE 2024
 (posizione = conteggio di eventi, gate che si apre sui separatori), FoX ICLR 2025 (il
