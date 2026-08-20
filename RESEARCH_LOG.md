@@ -616,6 +616,66 @@ migliore — allora il filone indirizzamento va riformulato prima di spendere ol
 
 ---
 
+### D16 — Griglia char: design operativo (2026-08-20)
+
+**Backbone char.** Byte grezzi UTF-8, vocab 256; il delimitatore letterale
+`<|endoftext|>` del testo grezzo si sostituisce col byte 0x00 (mai presente nel testo)
+come EOT. d256, L8, head tied; **seq_len 1024 byte** (≈ metà finestra-testo dello
+stadio 1: 512 token ≈ 2130 byte — l'estensione a 2048 è un punto di arrivo dopo il
+collaudo, non di partenza: l'attention paga ×4). Parametri: ~65k embedding + ~6,3M
+corpo (+262k pos, solo dove previsto) ≈ **6,4-6,6M**; parità lasca ±10% tra bracci
+(D15). Budget: **B1 = 700M byte** (≈ testo dei 170M token di stadio 1), **B2 = 2,2B
+byte** (1 epoca) per i vincitori — protocollo pendenza a due punti obbligatorio.
+
+**Fasi della griglia** (2 seed per braccio, autopsia obbligatoria, ordine = costo
+crescente di implementazione):
+
+- **Fase 0-char (collaudo, oggi)**: pipeline byte (`train_bytes.bin` uint8 dal txt
+  grezzo, su HF), smoke M2, collaudo su GPU piccola (throughput byte/s, memoria a
+  t=1024, prime curve). Gate: si prosegue solo con throughput ibrido ≥ ~30k byte/s.
+- **Sweep ricetta char-baseline**: batch×lr a budget corto (~200M byte), poi 3 seed
+  alla ricetta vincente → **pavimento di rumore σ_char** (l'analogo dello 0,025 di
+  stadio 1; nessun criterio di successo sotto questo numero).
+- **Fase A — fase-come-posizione** (l'interruttore più informativo per $ speso):
+  `cb` char-transformer con pos emb (baseline) · `cb-nopos` senza pos emb (controllo
+  negativo) · `osc0-nopos` layer 0 = banco oscillatorio log-polare + 7 layer attention
+  senza pos emb (l'ordine lo fornisce la fase) · opz. `osc0-pos` (misura ridondanza).
+  **Caveat dichiarato**: la letteratura (Haviv 2022; NoPE, Kazemnejad 2023) mostra che
+  i decoder causali senza PE imparano comunque posizione dalla mask — quindi il
+  controllo potrebbe non collassare; il verdetto è il confronto a tre, non il collasso:
+  fase-come-posizione è supportata se osc0-nopos ≥ cb (entro σ_char) E > cb-nopos
+  (oltre σ_char), con la probe a confermare che la posizione è *nella fase*.
+- **Fase B — reset-su-confini** sull'ibrido char (hyb-oa-lp-char): 3 bracci — LTI
+  (controllo) · hard reset θ≡0 (puro chunking) · phase reset — gate b_t ∈ [0,1] da
+  conv causale sui byte (kernel ~7), per-gruppo. **Flag ingegneristico**: col gate la
+  transizione diventa batch-dipendente → prima implementazione nello scan eager
+  (corretto per costruzione), ottimizzazione del path `hoo` solo dopo il collaudo (il
+  bug backward di Inductor è un precedente: prudenza motivata da evidenza).
+- **Fase C — lettura a fase** sullo stack puro char (dlinoss-lp-char): LTI vs
+  phase-read, init a zero = identità bit-per-bit col controllo.
+
+**Probe e misure.** BPB = loss_nats/ln2 (esatto a livello byte); giudice cieco D14 sui
+prompt congelati (generazione byte: max_new ~900 byte ≈ i 200 token attuali; serve il
+codec byte in `src.eval.generate`); **probe posizione-nel-chunk**: regressione lineare
+dai 2D-state della fase a "byte dall'ultimo confine (spazio/punteggiatura)" — la
+capacità di decodifica deve separare i bracci; autopsia spettrale su tutti i bracci.
+
+**Costi stimati** (ricaricabile; collaudo su GPU ~0,05 $/h, griglia su classe 4090
+~0,35 $/h): collaudo <0,5 $ · sweep+pavimento ~1,5 $ · fase A ~2 $ · fase B ~2,5 $ ·
+fase C ~1 $ · pendenza B2 vincitori ~3-4 $.
+
+**Scartato.** Partire a seq 2048 (costo attention ×4 prima ancora del collaudo);
+implementare subito il gate nello scan fuso (precedente Inductor); tokenizer char
+appreso (D15: i byte eliminano ogni decisione di apparato).
+
+**Riconsiderare se.** Throughput ibrido < ~30k byte/s anche su GPU seria (griglia
+intrattabile → ridisegno budget); `cb-nopos` ≈ `cb` oltre ogni dubbio (il controllo
+negativo di fase A evapora → il verdetto si sposta interamente sulla probe di
+decodifica); BPB della char-baseline fuori scala rispetto all'àncora 0,4407 (regime
+byte troppo povero a ~6,5M parametri).
+
+---
+
 ## Questioni aperte (fase di design, in corso)
 
 - (nessuna — Q3-granularità chiusa in D15-stadio-char)

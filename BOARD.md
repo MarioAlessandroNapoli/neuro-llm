@@ -9,10 +9,10 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- **D15-stadio-char congelata** (byte=tempo, fase come indirizzo; revisiona D3/D4/D6
-  nel solo nuovo stadio). Prossimo: design operativo della griglia char (D16) —
-  seq_len byte, architettura bracci, sweep ricetta della char-baseline, pavimento di
-  rumore nuovo
+- **D16 congelata** (griglia char: backbone byte seq1024, fasi 0→sweep→A/B/C, budget
+  700M/2,2B byte). In corso: implementazione fase 0-char (pipeline byte, configs,
+  smoke M2) → collaudo su GPU piccola → sweep+griglia su GPU potente (budget
+  ricaricabile, ok da utente 2026-08-20)
 
 ## Next
 
