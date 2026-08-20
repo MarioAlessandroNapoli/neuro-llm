@@ -891,6 +891,37 @@ oltre la coordinata). Citazioni obbligate in rassegna § fronte 5. Il nostro cla
 partenza è un raffinamento dichiarato di Haviv 2022 (NoPE conta i predecessori): col
 reset il conteggio riparte dal confine.
 
+**Esito C1 (2026-08-20/21, notte — griglia completa in 6 run): lo spettro di
+timescale è il meccanismo; confini, coordinata e gate sono comparse.** Decomposizione
+a parità (700M, engine 32-true dove conta):
+
+| braccio | cosa fornisce | val loss | estrapolazione (bucket 8192) |
+|---|---|---|---|
+| lti32 | nulla (ring 0,9-1) | 0,4527 | — |
+| fC1-heu | confini cablati, reset totale | 0,4523 | — |
+| fC1-rel (transformer) | SOLO coordinata dal confine | 0,7571 | — |
+| fC1-ts | SOLO spettro τ multi-banda | 0,4357 / 0,4277 | **+15%** |
+| fB-hard | gate appreso (spettro emergente + confini) | 0,4295 / 0,4251 | +13% |
+| osc0 (rif.) | banda unica | — | +188% (collassa) |
+
+(1) I confini da soli valgono zero (heu=lti32); la coordinata esplicita da sola resta
+a metà strada (rel 0,757: sblocca la transizione da nopos 1,45-2,04 ma −0,33 da hard);
+(2) **lo spettro di timescale da solo vale quasi tutto**: ts pareggia hard entro lo
+spread dei seed (0,432 vs 0,427, seed intrecciati) E estrapola come lui (+15% vs +13%
+a 4×; il contrasto interno osc0-vs-ts — banda unica collassa, quattro bande reggono —
+inchioda lo spettro come meccanismo); (3) il gate appreso non aggiunge nulla di
+misurabile sopra lo spettro imposto — e l'autopsia spiega perché: il gradiente aveva
+USATO il gate per costruirsi uno spettro efficace (gruppi portatori + dimenticatori).
+Harmonic sostanzialmente replicato su byte-LM ibrido (con estrapolazione verificata a
+bucket); PoST confermato (lo spettro va imposto o costruito: l'init collassato di lti
+non lo trova da solo). La predizione unexplored-states per ts è fallita: i canali
+lenti fissi non sbandano a 4×. Pagella neuro aggiornata: gerarchia-di-timescale
+(Murray/Hasson) ✓✓ · reset-theta-come-meccanismo ✗ al netto dello spettro (il
+guadagno di fase B era lo spettro travestito). Conseguenza per C2: la gerarchia di
+reset ANNIDATI perde il suo razionale a questa scala — la domanda utile diventa se
+lo spettro basti anche all'asintoto (fB2-ts, in coda) e dove il gate torni a contare
+(recall/MQAR, budget maggiori, o mai). Caveat: 2 seed, TinyStories, 6,8M.
+
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
 gate-appreso = euristica-spazi (il livello 1 non è contributo: lo si dichiara e ci si
