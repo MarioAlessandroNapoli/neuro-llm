@@ -5,14 +5,24 @@
 l'inverso. Position embedding attivo (serve all'attention).
 """
 
+import math
 from dataclasses import dataclass
 
 import torch
 import torch.nn as nn
 
-from ..configs import CHAR_BASELINE_BACKBONE_PARAMS, CHAR_PARITY_TOL, CHAR_SEQ_LEN, CHAR_VOCAB, ModelConfig
-from .linoss import OscBlock
+from ..configs import (
+    CHAR_BASELINE_BACKBONE_PARAMS, CHAR_BOUNDARY_BYTES, CHAR_PARITY_TOL,
+    CHAR_SEQ_LEN, CHAR_VOCAB, ModelConfig,
+)
+from .linoss import RING_R_MAX, RING_R_MIN, OscBlock
 from .transformer import Block
+
+# Braccio timescale (D17 C1, Harmonic-style): init dei raggi per layer oscillatorio
+# su bande di τ scalate geometricamente — layer l: τ ∈ [TS_TAU_MIN·8^l, TS_TAU_MIN·8^(l+1)]
+# byte, cioè (2-16, 16-128, 128-1024, 1024-8192). Solo init: il gradiente resta libero.
+TS_TAU_MIN = 2.0
+TS_TAU_FACTOR = 8.0
 
 
 @dataclass
@@ -23,6 +33,8 @@ class HybridOAConfig(ModelConfig):
     n_osc: int = -1  # -1 = n_layer//2 (griglie 1a/1b); la griglia char (D16) lo fissa
     reset: bool = False
     no_rotation: bool = False
+    heuristic_reset: bool = False
+    ts_hierarchy: bool = False
 
 
 @dataclass
@@ -66,6 +78,21 @@ class CharHybPhaseConfig(CharHybConfig):
 
 
 @dataclass
+class CharHybHeuConfig(CharHybConfig):
+    # C1 (D17): reset cablato sui byte-confine letterali, θ≡0 — zero parametri di gate.
+    # Se hard-appreso non batte questo, il gate è un rilevatore di spazi (SOMBRERO).
+    no_rotation: bool = True
+    heuristic_reset: bool = True
+
+
+@dataclass
+class CharHybTsConfig(CharHybConfig):
+    # C1 (D17): gerarchia di sole timescale senza reset (baseline Harmonic-style) —
+    # lti con init dei ν per layer su bande τ scalate 8×.
+    ts_hierarchy: bool = True
+
+
+@dataclass
 class CharOsc0Config(HybridOALPConfig):
     # Fase A griglia char (D16): banco oscillatorio al layer 0 come codice di posizione,
     # 7 layer di attention SENZA position embedding sopra.
@@ -85,10 +112,22 @@ class Hybrid(nn.Module):
         self.tok = nn.Embedding(cfg.vocab_size, cfg.d_model)
         self.pos = nn.Embedding(cfg.seq_len, cfg.d_model) if cfg.use_pos else None
         n_osc = cfg.n_layer // 2 if cfg.n_osc == -1 else cfg.n_osc
+
+        def ring(i):
+            if not cfg.ts_hierarchy:
+                return (RING_R_MIN, RING_R_MAX)
+            lo, hi = TS_TAU_MIN * TS_TAU_FACTOR**i, TS_TAU_MIN * TS_TAU_FACTOR**(i + 1)
+            return (math.exp(-1 / lo), math.exp(-1 / hi))
+
         osc = [OscBlock(cfg, cfg.m, damped=True, phi_init=False, log_polar=cfg.log_polar,
-                        reset=cfg.reset, no_rotation=cfg.no_rotation) for _ in range(n_osc)]
+                        ring=ring(i), reset=cfg.reset, no_rotation=cfg.no_rotation,
+                        heuristic_reset=cfg.heuristic_reset) for i in range(n_osc)]
         attn = [Block(cfg) for _ in range(cfg.n_layer - n_osc)]
         self.blocks = nn.ModuleList(osc + attn if cfg.osc_first else attn + osc)
+        if cfg.heuristic_reset:
+            lut = torch.zeros(cfg.vocab_size, dtype=torch.bool)
+            lut[list(CHAR_BOUNDARY_BYTES)] = True
+            self.register_buffer("boundary_lut", lut, persistent=False)
         self.ln_f = nn.LayerNorm(cfg.d_model)
         self.head = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)
         self.head.weight = self.tok.weight
@@ -103,6 +142,7 @@ class Hybrid(nn.Module):
         x = self.tok(idx)
         if self.pos is not None:
             x = x + self.pos(torch.arange(idx.shape[1], device=idx.device))
+        boundary = self.boundary_lut[idx].to(x.dtype) if self.cfg.heuristic_reset else None
         for blk in self.blocks:
-            x = blk(x)
+            x = blk(x, boundary) if isinstance(blk, OscBlock) else blk(x)
         return self.head(self.ln_f(x))

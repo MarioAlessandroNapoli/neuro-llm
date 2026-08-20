@@ -2,7 +2,9 @@ from ..configs import CharTransformerConfig, CharTransformerNoPosConfig, ModelCo
 from .hybrid import (
     CharHybConfig,
     CharHybHardConfig,
+    CharHybHeuConfig,
     CharHybPhaseConfig,
+    CharHybTsConfig,
     CharOsc0Config,
     Hybrid,
     HybridAOConfig,
@@ -42,7 +44,9 @@ ARCHS = {
     # Griglia char, fase B (D16): reset-su-confini sull'ibrido oa log-polare
     "char-hyb": (Hybrid, CharHybConfig),
     "char-hyb-hard": (Hybrid, CharHybHardConfig),
+    "char-hyb-heu": (Hybrid, CharHybHeuConfig),
     "char-hyb-phase": (Hybrid, CharHybPhaseConfig),
+    "char-hyb-ts": (Hybrid, CharHybTsConfig),
 }
 
 

@@ -172,12 +172,15 @@ class OscMixer(nn.Module):
     def __init__(
         self, d_model: int, m: int, damped: bool, phi_init: bool,
         log_polar: bool = False, ring: tuple = (RING_R_MIN, RING_R_MAX),
-        reset: bool = False, no_rotation: bool = False,
+        reset: bool = False, no_rotation: bool = False, heuristic_reset: bool = False,
     ):
         super().__init__()
+        if reset and heuristic_reset:
+            raise ValueError("reset appreso e heuristic_reset sono mutuamente esclusivi")
         self.damped = damped
         self.log_polar = log_polar
         self.no_rotation = no_rotation
+        self.heuristic_reset = heuristic_reset
         self.B = nn.Linear(d_model, m)
         self.C = nn.Linear(m, d_model)
         self.gate_conv = None
@@ -217,7 +220,7 @@ class OscMixer(nn.Module):
             return [self.nu_raw, self.theta_raw]
         return [self.A_raw] + ([self.G_raw, self.dt_raw] if self.damped else [])
 
-    def forward(self, u):
+    def forward(self, u, boundary=None):
         t = u.shape[1]
         bu = self.B(u)  # (b, t, m)
         if self.log_polar:
@@ -248,7 +251,14 @@ class OscMixer(nn.Module):
         M = torch.stack([row1, row2], dim=-2)  # (m, 2, 2)
         f = torch.stack([dt * S * bu, dt.square() * S * bu], dim=-1)  # (b, t, m, 2)
         M_t = M.unsqueeze(0).expand(t, -1, -1, -1)
-        if self.gate_conv is not None:
+        if self.heuristic_reset:
+            # Braccio C1 (D17): reset cablato sui byte-confine — g=0 dove il byte
+            # corrente è un confine (spazi/punteggiatura/EOT), nessun parametro.
+            if boundary is None:
+                raise ValueError("heuristic_reset richiede la maschera boundary dal modello")
+            g = (1 - boundary)[..., None].expand(-1, -1, f.shape[2])
+            states = prefix_scan_gated(M_t, f, g)
+        elif self.gate_conv is not None:
             boundary = torch.sigmoid(self.gate_conv(u.transpose(1, 2))[..., :t].transpose(1, 2))
             g = (1 - boundary).repeat_interleave(f.shape[2] // RESET_GROUPS, dim=-1)
             states = prefix_scan_gated(M_t, f, g)
@@ -261,21 +271,21 @@ class OscBlock(nn.Module):
     def __init__(
         self, cfg: ModelConfig, m: int, damped: bool, phi_init: bool,
         log_polar: bool = False, ring: tuple = (RING_R_MIN, RING_R_MAX),
-        reset: bool = False, no_rotation: bool = False,
+        reset: bool = False, no_rotation: bool = False, heuristic_reset: bool = False,
     ):
         super().__init__()
         self.ln1 = nn.LayerNorm(cfg.d_model)
         self.ln2 = nn.LayerNorm(cfg.d_model)
         self.mixer = OscMixer(cfg.d_model, m, damped, phi_init, log_polar, ring,
-                              reset, no_rotation)
+                              reset, no_rotation, heuristic_reset)
         self.mlp = nn.Sequential(
             nn.Linear(cfg.d_model, 4 * cfg.d_model),
             nn.GELU(),
             nn.Linear(4 * cfg.d_model, cfg.d_model),
         )
 
-    def forward(self, x):
-        x = x + self.mixer(self.ln1(x))
+    def forward(self, x, boundary=None):
+        x = x + self.mixer(self.ln1(x), boundary)
         return x + self.mlp(self.ln2(x))
 
 

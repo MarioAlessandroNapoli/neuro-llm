@@ -14,6 +14,9 @@ PARITY_TOL = 0.05
 CHAR_VOCAB = 256
 CHAR_SEQ_LEN = 2048
 CHAR_EOT_BYTE = 0
+# Byte-confine per il reset euristico (D17 C1) e la probe posizionale: spazi,
+# punteggiatura, newline, EOT — gli stessi BOUNDARIES della probe.
+CHAR_BOUNDARY_BYTES = tuple(b" .,!?\"'\n:;") + (CHAR_EOT_BYTE,)
 CHAR_BASELINE_BACKBONE_PARAMS = 6_842_880
 CHAR_PARITY_TOL = 0.10
 
