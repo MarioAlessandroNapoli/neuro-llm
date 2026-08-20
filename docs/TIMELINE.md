@@ -90,6 +90,20 @@ operativo nei commit. Aggiornata dalla skill `docs-and-artifacts`.
   BPB come ponte cross-tokenizer, giudice D14 invariato (i prompt sono testo).
   Q3-granularità chiusa.
 
+- **mattina** **D15-stadio-char** (byte=tempo, fase come indirizzo) e **D16** (griglia
+  operativa; seq 2048 dall'analisi del dataset: 98,6% storie intere + protocollo
+  giudice). Fase 0-char: pipeline byte (2,195B byte, 2,72M storie), tre bracci
+  implementati, parità verificata su M2.
+- **13:00-13:30** Collaudo 3090: **450-467k byte/s** su tutti i bracci (gate 15×);
+  segnale precoce osc0 1,84 vs baseline 2,30 a ricetta di collaudo.
+- **13:30-15:00** Sweep ricetta: mappa lr ripidissima col **plateau a trigramma**
+  (2,3 nats/byte) attraversato solo da lr 1e-2; sonde batch → curve sovrapposte *in
+  step* (sotto il critical batch, tra 8 e 16); pavimento σ_char(200M)≈0,018 →
+  **ricetta b16@1e-2**. Gemelle cross-GPU (b8-s2 su 3090 e 5090): delta nel rumore →
+  split legittimo. Fase B implementata (gated scan, oracolo 7e-8) + codec byte giudice.
+- **15:01** **Fase A lanciata**: 7 run × 700M byte su 3090+5090 (split 2:5 sul
+  rapporto misurato 3,5×).
+
 ## Compute e costi
 
 3 GPU vast.ai usa-e-getta (3090 → 4080 → 3060 → 4070TiS), budget 10 $ (ledger in

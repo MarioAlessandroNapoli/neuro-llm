@@ -678,6 +678,32 @@ negativo di fase A evapora → il verdetto si sposta interamente sulla probe di
 decodifica); BPB della char-baseline fuori scala rispetto all'àncora 0,4407 (regime
 byte troppo povero a ~6,5M parametri).
 
+**Esiti fase 0-char + sweep (2026-08-20 pomeriggio).** (a) **Collaudo 3090**: 450-467k
+byte/s su tutti e tre i bracci di fase A (gate 30k superato 15×; il braccio osc0 non
+paga nulla: 1 solo layer di scan su 8). Segnale precoce a ricetta di collaudo (lr 1e-3,
+30M byte): osc0 1,84 vs baseline 2,30 — rimisurato in fase A a ricetta onesta.
+(b) **Sweep lr** (b32, 200M byte): 3e-2→2,169 · **1e-2→0,639** · 3e-3→0,831 ·
+1e-3→1,199; il regime char ha un **plateau a livello trigramma (~2,3 nats/byte ≈ 3,3
+BPB)** che solo lr sufficiente attraversa entro il budget — la mappa è ripidissima.
+(c) **Sonde batch @1e-2**: b64→2,041 · b32→0,639 · b16→0,506 · b8→0,490; le curve
+b16-b64 si sovrappongono *in step* (siamo sotto il critical batch size: la moneta è il
+numero di step, non i byte), b8 se ne stacca (transizione più tardiva, varianza
+maggiore) — il critical batch del regime è tra 8 e 16. (d) **Pavimento a 200M**: b16 su
+3 seed = 0,506/0,526/0,541 → **σ_char(200M) ≈ 0,018**, spread 0,035; il vantaggio di
+b8 (0,014-0,016 sulle medie) è dentro il rumore e paga varianza doppia → **ricetta di
+fase: b16@1e-2**. (e) **Gemelle cross-GPU** (stessa run b8-s2 su 3090 e 5090):
+traiettorie sovrapposte per 12k step → il delta cross-scheda vive dentro il rumore di
+seed, lo split della griglia su due GPU è legittimo. Caveat: la gemella 3090 è morta a
+~metà run con Traceback non diagnosticato (esito finale perso; il confronto si regge
+sulle traiettorie); la 5090 ha chiuso a 0,531, dentro il ventaglio dei seed b8.
+(f) **Fase B implementata**: `prefix_scan_gated` con oracolo fwd/bwd a 7e-8 dal
+sequenziale fp64, g=1 bit-identico allo scan LTI; gate conv causale k=7, 64 gruppi,
+bias −4 (init quasi-LTI); bracci char-hyb / -hard(θ≡0) / -phase in parità (reset −0,9%,
+controllo −7,6%: i parametri del gate sono il meccanismo, dichiarato). Codec byte in
+`generate` (max 900 byte ≈ protocollo D7). **Fase A in corsa** (7 run × 700M byte,
+split 2:5 sul rapporto misurato 3,5× tra 3090 e 5090; run `fA-{cb,nopos,osc0}-s{1,2,3}`,
+gruppo grid-char).
+
 ---
 
 ## Questioni aperte (fase di design, in corso)

@@ -3,16 +3,19 @@
 Stato e priorità del progetto. Regole di gestione nella skill `neuro`.
 Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non prossimo · Done = compresso.
 
-**Budget compute**: 10 $ — spesi 3,42 $ (1a: 3090+4080 ~2,68 $ · 1b+asintoto:
-3060+4070 ~0,74 $) · residui 6,58 $. **Zero istanze attive** (tutte distrutte,
-2026-08-19 notte).
+**Budget compute**: ricaricabile (deciso 2026-08-20). Stadio 1: 3,42 $ totali.
+Stadio char: 3090 (~0,1 $/h, dalle 13:00) + 5090 datacenter (0,40 $/h, dalle 14:45) —
+stima giornata ~1,5-2 $, consuntivo a fine fase. **Istanze attive: 2** (3090 riferimento
++ 5090 muscolo — distruggere a fine giornata di lavoro).
 
 ## Now
 
-- **D16 congelata** (griglia char: backbone byte seq1024, fasi 0→sweep→A/B/C, budget
-  700M/2,2B byte). In corso: implementazione fase 0-char (pipeline byte, configs,
-  smoke M2) → collaudo su GPU piccola → sweep+griglia su GPU potente (budget
-  ricaricabile, ok da utente 2026-08-20)
+- **Fase A in corsa** (verdetto ~16:00): fA-{cb,nopos,osc0} × seed a 700M byte,
+  ricetta b16@1e-2 (sweeppata, pavimento σ≈0,018 a 200M), split 3090/5090. Domanda:
+  il banco oscillatorio al layer 0 fornisce la posizione meglio del pos embedding?
+- In coda 5090 (mai capparla): A/B engine (AdamW fused, compile mode) → collaudo
+  gated-hoo su CUDA → **fase B** (reset-su-confini, 3 bracci × 2 seed) → B2 asintoto
+  notturno (2,2B byte)
 
 ## Next
 
