@@ -91,6 +91,9 @@ def main():
     parser.add_argument("--run-name", required=True)
     parser.add_argument("--hub-repo", default="MarioAlessandroNapoli/neuro-llm-ckpt")
     parser.add_argument("--data-dir", type=Path, default=Path("data"))
+    parser.add_argument("--target", choices=["chunk", "assoluta"], default="chunk",
+                        help="chunk = byte dall'ultimo confine (cap 16); assoluta = "
+                             "indice nella finestra (controllo alla Haviv, D17)")
     args = parser.parse_args()
 
     model, cfg = build_model(args.arch)
@@ -106,7 +109,10 @@ def main():
     starts = rng.choice(len(data) - SEQ - 1, N_WINDOWS, replace=False)
     windows = np.stack([np.asarray(data[s: s + SEQ]) for s in starts])
     idx = torch.from_numpy(windows.astype(np.int64))
-    y = np.stack([positions_since_boundary(w) for w in windows])
+    if args.target == "assoluta":
+        y = np.tile(np.arange(SEQ, dtype=np.float32), (N_WINDOWS, 1))
+    else:
+        y = np.stack([positions_since_boundary(w) for w in windows])
 
     feats = {}
     resids, states_all = [], []
@@ -125,8 +131,9 @@ def main():
 
     tr, te = slice(0, SPLIT), slice(SPLIT, None)
     y_tr, y_te = y[tr].reshape(-1), y[te].reshape(-1)
-    print(f"{args.run_name} — probe posizione-nel-chunk (target 0-{MAX_POS}, "
-          f"train {SPLIT}/test {N_WINDOWS - SPLIT} finestre)")
+    label = ("posizione ASSOLUTA (0-2047)" if args.target == "assoluta"
+             else f"posizione-nel-chunk (0-{MAX_POS})")
+    print(f"{args.run_name} — probe {label}, train {SPLIT}/test {N_WINDOWS - SPLIT} finestre")
     for name, X in feats.items():
         r2 = ridge_r2(X[tr].reshape(len(y_tr), -1), y_tr, X[te].reshape(len(y_te), -1), y_te)
         print(f"  R² {name:>18}: {r2:.3f}  (dim {X.shape[-1]})")

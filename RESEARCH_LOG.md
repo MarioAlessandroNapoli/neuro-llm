@@ -922,6 +922,23 @@ reset ANNIDATI perde il suo razionale a questa scala — la domanda utile divent
 lo spettro basti anche all'asintoto (fB2-ts, in coda) e dove il gate torni a contare
 (recall/MQAR, budget maggiori, o mai). Caveat: 2 seed, TinyStories, 6,8M.
 
+**Addendum notturno (2026-08-21, 01-02): probe assoluta e autopsia spettrale
+correggono la lettura di C1.** (1) *Controllo alla Haviv eseguito*: posizione ASSOLUTA
+decodificabile da cb (residual R²=0,997, è la tabella) e da NESSUN braccio
+oscillatorio (hard/ts/osc0: R²≈0, anche negativi) — combinato con la probe locale
+(R² 0,90-0,95), l'attribuzione "estrapola perché la coordinata è locale" è ora una
+misura. (2) *Autopsia spettrale*: lo spettro IMPOSTO di ts è morto in training (tutte
+le bande collassate a τ max 7-59 byte, spettro finale ≈ lti); l'unico braccio con
+spettro sopravvissuto è HARD — 65-200/512 canali per layer con τ nominale >500 byte
+(max ~2·10⁵): **divisione del lavoro** — senza gate l'oblio vive nei pesi e il
+gradiente collassa r alla scala-parola; col gate l'oblio migra nel data-dependent
+(g~0,5/byte, autopsia gate) e r resta libero di tenere capacità lunga, modulata
+selettivamente. Lettura rivista: la parità ts=hard a 700M è probabilmente un effetto
+di TRAIETTORIA (le bande lente guidano la transizione, poi muoiono), mentre hard ha
+capacità lunga reale a fine training. Discriminanti in coda: asintoto fB2-ts (se
+resta parallelo a cb mentre hard converge → transizione vs capacità) ed
+estrapolazione estrema 16k/32k (se la capacità nominale conta, emerge lì).
+
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
 gate-appreso = euristica-spazi (il livello 1 non è contributo: lo si dichiara e ci si
