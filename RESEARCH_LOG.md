@@ -794,6 +794,14 @@ distanze >2048 — l'estrapolazione delle fasi è il test della qualità dell'or
 Verdetto: se (b) regge, il "fancy re-encoding" è falsificato — a parità di parametri
 il meccanismo compra robustezza fuori distribuzione; se hard degrada quanto crolla
 osc0/nopos, l'ipotesi scettica vince e si scrive col medesimo inchiostro.
+**Anteprima sui checkpoint 700M (2026-08-20 sera, 1 seed/braccio, 64 finestre)**: le
+tre predizioni confermate — cb incapace (tabella finita) · osc0 collassa (bucket
+6144-8191: 1,175, +188% — il crollo è dell'attention su un candidato-set 4× mai visto,
+lo scan LTI è invariante) · **hard regge: 4096 gratis (bucket lontano +0,008, totale
+migliore che a 2048), 8192 a +13%** dove osc0 paga +188%. Il "fancy re-encoding" è
+falsificato in anteprima: a parità di parametri il reset compra estrapolazione che il
+pos emb appreso non può avere per costruzione. Caveat: manca il confronto esterno con
+RoPE/ALiBi; ufficiale sui checkpoint B2.
 
 ---
 
