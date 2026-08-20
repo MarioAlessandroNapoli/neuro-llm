@@ -23,6 +23,10 @@ stima giornata ~1,5-2 $, consuntivo a fine fase. **Istanze attive: 2** (3090 rif
 
 ## Next
 
+- **Griglia C1 (D17-tempo-a-eventi)**: hard-appreso (fatto) vs hard-euristico (reset
+  su spazi cablati) vs gerarchia-di-timescale senza reset (Harmonic-style) — loss +
+  estrapolazione + probe + ℬ + autopsia. Poi C2 (secondo livello) se C1 promuove
+  l'appreso e la scala frase ha segnale (misurare BPIC e lunghezze frasi prima)
 - Campagna giudice completa (D14): generazioni ≥2 seed per braccio su istanza GPU vast
   (M2 troppo lento: ~2h/run per l'ibrido), poi Elo con la regola E± pre-registrata
   (il bootstrap cluster richiede ≥2 seed) + scoring assoluto e self-agreement

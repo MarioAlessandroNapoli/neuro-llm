@@ -805,6 +805,69 @@ RoPE/ALiBi; ufficiale sui checkpoint B2.
 
 ---
 
+## D17 — Tempo a eventi: convergenza sull'asse posizionale (2026-08-20, sera)
+
+**Decisione.** Il progetto converge sulla tesi: *il reset di stato su confini è un
+meccanismo posizionale — "il tempo scandito dagli eventi, non dall'indice" — e la sua
+forma appresa e gerarchica è l'oggetto di studio*. Asse **posizionale**, non
+compressivo (la compressione H-Net-style è satura; la nostra moneta è l'ablazione
+controllata + estrapolazione, non i FLOP). Griglia in due mosse, ogni braccio misurato
+su loss (700M), estrapolazione 2048→8192, probe, autopsia e metrica di allineamento
+dei confini ℬ (SOMBRERO):
+
+- **C1 — appreso vs euristico vs timescale** (le baseline che i reviewer esigeranno):
+  (a) `hard-euristico` — reset cablato sui confini letterali (spazi/punteggiatura/EOT,
+  il set BOUNDARIES della probe), gate senza parametri (delta di parità dichiarato);
+  (b) `timescale` — gerarchia di sole scale temporali senza reset (Harmonic-style:
+  init dei ν per layer su range scalati, nessun gate); contro `hard-appreso` (già in
+  mano). Domande: il gate appreso batte lo spazio cablato? il reset aggiunge qualcosa
+  sopra le scale imposte?
+- **C2 — secondo livello di reset** (condizionata: solo se C1 promuove l'appreso E il
+  corpus ha segnale alla scala frase — misurare prima BPIC del livello 1 e
+  distribuzione lunghezze frasi TinyStories): gate al layer superiore sopra gli stati
+  del primo, con le tre predizioni neuro pre-registrate come pagella (sotto).
+
+**L'àncora neuro cambia mestiere: da giustificazione a generatore di predizioni con
+pagella.** Ogni predizione neuro va registrata PRIMA dell'esperimento con esito
+annotato. Pagella a oggi: byte=tempo ✓ · phase precession ✗ (rotazione inerte 2×) ·
+reset theta-sillabico ✓✓ (fase B + estrapolazione) · smorzamento=reset-morbido ✓.
+Pre-registrate per C2: (1) rapporto tra scale adiacenti ~5-15× (Hasson/Murray/Ding);
+(2) reset di alto livello endogeno/top-down — ablando gli stati alti i gate devono
+cambiare, se dipendono solo da punteggiatura è scorciatoia (Ding & Poeppel 2016);
+(3) il canale top-down persistente tra i reset paga su ambiguità locale
+(Kiebel-Friston) — contro-precedente dichiarato: in Harmonic l'accoppiamento
+predittivo è rumore. Argomento di fondo: convergenza evolutiva come evidenza — quando
+gradiente e corteccia scelgono la stessa soluzione (τ≈7 byte spontaneo; S4→Mamba =
+lti→hard), il dato è sul calcolo, non sul substrato.
+
+**Perché.** (1) Fase B: il reset appreso vale 4σ e la rotazione è inerte; anteprima
+estrapolazione: hard regge (4096 gratis, 8192 +13%) dove cb è incapace per costruzione
+e osc0 collassa (+188%). (2) Rassegna 4 fronti (docs/2026-08-rassegna-gerarchia-di-reset.md):
+l'intersezione «SSM + confini appresi + reset di stato + estrapolazione/ablazione» è
+vuota — H-Net comprime senza resettare (verificato nel codice), Harmonic ha gerarchia+
+controlli ma timescale fisse, HM-RNN aveva il FLUSH ma è pre-SSM e senza controlli; le
+cause della sua morte (stimatore instabile, cardinalità non controllata, euristica
+vincente) sono state rimosse dal 2023-26. (3) La domanda residua è netta e nostra:
+**il confine appreso batte la timescale fissa e l'euristica come meccanismo
+posizionale?**
+
+**Scartato.** Asse compressione (saturo: 72 citazioni H-Net in 13 mesi, industria
+dentro, e il gruppo H-Net è migrato sul DNA); sintassi esplicita come livello
+gerarchico (URNNG/ON-LSTM/StructFormer: ritorni marginali — si gerarchizza la
+sorpresa, non la grammatica); fase C lettura-a-fase (declassata: la rotazione è
+risultata inerte due volte, leggere a fase un orologio che vince da fermo non è più
+la domanda); scala frase incondizionata (rischio no-signal su TinyStories, e SOMBRERO
+mostra che forzare confini linguistici alti degrada).
+
+**Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
+(la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
+gate-appreso = euristica-spazi (il livello 1 non è contributo: lo si dichiara e ci si
+sposta su C2 o si chiude); (c) la pagella neuro chiude in rosso lo stadio (àncora
+declassata a ispirazione, dichiarato nel log); (d) hierarchical collapse in C2 non
+curabile col decoupled training di SUNTA.
+
+---
+
 ## Questioni aperte (fase di design, in corso)
 
 - (nessuna — Q3-granularità chiusa in D15-stadio-char)
