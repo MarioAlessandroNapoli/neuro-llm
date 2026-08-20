@@ -102,7 +102,16 @@ operativo nei commit. Aggiornata dalla skill `docs-and-artifacts`.
   **ricetta b16@1e-2**. Gemelle cross-GPU (b8-s2 su 3090 e 5090): delta nel rumore →
   split legittimo. Fase B implementata (gated scan, oracolo 7e-8) + codec byte giudice.
 - **15:01** **Fase A lanciata**: 7 run × 700M byte su 3090+5090 (split 2:5 sul
-  rapporto misurato 3,5×).
+  rapporto misurato 3,5×). La 3090 muore due volte con crash opachi → distrutta,
+  griglia consolidata sulla 5090 (lezione: mai filtrare i log alla fonte).
+- **16:10** **Fase A chiusa — l'interruttore funziona nei due versi**: senza
+  posizione la transizione dal plateau fallisce (nopos 2,04/1,45, probe R²=0,24);
+  il banco oscillatorio al layer 0 sostituisce integralmente il position embedding
+  (0,428 vs 0,419, parità entro σ=0,007, 260k param in meno) e la posizione è
+  leggibile **dalla fase** (R²=0,90) — *phase precession artificiale: il claim neuro
+  di D15 verificato*. Il vantaggio osc0 del collaudo era velocità di transizione,
+  non asintoto.
+- **16:15** Fase B lanciata sulla 5090 (oracolo CUDA gated-hoo: 5e-8).
 
 ## Compute e costi
 

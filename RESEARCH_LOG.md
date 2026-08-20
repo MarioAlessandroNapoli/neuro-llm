@@ -700,9 +700,32 @@ sulle traiettorie); la 5090 ha chiuso a 0,531, dentro il ventaglio dei seed b8.
 sequenziale fp64, g=1 bit-identico allo scan LTI; gate conv causale k=7, 64 gruppi,
 bias −4 (init quasi-LTI); bracci char-hyb / -hard(θ≡0) / -phase in parità (reset −0,9%,
 controllo −7,6%: i parametri del gate sono il meccanismo, dichiarato). Codec byte in
-`generate` (max 900 byte ≈ protocollo D7). **Fase A in corsa** (7 run × 700M byte,
-split 2:5 sul rapporto misurato 3,5× tra 3090 e 5090; run `fA-{cb,nopos,osc0}-s{1,2,3}`,
-gruppo grid-char).
+`generate` (max 900 byte ≈ protocollo D7). Ops: la 3090 è morta due volte con crash
+opachi (~7 min, traceback perso per colpa del filtro grep nel lancio — lezione: log
+sempre integrale) → distrutta, griglia consolidata sulla 5090.
+
+**Esito fase A (2026-08-20, 15:01-16:10, 7 run × 700M byte, b16@1e-2).**
+L'interruttore fase-come-posizione ha funzionato **in entrambe le direzioni**:
+
+| braccio | val loss (nats/byte) | media | probe posizione post-L0 (R²) |
+|---|---|---|---|
+| cb (pos emb) | 0,4148 · 0,4263 · 0,4146 | **0,419 (σ 0,007)** | 0,88 (residual) |
+| osc0 (banco L0, no pos) | 0,4446 · 0,4115 | **0,428** | **0,90 dalla fase** (0,91 residual; 0,76 sola ampiezza) |
+| nopos (niente) | 1,4485 · 2,0390 | — | **0,24** (residual) |
+
+(1) **Senza posizione esplicita la transizione dal plateau a trigramma fallisce o
+ritarda drammaticamente**: nopos resta a 2,04 (s2, mai transitato) o a 1,45 (s1, a
+metà del guado) — la letteratura NoPE ("la mask causale basta") NON regge a 6,4M
+parametri byte-level su questo budget; la sua posizione implicita è appena decodificabile
+(R² 0,24). (2) **Il banco oscillatorio al layer 0 è un position encoder completo**:
+parità di loss con la baseline (0,428 vs 0,419; divario 0,009 ≈ 1,3σ, sotto il criterio
+pre-registrato) SENZA position embedding e con 260k parametri in meno; l'indirizzo
+ordinale è leggibile linearmente **dalla fase** (R² 0,90 — phase precession artificiale,
+il claim neuro di D15 operazionalizzato e verificato). (3) Il vantaggio osc0 del
+collaudo (0,46 nats a 30M byte) era **velocità di transizione**, non asintoto: a 700M
+la baseline raggiunge — coerente con lo stadio 1 (il vantaggio oscillatorio vive nella
+dinamica di apprendimento). Caveat dichiarati: nopos-s1 stava ancora scendendo
+(transizione ritardata ≠ impossibile); osc0 su 2 seed.
 
 ---
 
@@ -738,6 +761,9 @@ gruppo grid-char).
 | as-h1..2 | 2026-08-19 | hyb-oa-lp | 8,55M | **536M** ×2 seed | 1-2 | 1,5040 / 1,5150 | Fase 2 asintoto, stessa ricetta. **Niente incrocio**: gap medie 0,013 (era 0,016 a 170M) — parità stabile col budget |
 | b8-1 | 2026-08-19 | transformer | 8,5M | 170M | 1 | 1,6813 | Sonda batch: a b8 il trend si inverte (rumore > beneficio step) → **b16@1e-2 è il punto dolce, baseline onesta 1,558 confermata** |
 | ctrl3-1..2 | 2026-08-19 | transformer | 8,5M | 170M ×2 seed | 1-2 | 1,6918 / 1,7090 | **Controllo lr-matched** @3e-3 (la lr degli oscillatori): media 1,700. Non braccio di griglia; separa espressività da ottimizzazione nel gap oscillatori-vs-baseline |
+| fA-cb-1..3 | 2026-08-20 | char-transformer | 6,91M | **700M byte** ×3 | 1-3 | 0,4148 / 0,4263 / 0,4146 | **Griglia char fase A, baseline onesta: media 0,419, σ 0,007** (≈0,60 BPB). Ricetta b16@1e-2 sweeppata. RTX 5090 |
+| fA-osc0-1..2 | 2026-08-20 | char-osc0 | 6,38M | 700M byte ×2 | 1-2 | 0,4446 / 0,4115 | Banco osc layer 0 + 7 attn SENZA pos emb: **parità (0,428)** con 260k param in meno; probe: posizione dalla fase R²=0,90 |
+| fA-nopos-1..2 | 2026-08-20 | char-transformer-nopos | 6,38M | 700M byte ×2 | 1-2 | 1,4485 / 2,0390 | Controllo senza posizione: **transizione fallita (s2) o a metà (s1)** — la mask causale non basta a questa scala; probe R²=0,24 |
 | judge-s1 | 2026-08-20 | as-t1 vs as-h1 | — | — | 1 | — | **Giudizio cieco D14** (non training): 188 giudici Opus 5 in-sessione, doppio ordine. t 82 · h 77 · tie 29 (p=0,75); prompt netti 28 vs 30 (p=0,90) → **parità qualitativa, conferma la loss**. Preliminare (1 coppia, 536M). Artefatti: eval/judgments/elo-536M-s1.* |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 

@@ -10,12 +10,14 @@ stima giornata ~1,5-2 $, consuntivo a fine fase. **Istanze attive: 2** (3090 rif
 
 ## Now
 
-- **Fase A in corsa** (verdetto ~16:00): fA-{cb,nopos,osc0} × seed a 700M byte,
-  ricetta b16@1e-2 (sweeppata, pavimento σ≈0,018 a 200M), split 3090/5090. Domanda:
-  il banco oscillatorio al layer 0 fornisce la posizione meglio del pos embedding?
-- In coda 5090 (mai capparla): A/B engine (AdamW fused, compile mode) → collaudo
-  gated-hoo su CUDA → **fase B** (reset-su-confini, 3 bracci × 2 seed) → B2 asintoto
-  notturno (2,2B byte)
+- **Fase A CHIUSA** (esito in D16): interruttore riuscito nei due versi — senza
+  posizione la transizione fallisce (nopos 1,45/2,04); il banco oscillatorio è un
+  position encoder completo (parità 0,428 vs 0,419, σ 0,007, senza pos emb) e
+  l'indirizzo vive nella fase (probe R²=0,90 vs 0,24 di nopos)
+- **Fase B in corsa su 5090** (fB-{lti,hard,phase}-s{1,2}, oracolo CUDA gated-hoo
+  passato 5e-8; fine ~18:15): il reset-su-confini cura/aiuta? phase vs hard = la
+  forma oscillatoria conta oltre il chunking?
+- Dopo: B2 asintoto notturno (2,2B byte) per cb/osc0/vincitore-B
 
 ## Next
 
