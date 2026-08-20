@@ -727,6 +727,28 @@ la baseline raggiunge — coerente con lo stadio 1 (il vantaggio oscillatorio vi
 dinamica di apprendimento). Caveat dichiarati: nopos-s1 stava ancora scendendo
 (transizione ritardata ≠ impossibile); osc0 su 2 seed.
 
+**Diagnosi NaN del braccio hard (fase B, 2026-08-20 sera).** fB-hard (θ≡0 + reset) in
+16-mixed: loss patologica dall'init (44 vs ~4 in fp32) poi NaN in warmup. Matrice
+diagnostica: hard@32-true sano · phase@16-mixed sano · compile scagionato (NaN anche
+eager) → **interazione θ≡0 × fp16**. Causa: con θ≡0 il blocco 2×2 ha un doppio polo
+reale in r (Jordan): la risonanza in continua guadagna ~1/(1−r)² ≈ 50-100× — senza
+rotazione il DC dell'input si accumula coerentemente invece di mediarsi via; in fp32
+il LayerNorm assorbe, in fp16 satura. **Il braccio hard gira a 32-true (dichiarato:
+engine diverso dagli altri due)**. Lezione fisica in regalo: la rotazione non è solo
+espressività — è anche il meccanismo che tiene le attivazioni piccole (media via il
+DC); "un oscillatore è un filtro che non esplode in continua". Il banco NON è migrato verso
+orologi lenti da posizione assoluta: r mediana 0,85-0,86 (p90 0,87-0,88; frac r>0,99 =
+0), **orizzonte di memoria τ ≈ 7-8 byte**, periodi mediani 4 byte/giro (p90 21-25).
+È una base temporale a **scala di parola**: τ coincide con la lunghezza mediana di una
+parola TinyStories (~5-7 byte) e con il range della probe (posizione-nel-chunk, cap 16)
+— il banco codifica la posizione *relativa alla parola corrente*, non quella globale
+nella finestra; phase precession dentro finestre grandi quanto una parola. Coerente con
+la legge di stadio 1 (front-end di filtri, r 0,74-0,88): stesso bacino, ma ora il
+mestiere ha un nome. Implicazione per la fase B: il reset rende *esplicito* (confine
+appreso) ciò che lo smorzamento fa *implicitamente* (oblio a τ≈7) — se phase-reset
+non batte lti, una spiegazione candidata è che lo smorzamento breve è già un
+"reset morbido" sufficiente.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
