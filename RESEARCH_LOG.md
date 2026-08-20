@@ -749,6 +749,38 @@ appreso) ciò che lo smorzamento fa *implicitamente* (oblio a τ≈7) — se pha
 non batte lti, una spiegazione candidata è che lo smorzamento breve è già un
 "reset morbido" sufficiente.
 
+**Esito fase B (2026-08-20, 16:48-18:30, 7 run × 700M byte, b16@1e-2): il reset duro
+vince, la rotazione no.** Ibrido 4 osc + 4 attn, nessuna posizione esplicita:
+
+| braccio | val loss (nats/byte) | media | probe posizione post-L0 (R²) |
+|---|---|---|---|
+| fB-lti (nessun reset) | 0,4548 · 0,4619 | 0,458 | 0,91 (fase) |
+| fB-phase (reset + rotazione) | 0,4586 · 0,4573 | 0,458 | 0,94 (fase) |
+| **fB-hard (reset, θ≡0)** | 0,4295 · 0,4251 | **0,427** | 0,95 ("fase" = rampa) |
+| fB-lti32 (lti @32-true, controllo) | 0,4527 | — | — |
+| cb (rif. fase A, pos emb) | — | 0,419 (σ 0,007) | 0,88 (residual) |
+
+(1) **Il gate sui confini con θ≡0 — "dimentica quando vedi un confine" — vale 0,03
+nats/byte (≈4σ)**: 0,427 contro lo 0,458 di lti e phase, a ~1σ dal transformer con
+position embedding. (2) **Confound precisione escluso by design**: hard gira a 32-true
+(diagnosi NaN); il controllo fB-lti32 (lti identica a 32-true) fa 0,4527 — dentro il
+gruppo 16-mixed, non a 0,427: il residuo fp32 vale ≤0,004, un decimo del gap.
+(3) **La rotazione non compra nulla, in nessuna combinazione**: phase = lti alla terza
+cifra (col gate), e già la fase A aveva osc0 = cb (senza gate). Con reset, togliere la
+rotazione *migliora*. (4) **Meccanismo (probe)**: la probe non discrimina i bracci
+(tutti codificano la posizione-nella-parola a R²≈0,9) — il vantaggio di hard non è
+*avere* l'indirizzo ma la sua *forma*: con doppio polo reale atan2(z,x) non è un angolo
+che ruota ma il rapporto tra le componenti del blocco di Jordan, che cresce monotono dal
+reset — una **rampa riavviata a ogni confine**, il contatore ordinale più letterale
+possibile. Il gate duro rende esplicito e pulito ciò che lo smorzamento a τ≈7 byte
+faceva in modo sfumato (la predizione dell'autopsia era giusta per phase — ridondante
+col reset morbido — ma sottostimava il valore del reset *esatto*). Traduzione neuro
+onesta: il vincitore non è l'oscillazione sostenuta ma il **segmentatore theta-sillabico
++ integratore a rampa** — più vicino a "reset di fase agli onset" (Giraud/Hovsepyan)
+che a phase precession continua. Caveat dichiarati: 2 seed per braccio; hard su engine
+32-true (quantificato dal controllo); budget 700M — l'asintoto B2 (2,2B, in corsa)
+dice se il gap è di pendenza o di punto fisso.
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
@@ -786,6 +818,11 @@ non batte lti, una spiegazione candidata è che lo smorzamento breve è già un
 | fA-cb-1..3 | 2026-08-20 | char-transformer | 6,91M | **700M byte** ×3 | 1-3 | 0,4148 / 0,4263 / 0,4146 | **Griglia char fase A, baseline onesta: media 0,419, σ 0,007** (≈0,60 BPB). Ricetta b16@1e-2 sweeppata. RTX 5090 |
 | fA-osc0-1..2 | 2026-08-20 | char-osc0 | 6,38M | 700M byte ×2 | 1-2 | 0,4446 / 0,4115 | Banco osc layer 0 + 7 attn SENZA pos emb: **parità (0,428)** con 260k param in meno; probe: posizione dalla fase R²=0,90 |
 | fA-nopos-1..2 | 2026-08-20 | char-transformer-nopos | 6,38M | 700M byte ×2 | 1-2 | 1,4485 / 2,0390 | Controllo senza posizione: **transizione fallita (s2) o a metà (s1)** — la mask causale non basta a questa scala; probe R²=0,24 |
+| fB-lti-1..2 | 2026-08-20 | char-hyb | 6,39M | 700M byte ×2 | 1-2 | 0,4548 / 0,4619 | Griglia char fase B, controllo senza reset (ibrido 4osc+4attn, no pos). Parità lasca −7,6%: i param del gate sono il meccanismo (dichiarato) |
+| fB-phase-1..2 | 2026-08-20 | char-hyb-phase | 6,85M | 700M byte ×2 | 1-2 | 0,4586 / 0,4573 | Reset con rotazione: **identico a lti** — il gate con oscillazione non compra nulla |
+| fB-hard-1..2 | 2026-08-20 | char-hyb-hard | 6,85M | 700M byte ×2 | 1-2 | 0,4295 / 0,4251 | **Vincitore fase B: reset θ≡0 = 0,427, −0,03 (≈4σ) da lti/phase**, a ~1σ da cb. 32-true (diagnosi NaN); s1 rilanciata (guard anti-resume su ckpt HF della run NaN, rimosso) |
+| fB-lti32-1 | 2026-08-20 | char-hyb | 6,39M | 700M byte | 1 | 0,4527 | Controllo confound precisione: lti a 32-true resta nel gruppo 16-mixed → il vantaggio di hard è del reset, non di fp32 (residuo ≤0,004) |
+| fB2-cb-1 | 2026-08-20 | char-transformer | 6,91M | **2,2B byte (1 epoca)** | 1 | 0,3879 | Asintoto B2, baseline (≈0,56 BPB). 66.990 step |
 | judge-s1 | 2026-08-20 | as-t1 vs as-h1 | — | — | 1 | — | **Giudizio cieco D14** (non training): 188 giudici Opus 5 in-sessione, doppio ordine. t 82 · h 77 · tie 29 (p=0,75); prompt netti 28 vs 30 (p=0,90) → **parità qualitativa, conferma la loss**. Preliminare (1 coppia, 536M). Artefatti: eval/judgments/elo-536M-s1.* |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 

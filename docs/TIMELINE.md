@@ -112,6 +112,14 @@ operativo nei commit. Aggiornata dalla skill `docs-and-artifacts`.
   di D15 verificato*. Il vantaggio osc0 del collaudo era velocità di transizione,
   non asintoto.
 - **16:15** Fase B lanciata sulla 5090 (oracolo CUDA gated-hoo: 5e-8).
+- **18:30** **Fase B chiusa — il reset duro vince, la rotazione no**: il gate sui
+  confini con θ≡0 vale 0,03 nats/byte (0,427 vs 0,458 di lti e phase, ≈4σ), a ~1σ
+  dal transformer con position embedding; controllo lti@32-true (0,4527) esclude il
+  confound precisione. La probe rivela il meccanismo: senza rotazione lo stato è una
+  **rampa riavviata a ogni confine** (R²=0,95) — il segmentatore theta-sillabico
+  batte la phase precession continua.
+- **18:40** B2 asintoto lanciato (2,2B byte = 1 epoca × {cb, osc0, hard} × 2 seed,
+  due code parallele sulla 5090). Primo esito: cb-s1 = 0,3879 (~0,56 BPB).
 
 ## Compute e costi
 

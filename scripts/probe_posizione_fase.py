@@ -18,7 +18,9 @@ import numpy as np
 import torch
 
 from src.models import build_model
-from src.models.linoss import DT_INIT, OscBlock, prefix_scan
+from src.models.linoss import (
+    DT_INIT, RESET_GROUPS, OscBlock, prefix_scan, prefix_scan_gated,
+)
 
 BOUNDARIES = frozenset(b" .,!?\"'\n:;") | {0}
 MAX_POS = 16
@@ -59,6 +61,8 @@ def collect(model, cfg, idx):
         bu = mx.B(u)
         r = torch.exp(-mx.nu_raw.exp())
         theta = math.pi * torch.sigmoid(mx.theta_raw)
+        if mx.no_rotation:
+            theta = torch.zeros_like(theta)
         S = r.square()
         dt = torch.full_like(r, DT_INIT)
         A = (S + 1 - 2 * r * torch.cos(theta)) / (dt.square() * S)
@@ -66,7 +70,14 @@ def collect(model, cfg, idx):
         row2 = torch.stack([dt * S, 1 - dt.square() * S * A], dim=-1)
         M = torch.stack([row1, row2], dim=-2)
         f = torch.stack([dt * S * bu, dt.square() * S * bu], dim=-1)
-        states = prefix_scan(M.unsqueeze(0).expand(idx.shape[1], -1, -1, -1), f)
+        M_t = M.unsqueeze(0).expand(idx.shape[1], -1, -1, -1)
+        if mx.gate_conv is not None:
+            t = u.shape[1]
+            boundary = torch.sigmoid(mx.gate_conv(u.transpose(1, 2))[..., :t].transpose(1, 2))
+            g = (1 - boundary).repeat_interleave(f.shape[2] // RESET_GROUPS, dim=-1)
+            states = prefix_scan_gated(M_t, f, g)
+        else:
+            states = prefix_scan(M_t, f)
         x = x + mx.C(states[..., 1])
         x = x + blk.mlp(blk.ln2(x))
     else:

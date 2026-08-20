@@ -10,14 +10,14 @@ stima giornata ~1,5-2 $, consuntivo a fine fase. **Istanze attive: 2** (3090 rif
 
 ## Now
 
-- **Fase A CHIUSA** (esito in D16): interruttore riuscito nei due versi — senza
-  posizione la transizione fallisce (nopos 1,45/2,04); il banco oscillatorio è un
-  position encoder completo (parità 0,428 vs 0,419, σ 0,007, senza pos emb) e
-  l'indirizzo vive nella fase (probe R²=0,90 vs 0,24 di nopos)
-- **Fase B in corsa su 5090** (fB-{lti,hard,phase}-s{1,2}, oracolo CUDA gated-hoo
-  passato 5e-8; fine ~18:15): il reset-su-confini cura/aiuta? phase vs hard = la
-  forma oscillatoria conta oltre il chunking?
-- Dopo: B2 asintoto notturno (2,2B byte) per cb/osc0/vincitore-B
+- **Fase B CHIUSA** (esito in D16): **il reset duro vince** — hard (θ≡0) 0,427 vs
+  lti/phase 0,458 (≈4σ), a ~1σ dal transformer con pos emb; confound fp32 escluso
+  (lti32 = 0,4527); la rotazione non compra mai nulla. Meccanismo: rampa di Jordan
+  riavviata a ogni confine (probe R²=0,95)
+- **B2 asintoto in corsa su 5090** (fB2-{cb,osc0,hard}-s{1,2}, 2,2B byte = 1 epoca,
+  due code parallele; fine ~23:00): il gap del reset è pendenza o punto fisso?
+  Primo esito: fB2-cb-s1 = 0,3879
+- Dopo: autopsia fase B + figure fase A/B + consuntivo ledger, distruzione 5090
 
 ## Next
 
