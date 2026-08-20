@@ -944,6 +944,12 @@ sotto ts su OGNI bucket oltre 4096** (~0,02-0,03 costante; a 16k: 0,584 vs 0,609
 con margine modesto ma sistematico. Nota di metodo: TinyStories non ha dipendenze
 oltre la storia (~900 byte) → la degradazione per-posizione misura la pura
 fuori-distribuzione dello stato, non la difficoltà del task.
+*Estrapolazione UFFICIALE sui checkpoint B2* (pre-registrata): gerarchia confermata —
+hard 4096 gratis (+0,007) e 8192 +33% · osc0 collassa (+231%) · cb strutturalmente
+incapace. Effetto nuovo e onesto: **l'estrapolazione peggiora col budget** — hard a
+8192 passa da +13% (700M) a +33% (B2), e in assoluto il B2 al bucket lontano è
+peggiore del 700M (0,518 vs 0,475): l'annealing lungo cuce il modello alla lunghezza
+di training. Le curve di estrapolazione si dichiarano per-budget.
 
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
