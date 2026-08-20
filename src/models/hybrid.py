@@ -21,6 +21,8 @@ class HybridOAConfig(ModelConfig):
     osc_first: bool = True
     log_polar: bool = False  # 1a: parametrizzazione classica (A,G) — congelata
     n_osc: int = -1  # -1 = n_layer//2 (griglie 1a/1b); la griglia char (D16) lo fissa
+    reset: bool = False
+    no_rotation: bool = False
 
 
 @dataclass
@@ -36,6 +38,31 @@ class HybridOALPConfig(HybridOAConfig):
 @dataclass
 class HybridAOLPConfig(HybridAOConfig):
     log_polar: bool = True
+
+
+@dataclass
+class CharHybConfig(HybridOALPConfig):
+    # Fase B griglia char (D16): ibrido oa log-polare su byte, senza pos emb
+    # (l'ordine lo danno gli oscillatori). Controllo LTI; i bracci reset sottoclassano.
+    vocab_size: int = CHAR_VOCAB
+    seq_len: int = CHAR_SEQ_LEN
+    byte_level: bool = True
+    use_pos: bool = False
+    parity_ref: int = CHAR_BASELINE_BACKBONE_PARAMS
+    parity_tol: float = CHAR_PARITY_TOL
+    reset: bool = False
+    no_rotation: bool = False
+
+
+@dataclass
+class CharHybHardConfig(CharHybConfig):
+    reset: bool = True
+    no_rotation: bool = True  # θ≡0: reset sì, oscillazione no → chunking puro
+
+
+@dataclass
+class CharHybPhaseConfig(CharHybConfig):
+    reset: bool = True  # phase reset: la dinamica oscillatoria continua tra i confini
 
 
 @dataclass
@@ -58,7 +85,8 @@ class Hybrid(nn.Module):
         self.tok = nn.Embedding(cfg.vocab_size, cfg.d_model)
         self.pos = nn.Embedding(cfg.seq_len, cfg.d_model) if cfg.use_pos else None
         n_osc = cfg.n_layer // 2 if cfg.n_osc == -1 else cfg.n_osc
-        osc = [OscBlock(cfg, cfg.m, damped=True, phi_init=False, log_polar=cfg.log_polar) for _ in range(n_osc)]
+        osc = [OscBlock(cfg, cfg.m, damped=True, phi_init=False, log_polar=cfg.log_polar,
+                        reset=cfg.reset, no_rotation=cfg.no_rotation) for _ in range(n_osc)]
         attn = [Block(cfg) for _ in range(cfg.n_layer - n_osc)]
         self.blocks = nn.ModuleList(osc + attn if cfg.osc_first else attn + osc)
         self.ln_f = nn.LayerNorm(cfg.d_model)

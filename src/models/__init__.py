@@ -1,5 +1,15 @@
 from ..configs import CharTransformerConfig, CharTransformerNoPosConfig, ModelConfig
-from .hybrid import CharOsc0Config, Hybrid, HybridAOConfig, HybridAOLPConfig, HybridOAConfig, HybridOALPConfig
+from .hybrid import (
+    CharHybConfig,
+    CharHybHardConfig,
+    CharHybPhaseConfig,
+    CharOsc0Config,
+    Hybrid,
+    HybridAOConfig,
+    HybridAOLPConfig,
+    HybridOAConfig,
+    HybridOALPConfig,
+)
 from .linoss import (
     DLinOSSConfig,
     DLinOSSLPConfig,
@@ -29,6 +39,10 @@ ARCHS = {
     "char-transformer": (Transformer, CharTransformerConfig),
     "char-transformer-nopos": (Transformer, CharTransformerNoPosConfig),
     "char-osc0": (Hybrid, CharOsc0Config),
+    # Griglia char, fase B (D16): reset-su-confini sull'ibrido oa log-polare
+    "char-hyb": (Hybrid, CharHybConfig),
+    "char-hyb-hard": (Hybrid, CharHybHardConfig),
+    "char-hyb-phase": (Hybrid, CharHybPhaseConfig),
 }
 
 

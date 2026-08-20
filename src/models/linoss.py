@@ -117,6 +117,36 @@ def _hoo_combine(a, b):
     )
 
 
+def prefix_scan_gated(M, f, g):
+    """Scan della ricorrenza col reset-su-confini (D15): s_k = g_k·M·s_{k−1} + f_k,
+    g ∈ [0,1] per (batch, passo, canale) — g→0 azzera la storia al confine.
+
+    M (t, m, 2, 2) resta condivisa sul batch; il gate scala l'intero blocco 2×2, quindi
+    nel path hoo si piega nelle 6 componenti elementwise (che diventano (t, b, m)) senza
+    toccare il combine. L'eager batched è l'oracolo di correttezza: doubling con la
+    transizione materializzata per batch — memoria pesante, solo shape piccole/smoke."""
+    with torch.autocast(device_type=f.device.type, enabled=False):
+        M, f, g = M.float(), f.float(), g.float()
+        if SCAN_IMPL == "hoo":
+            gT = g.movedim(1, 0)  # (t, b, m)
+            fT = f.movedim(1, 0)
+            xs = (gT * M[:, None, :, 0, 0], gT * M[:, None, :, 0, 1],
+                  gT * M[:, None, :, 1, 0], gT * M[:, None, :, 1, 1],
+                  fT[..., 0].contiguous(), fT[..., 1].contiguous())
+            out = associative_scan(_hoo_combine, xs, dim=0, combine_mode="generic")
+            return torch.stack([out[4], out[5]], dim=-1).movedim(0, 1)
+        GM = g[..., None, None] * M[None]  # (b, t, m, 2, 2)
+        t = f.shape[1]
+        stride = 1
+        while stride < t:
+            M_hi = GM[:, stride:]
+            f_new = torch.einsum("btmij,btmj->btmi", M_hi, f[:, :-stride]) + f[:, stride:]
+            GM = torch.cat([GM[:, :stride], M_hi @ GM[:, :-stride]], dim=1)
+            f = torch.cat([f[:, :stride], f_new], dim=1)
+            stride *= 2
+        return f
+
+
 def _scan_hoo_fp32(M, f):
     fT = f.movedim(1, 0)  # (t, b, m, 2): stessa dim di scan di M
     m11, m12 = M[:, :, 0, 0].unsqueeze(1), M[:, :, 0, 1].unsqueeze(1)
@@ -133,16 +163,32 @@ def phi_angles(m: int):
     return 2 * math.pi / periods
 
 
+RESET_KERNEL = 7
+RESET_GROUPS = 64
+RESET_BIAS_INIT = -4.0  # σ(−4) ≈ 0,018: a init niente reset → il braccio è quasi-LTI
+
+
 class OscMixer(nn.Module):
     def __init__(
         self, d_model: int, m: int, damped: bool, phi_init: bool,
         log_polar: bool = False, ring: tuple = (RING_R_MIN, RING_R_MAX),
+        reset: bool = False, no_rotation: bool = False,
     ):
         super().__init__()
         self.damped = damped
         self.log_polar = log_polar
+        self.no_rotation = no_rotation
         self.B = nn.Linear(d_model, m)
         self.C = nn.Linear(m, d_model)
+        self.gate_conv = None
+        if reset:
+            # Confini appresi dai byte (D16 fase B): conv causale k=7 → G gruppi di
+            # canali; b_t = σ(·) prob. di confine, moltiplicatore dello stato = 1−b_t.
+            if m % RESET_GROUPS:
+                raise ValueError(f"m={m} non divisibile nei {RESET_GROUPS} gruppi del reset")
+            self.gate_conv = nn.Conv1d(d_model, RESET_GROUPS, RESET_KERNEL,
+                                       padding=RESET_KERNEL - 1)
+            nn.init.constant_(self.gate_conv.bias, RESET_BIAS_INIT)
         if log_polar:
             # Parametrizzazione log-polare (LRU, arXiv:2303.06349): r = exp(−exp(ν)) < 1
             # per costruzione, θ = π·σ(θ̄) ∈ (0, π) — niente clamp, update moltiplicativi
@@ -177,6 +223,10 @@ class OscMixer(nn.Module):
         if self.log_polar:
             r = torch.exp(-self.nu_raw.exp())
             theta = math.pi * torch.sigmoid(self.theta_raw)
+            if self.no_rotation:
+                # Braccio hard-reset (D16 fase B): θ≡0 — autovalore reale doppio r,
+                # zero oscillazione; theta_raw resta parametro (parità) ma inerte.
+                theta = torch.zeros_like(theta)
             S = r.square()
             dt = torch.full_like(r, DT_INIT)
             # λ = r·e^{±iθ} esatto: dt²SA = S+1−2r·cosθ ⇒ traccia 2r·cosθ, det S = r²
@@ -197,7 +247,13 @@ class OscMixer(nn.Module):
         row2 = torch.stack([dt * S, 1 - dt.square() * S * A], dim=-1)
         M = torch.stack([row1, row2], dim=-2)  # (m, 2, 2)
         f = torch.stack([dt * S * bu, dt.square() * S * bu], dim=-1)  # (b, t, m, 2)
-        states = prefix_scan(M.unsqueeze(0).expand(t, -1, -1, -1), f)
+        M_t = M.unsqueeze(0).expand(t, -1, -1, -1)
+        if self.gate_conv is not None:
+            boundary = torch.sigmoid(self.gate_conv(u.transpose(1, 2))[..., :t].transpose(1, 2))
+            g = (1 - boundary).repeat_interleave(f.shape[2] // RESET_GROUPS, dim=-1)
+            states = prefix_scan_gated(M_t, f, g)
+        else:
+            states = prefix_scan(M_t, f)
         return self.C(states[..., 1])  # componente x dello stato
 
 
@@ -205,11 +261,13 @@ class OscBlock(nn.Module):
     def __init__(
         self, cfg: ModelConfig, m: int, damped: bool, phi_init: bool,
         log_polar: bool = False, ring: tuple = (RING_R_MIN, RING_R_MAX),
+        reset: bool = False, no_rotation: bool = False,
     ):
         super().__init__()
         self.ln1 = nn.LayerNorm(cfg.d_model)
         self.ln2 = nn.LayerNorm(cfg.d_model)
-        self.mixer = OscMixer(cfg.d_model, m, damped, phi_init, log_polar, ring)
+        self.mixer = OscMixer(cfg.d_model, m, damped, phi_init, log_polar, ring,
+                              reset, no_rotation)
         self.mlp = nn.Sequential(
             nn.Linear(cfg.d_model, 4 * cfg.d_model),
             nn.GELU(),
