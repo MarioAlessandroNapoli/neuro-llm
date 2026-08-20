@@ -938,6 +938,12 @@ di TRAIETTORIA (le bande lente guidano la transizione, poi muoiono), mentre hard
 capacità lunga reale a fine training. Discriminanti in coda: asintoto fB2-ts (se
 resta parallelo a cb mentre hard converge → transizione vs capacità) ed
 estrapolazione estrema 16k/32k (se la capacità nominale conta, emerge lì).
+*Esito 16k/32k*: nessun dirupo per nessuno dei due (degradazione liscia), ma **hard
+sotto ts su OGNI bucket oltre 4096** (~0,02-0,03 costante; a 16k: 0,584 vs 0,609; a
+32k: ~0,65 vs ~0,68) — la capacità nominale tenuta viva dal gate paga in robustezza,
+con margine modesto ma sistematico. Nota di metodo: TinyStories non ha dipendenze
+oltre la storia (~900 byte) → la degradazione per-posizione misura la pura
+fuori-distribuzione dello stato, non la difficoltà del task.
 
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
