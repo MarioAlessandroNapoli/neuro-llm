@@ -525,11 +525,100 @@ check del potere del giudice, mai ancora misurato).
 
 ---
 
+### D15 — Stadio char: byte come tempo, fase come indirizzo (2026-08-20)
+
+**Decisione.** Si apre un nuovo stadio sperimentale ("stadio char") che revisiona tre
+decisioni congelate *nel solo perimetro del nuovo stadio* — lo stadio 1 resta chiuso e
+valido nel suo apparato:
+
+- **D3-tokenizer → niente tokenizer**: input a **byte grezzi** (vocab 256). L'embedding
+  scende da 2,1M (BPE 8k, tied) a ~65k: ~2M di parametri passano dal lessico
+  memorizzato alla dinamica. Il BPB diventa esatto per costruzione (nats/byte / ln 2).
+- **D4-asse-token → byte=tempo**: non è un tradimento ma il compimento — token=tempo
+  era il compromesso pratico, il byte è più vicino al tempo fisico (era l'istinto di
+  Q3-granularità: "test più severo per la memoria oscillatoria").
+- **D6-parità → parità lasca di parametri totali** (±10%) + parità di *ricetta*
+  (batch×lr sweeppati per entrambi i lati, lezione della baseline sotto-tarata di D13)
+  + FLOPs/byte riportati onestamente. Dichiarato in chiaro: a parità di testo le
+  sequenze byte sono ~4-5× più lunghe — l'attention paga quadratico, lo scan lineare
+  no; il regime char è l'habitat strutturale della ricorrenza ed è una scelta di campo
+  motivata, non un trucco da nascondere.
+
+**Filone concettuale (preambolo di stadio).** Il cervello non usa le oscillazioni per
+ricordare: le usa per **indirizzare** — la fase come puntatore ordinale (phase
+precession: Reddy Nat. Comm. 2021, Qasim Cell 2021), il ritmo come scheduler
+scrittura/lettura (LTP al picco theta, LTD al trough; Daume Nature 2024), il **reset di
+fase su confini** come segmentatore (theta sillabico: Giraud & Poeppel; modello
+Hovsepyan Nat. Comm. 2020, dove senza reset il riconoscimento di parlato a rate
+variabile collassa). Lo stadio 1 ha falsificato l'oscillazione-come-memoria a parità
+stretta (parità strutturale a due budget, degenerazione del puro in banco di filtri);
+lo stadio char testa l'**oscillazione-come-indirizzamento**. Conferma indipendente dal
+lato ML (rassegna `docs/2026-08-rassegna-continuazione-1c.md`): tutto ciò che eguaglia
+o batte l'attention rende la dinamica input-dipendente; e le RNN sviluppano soluzioni
+oscillatorie solo se il compito rende utile un orologio (Pals, PLOS CB 2024) — al
+modello va dato un *mestiere* per la fase, non solo l'organo.
+
+**Tre meccanismi, ognuno con l'interruttore che lo isola** (regola: meccanismi, non
+estetiche):
+
+1. **Fase-come-posizione**: attention **senza** positional embedding (si rimuove
+   `self.pos`, 131k), l'ordine fornito solo dal banco oscillatorio sottostante — il
+   "front-end di filtri al layer 0" (unica legge di tutte le autopsie) promosso a ruolo
+   di progetto. Interruttore: togli il banco → l'attention senza posizione perde
+   l'ordine → collasso; rimettilo → recupero.
+2. **Reset-su-confini**: b_t ∈ [0,1] appreso dai byte, ricorrenza
+   s_t = (1−b_t)·r·R(θ)·s_{t−1} + B·u_t (resta affine tempo-variante → lo scan fuso
+   sopravvive). Dopo il reset la fase conta i byte dall'ultimo confine = coordinata
+   ordinale *dentro l'unità* (sillaba/parola). Tre bracci: nessun reset (LTI, controllo)
+   · hard reset con θ≡0 (puro chunking alla H-Net) · phase reset (la forma oscillatoria
+   continua). Se phase ≈ hard, conta la segmentazione e non il ritmo: si dice.
+3. **Lettura a fase** (ereditata dalla candidata 1c-int della rassegna): oggi il readout
+   butta metà stato (`linoss.py`, legge solo la componente x); lettura
+   y = C(cos φ ⊙ x + sin φ ⊙ z) con φ content-dependent, init a zero = bit-per-bit
+   il modello attuale (attribuzione pulita).
+
+**Apparato di confronto a tre livelli.** (1) Primario: char-oscillatorio vs
+**char-transformer baseline nostra** (D5 intatta), stessa ricetta sweeppata — verdetti
+in BPB sullo stesso testo di validazione. (2) Cross-stadio: entrambi vs i modelli BPE
+dello stadio 1 **via BPB** (àncore già misurate: stories15M 0,4407; pilot 0,531 @512)
+— "confronto ancorato, non verdetto" (ricette diverse). (3) Qualitativo: giudice cieco
+D14 sugli **stessi prompt congelati** (sono testo: l'apparato D7 è tokenizer-agnostico
+per costruzione) + probe meccanicistiche: decodifica lineare della posizione-nel-chunk
+dalla fase; curva di capacità multi-item vs rapporto di frequenze (predizione
+quantitativa di Ursino 2022); autopsia spettrale obbligatoria su ogni braccio.
+
+**Loss/training come oggetto di ricerca**: ammesso (es. loss ausiliaria di confine,
+multi-scala) con disciplina — ogni loss ausiliaria è un meccanismo e riceve la sua
+ablazione; la valutazione resta likelihood pura (BPB) + giudice + probe.
+
+**Criteri di successo pre-registrati.** Vietato ogni criterio sotto il pavimento di
+rumore misurato della nuova baseline (da misurare al primo sweep, analogo dello 0,025
+di stadio 1). Criteri ammessi: separazione BPB dal char-transformer oltre il rumore ·
+separazione binaria su una probe (posizione-dalla-fase decodificabile in un braccio e
+non nell'altro) · collasso/recupero nell'interruttore fase-come-posizione · autopsia
+(la degenerazione da banco-di-filtri resta la variabile dipendente che solo noi
+abbiamo). Protocollo a due budget con lettura della pendenza (warning
+Phase-Associative-Memory 2026: i macchinari di fase possono essere piatti in loss a
+~8,5M con pendenza diversa).
+
+**Scartato.** (a) Proseguire la 1c su BPE (transizione selettiva r/θ, curva di
+sostituzione attention): non morta, parcheggiata in Later — il regime char è più
+coerente col filone e più favorevole alla ricorrenza. (b) Phase-locking sostenuto tra
+layer come routing: ridimensionato dalla letteratura (Schneider Neuron 2021);
+sopravvivono solo eventi di fase transitori guidati dall'input. (c) Tokenizer char
+appreso (tipo BPE piccolo): i byte grezzi eliminano ogni decisione di apparato.
+
+**Riconsiderare se.** Il char-transformer baseline risulta intrattabile al nostro
+budget (seq 4-5× più lunghe); o se il primo sweep mostra che a 8,5M il regime byte è
+troppo povero per qualunque segnale (BPB baseline fuori scala rispetto all'àncora
+0,4407); o se le probe dicono che la fase non è decodificabile nemmeno nel braccio
+migliore — allora il filone indirizzamento va riformulato prima di spendere oltre.
+
+---
+
 ## Questioni aperte (fase di design, in corso)
 
-- **Q3 — Granularità temporale come ablazione futura.** Char-level (~4× più passi, dipendenze
-  stirate: test più severo per la memoria oscillatoria) o chunking appreso stile H-Net. Fuori
-  dallo scope dello stadio 1; richiede baseline dedicate.
+- (nessuna — Q3-granularità chiusa in D15-stadio-char)
 
 ---
 

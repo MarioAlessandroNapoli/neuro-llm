@@ -9,10 +9,10 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Now
 
-- Design griglia 1c-selettività: rassegna completata
-  (`docs/2026-08-rassegna-continuazione-1c.md` — 5 candidate classificate, prima
-  scelta proposta: 1c-int-lettura + controllo θ≡0 + sonde sintetiche); da discutere
-  e congelare in una D15
+- **D15-stadio-char congelata** (byte=tempo, fase come indirizzo; revisiona D3/D4/D6
+  nel solo nuovo stadio). Prossimo: design operativo della griglia char (D16) —
+  seq_len byte, architettura bracci, sweep ricetta della char-baseline, pavimento di
+  rumore nuovo
 
 ## Next
 
@@ -22,6 +22,9 @@ Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non
 
 ## Later
 
+- Candidate 1c su BPE parcheggiate da D15 (rassegna in docs): transizione selettiva
+  r/θ disaccoppiata · curva di sostituzione attention · catena osc-osc senza MLP ·
+  sonde sintetiche parity/mod-3/MQAR
 - Sanity check del potere del giudice cieco (D14-riconsiderare): una coppia a loss
   distanti (es. ibrido 1,57 vs dlinoss-lp 1,95) — il giudice la distingue? Mai misurato
 - Griglia 1b, fasi 1-2 (D12): dlinoss log-polare + sweep lr · omeostasi vs controllo

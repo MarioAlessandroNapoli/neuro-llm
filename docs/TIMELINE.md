@@ -78,6 +78,18 @@ operativo nei commit. Aggiornata dalla skill `docs-and-artifacts`.
   nessuna firma qualitativa; loop degenerativi quasi solo sui prompt lunghi (entrambi).
   Limite scoperto: il bootstrap cluster pre-registrato degenera con 1 seed → sign test.
 
+- **sera** Ricerca web multi-agente (7 assi + sintesi): l'oscillatore selettivo esiste
+  (PD-SSM) ma **nessuno ha mai fatto LM con SSM oscillatori** — lo stadio 1 è il primo;
+  la loss LM non può risolvere un sorpasso dell'ibrido (rumore 0,025 > gap 0,016);
+  l'asse con potere statistico è il puro (0,39 = 16× rumore). Rassegna in
+  `docs/2026-08-rassegna-continuazione-1c.md`.
+- **sera** **D15-stadio-char**: byte=tempo (via il tokenizer: vocab 256, ~2M di
+  parametri dal lessico alla dinamica), fase come indirizzo ordinale (via il positional
+  embedding), reset-su-confini (theta sillabico alla Giraud), lettura a fase. Filone:
+  *l'oscillazione-come-memoria è falsificata; si testa l'oscillazione-come-indirizzamento.*
+  BPB come ponte cross-tokenizer, giudice D14 invariato (i prompt sono testo).
+  Q3-granularità chiusa.
+
 ## Compute e costi
 
 3 GPU vast.ai usa-e-getta (3090 → 4080 → 3060 → 4070TiS), budget 10 $ (ledger in
