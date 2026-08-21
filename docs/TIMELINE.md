@@ -120,6 +120,31 @@ operativo nei commit. Aggiornata dalla skill `docs-and-artifacts`.
   batte la phase precession continua.
 - **18:40** B2 asintoto lanciato (2,2B byte = 1 epoca × {cb, osc0, hard} × 2 seed,
   due code parallele sulla 5090). Primo esito: cb-s1 = 0,3879 (~0,56 BPB).
+- **sera** Anteprima estrapolazione 2048→8192 sui checkpoint 700M: cb incapace per
+  costruzione · osc0 collassa (+188%) · **hard regge (4096 gratis, 8192 +13%)** — il
+  "fancy re-encoding" falsificato. Rassegna gerarchia-di-reset (5 fronti, 2 bonifiche)
+  → **D17-tempo-a-eventi** + claim riformulato post-CoPE/FoX/Segatron.
+- **21:00-23:00** Griglia C1 lanciata (heu cablato, ts Harmonic-style, rel alla
+  Segatron); autopsia del gate: non un tokenizer implicito ma **oblio selettivo
+  continuo modulato dai confini** (p~0,5 ovunque, 0,83 ai confini, 2-11/64 portatori).
+
+## Giorno 5 — 2026-08-21 (giovedì): la notte dei controlli
+
+- **00:00-01:30** Verdetti C1: i confini cablati valgono zero (heu=lti32) · la
+  coordinata esplicita da sola resta a metà strada (rel 0,757) · **lo spettro di
+  timescale pareggia il gate in loss ED estrapolazione** (ts 0,432, +15% a 8192).
+- **01:00-02:00** I controlli ribaltano la lettura: probe ASSOLUTA (cb R²=0,997,
+  bracci osc ~0 → l'attribuzione "estrapola perché la coordinata è locale" diventa
+  misura) e autopsia spettrale (**lo spettro imposto di ts muore in training; hard è
+  l'unico con capacità lunga — divisione del lavoro: l'oblio migra nel gate, r resta
+  libero**, τ nominali fino a 2·10⁵). Estrapolazione 16k/32k: hard sotto ts su ogni
+  bucket lontano.
+- **03:11** B2 completa con fB2-ts: **ts scivola ultimo all'epoca (0,3991)** — la
+  parità a 700M era traiettoria, come predetto; all'epoca piena tutti entro 0,011 da
+  cb (regime data-limited: il verdetto vive su estrapolazione/probe/spettri, non
+  sulla loss). Estrapolazione ufficiale B2: gerarchia confermata; scoperto che
+  **l'estrapolazione peggiora col budget** (annealing cuce alla lunghezza).
+- **notte** Figura decomposizione C1 (IT/EN); generazioni giudice sui campioni B2.
 
 ## Compute e costi
 

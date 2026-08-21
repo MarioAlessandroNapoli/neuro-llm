@@ -3,23 +3,23 @@
 Stato e priorità del progetto. Regole di gestione nella skill `neuro`.
 Now = in lavorazione (max 2-3) · Next = pronto a partire · Later = deciso, non prossimo · Done = compresso.
 
-**Budget compute**: ricaricabile (deciso 2026-08-20). Stadio 1: 3,42 $ totali.
-Stadio char: 3090 (~0,1 $/h, dalle 13:00) + 5090 datacenter (0,40 $/h, dalle 14:45) —
-stima giornata ~1,5-2 $, consuntivo a fine fase. **Istanze attive: 2** (3090 riferimento
-+ 5090 muscolo — distruggere a fine giornata di lavoro).
+**Budget compute**: ricaricabile. Stadio 1: 3,42 $. Stadio char (giorni 4-5): 3090
+~0,3 $ + 5090 0,40 $/h dalle 14:45 del 20/08 (~19h al mattino del 21/08 ≈ 7,5-8 $) —
+la stima iniziale 1,5-2 $ è stata superata dall'estensione notturna (B2+C1+controlli),
+decisa a budget dichiarato ricaricabile. **Istanza attiva: 1** (5090 — generazioni
+giudice in corso, poi distruggere).
 
 ## Now
 
-- **Fase B CHIUSA** (esito in D16): **il reset duro vince** — hard (θ≡0) 0,427 vs
-  lti/phase 0,458 (≈4σ), a ~1σ dal transformer con pos emb; confound fp32 escluso
-  (lti32 = 0,4527); la rotazione non compra mai nulla. Meccanismo: rampa di Jordan
-  riavviata a ogni confine (probe R²=0,95)
-- **B2 asintoto in corsa su 5090** (fB2-{cb,osc0,hard}-s{1,2}, 2,2B byte = 1 epoca,
-  due code parallele; fine ~23:00): il gap del reset è pendenza o punto fisso?
-  Primo esito: fB2-cb-s1 = 0,3879
-- Dopo: **test estrapolazione 2048→4096/8192 sui checkpoint B2** (pre-registrato in
-  D16, script pronto) + autopsia fase B + figure fase A/B + consuntivo ledger,
-  distruzione 5090
+- **Griglie stadio char TUTTE CHIUSE** (fase A+B+C1+B2, esiti in D16/D17): il quadro
+  finale — la coordinata locale è necessaria ma non sufficiente (rel 0,757); i
+  confini cablati valgono zero (heu); lo spettro imposto guida la transizione e muore
+  (ts, ultimo all'epoca); **il gate appreso è l'unico con capacità lunga (divisione
+  del lavoro oblio→gate) e la migliore estrapolazione a ogni budget e lunghezza**;
+  all'epoca piena la loss satura (tutti entro 0,011 da cb)
+- **Chiusura operativa**: generazioni giudice B2 in corso → distruzione 5090 →
+  discussione C2 con l'utente (la domanda è cambiata: dove il gate torna a contare —
+  recall/MQAR, scale maggiori, BabyLM?)
 
 ## Next
 
