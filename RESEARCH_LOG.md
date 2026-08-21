@@ -951,6 +951,21 @@ incapace. Effetto nuovo e onesto: **l'estrapolazione peggiora col budget** — h
 peggiore del 700M (0,518 vs 0,475): l'annealing lungo cuce il modello alla lunghezza
 di training. Le curve di estrapolazione si dichiarano per-budget.
 
+**Esito B2 (2026-08-21, notte — asintoto 2,2B = 1 epoca, griglia completa).**
+cb 0,3879/0,3889 · osc0 0,3960/0,3870 · hard 0,3921/0,3954 · ts 0,3991 (1 seed).
+(1) **Regime data-limited**: all'epoca piena tutti i bracci convergono entro 0,011 da
+cb — la loss perde potere discriminante (replica della parità strutturale di stadio 1
+sul nuovo asse); il protocollo pendenza chiude senza incroci né divergenze.
+(2) **Traiettoria vs capacità, deciso**: ts (pari a hard a 700M) scivola ultimo
+all'epoca — le bande imposte guidano la transizione e muoiono (autopsia spettrale),
+mentre hard tiene la capacità costruita dal gate; predizione registrata prima della
+misura. (3) Il verdetto tra bracci vive sugli strumenti ortogonali alla loss:
+estrapolazione (hard 4096-gratis a ogni budget; gerarchia hard≫ts>osc0≫cb), probe
+(coordinata locale sì R²0,95 / assoluta no R²≈0 — cb l'inverso), spettri (divisione
+del lavoro gate/pesi). (4) BPB all'epoca: cb 0,560 — il ponte cross-stadio si
+aggiorna (token-level 536M: 0,531). Caveat: ts 1 seed; nessun incrocio ≠ mai
+incrocio (budget oltre l'epoca non esplorabili senza ripetizioni).
+
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
 gate-appreso = euristica-spazi (il livello 1 non è contributo: lo si dichiara e ci si
@@ -1006,6 +1021,7 @@ curabile col decoupled training di SUNTA.
 | fC1-heu-1 | 2026-08-20 | char-hyb-heu | 6,39M | 700M byte | 1 | 0,4523 | **C1: il reset totale cablato sugli spazi = lti32 (0,4527) — i confini da soli non comprano nulla**; l'ipotesi "gate=rilevatore di spazi" muore. 32-true. s2 tagliata (verdetto a 3,5σ) |
 | fC1-ts-1..2 | 2026-08-20/21 | char-hyb-ts | 6,39M | 700M byte ×2 | 1-2 | 0,4357 / 0,4277 | **C1: lo spettro di timescale PAREGGIA il gate appreso** (media 0,432 vs 0,427, seed intrecciati) e **estrapola come lui** (+15% vs +13% al bucket 8192; osc0 banda-unica +188%) — il meccanismo è lo spettro. 32-true dopo NaN a 16-mixed (bande lente quasi-DC, stessa fisica di hard) |
 | fC1-rel-1 | 2026-08-21 | char-transformer-rel | 6,40M | 700M byte | 1 | 0,7571 | **C1, controllo alla Segatron: la coordinata distanza-dal-confine esplicita da sola fa 0,757** — sblocca la transizione (vs nopos 1,45/2,04) ma resta a 0,33 da hard: il reset è coordinata + dinamica di oblio selettivo, non solo PE implicito |
+| fB2-ts-1 | 2026-08-21 | char-hyb-ts | 6,39M | 2,2B byte | 1 | 0,3991 | Asintoto B2: **ts scivola ultimo** (+0,005 da hard, +0,011 da cb) — la parità a 700M era effetto di traiettoria (bande che guidano la transizione e muoiono), come predetto dall'autopsia spettrale. 32-true |
 | judge-s1 | 2026-08-20 | as-t1 vs as-h1 | — | — | 1 | — | **Giudizio cieco D14** (non training): 188 giudici Opus 5 in-sessione, doppio ordine. t 82 · h 77 · tie 29 (p=0,75); prompt netti 28 vs 30 (p=0,90) → **parità qualitativa, conferma la loss**. Preliminare (1 coppia, 536M). Artefatti: eval/judgments/elo-536M-s1.* |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
