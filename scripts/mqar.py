@@ -53,7 +53,7 @@ def make_batch(bs, n_kv, seq, device, rng):
 class RecStack(nn.Module):
     """Stack ricorrente puro: emb + n OscBlock + head. Nessuna attention."""
 
-    def __init__(self, arm, d_model=128, m=256, n_layer=4):
+    def __init__(self, arm, d_model=128, m=256, n_layer=4, gate_bias=None):
         super().__init__()
         cfg = ModelConfig(vocab_size=VOCAB, d_model=d_model, n_layer=n_layer,
                           n_head=1, seq_len=8192)
@@ -71,6 +71,12 @@ class RecStack(nn.Module):
                      no_rotation=(arm == "gate"))
             for i in range(n_layer)
         )
+        if gate_bias is not None:
+            # Orizzonte di apprendibilità: all'init la memoria sopravvive a T byte di
+            # rumore con fattore ~exp(-T·sigma(bias)) — il bias fissa l'orizzonte.
+            for blk in self.blocks:
+                if blk.mixer.gate_conv is not None:
+                    nn.init.constant_(blk.mixer.gate_conv.bias, gate_bias)
         self.ln_f = nn.LayerNorm(d_model)
         self.head = nn.Linear(d_model, VOCAB, bias=False)
 
@@ -105,13 +111,14 @@ def main():
     parser.add_argument("--m", type=int, default=256)
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--compile", action="store_true")
+    parser.add_argument("--gate-bias", type=float, default=None)
     args = parser.parse_args()
 
     device = ("cuda" if torch.cuda.is_available()
               else "mps" if torch.backends.mps.is_available() else "cpu")
     torch.manual_seed(args.seed)
     rng = torch.Generator().manual_seed(args.seed)
-    model = RecStack(args.arm, args.d_model, args.m).to(device)
+    model = RecStack(args.arm, args.d_model, args.m, gate_bias=args.gate_bias).to(device)
     if args.compile:
         model = torch.compile(model)
     n_par = sum(p.numel() for p in model.parameters())
