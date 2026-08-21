@@ -103,6 +103,7 @@ def main():
     parser.add_argument("--d-model", type=int, default=128)
     parser.add_argument("--m", type=int, default=256)
     parser.add_argument("--seed", type=int, default=1)
+    parser.add_argument("--compile", action="store_true")
     args = parser.parse_args()
 
     device = ("cuda" if torch.cuda.is_available()
@@ -110,6 +111,8 @@ def main():
     torch.manual_seed(args.seed)
     rng = torch.Generator().manual_seed(args.seed)
     model = RecStack(args.arm, args.d_model, args.m).to(device)
+    if args.compile:
+        model = torch.compile(model)
     n_par = sum(p.numel() for p in model.parameters())
     print(f"mqar {args.arm}: {n_par/1e6:.2f}M param, n_kv={args.n_kv}, seq={args.seq}, "
           f"device={device}")
