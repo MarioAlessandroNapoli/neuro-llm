@@ -12,3 +12,4 @@ kaggle.json
 *.pem
 .netrc
 eval/judgments/*.bodies/
+PUBLICATION_LOG.md
