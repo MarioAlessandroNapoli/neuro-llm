@@ -56,8 +56,16 @@ def generate_batch(model, prompt_ids: list[int], seeds: list[int], eot_id: int,
     ids = torch.tensor([prompt_ids] * len(seeds), device=device)
     outs = [[] for _ in seeds]
     done = [False] * len(seeds)
+    # Path incrementale (ibridi ricorrenti, D17): prefill+step a contesto PIENO —
+    # niente finestra scorrevole (la ricorrenza non dimentica il byte uscito;
+    # giustificato dall'estrapolazione). I modelli con pos table restano finestrati.
+    incremental = hasattr(model, "prefill")
+    cache = None
+    if incremental:
+        logits, cache = model.prefill(ids)
     for _ in range(max_new):
-        logits = model(ids[:, -seq_len:])[:, -1]
+        if not incremental:
+            logits = model(ids[:, -seq_len:])[:, -1]
         probs = F.softmax(logits.float() / TEMPERATURE, dim=-1).cpu()
         nxts = [torch.multinomial(probs[i], 1, generator=g).item() for i, g in enumerate(gens)]
         for i, nxt in enumerate(nxts):
@@ -68,7 +76,11 @@ def generate_batch(model, prompt_ids: list[int], seeds: list[int], eot_id: int,
                     outs[i].append(nxt)
         if all(done):
             break
-        ids = torch.cat([ids, torch.tensor(nxts, device=device).unsqueeze(1)], dim=1)
+        nxt_t = torch.tensor(nxts, device=device)
+        if incremental:
+            logits = model.step(nxt_t, cache)
+        else:
+            ids = torch.cat([ids, nxt_t.unsqueeze(1)], dim=1)
     return outs
 
 

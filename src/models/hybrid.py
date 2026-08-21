@@ -146,3 +146,53 @@ class Hybrid(nn.Module):
         for blk in self.blocks:
             x = blk(x, boundary) if isinstance(blk, OscBlock) else blk(x)
         return self.head(self.ln_f(x))
+
+    # --- Generazione incrementale (D17, campagna giudice): stati osc in O(1)/byte, ---
+    # --- pila attention ricalcolata sulla sequenza cacheata (costo da transformer). ---
+    # Contesto PIENO (nessuna finestra scorrevole: la ricorrenza non può dimenticare
+    # il byte uscito; l'estrapolazione D17 giustifica — dichiarato nel log).
+
+    @torch.no_grad()
+    def prefill(self, idx):
+        """→ (logits ultima posizione (b,V), cache)."""
+        if not self.cfg.osc_first or self.pos is not None:
+            raise NotImplementedError("prefill: solo ibridi osc-first senza pos emb")
+        from .linoss import RESET_KERNEL
+        x = self.tok(idx)
+        boundary = self.boundary_lut[idx].to(x.dtype) if self.cfg.heuristic_reset else None
+        states, bufs = [], []
+        osc = [b for b in self.blocks if isinstance(b, OscBlock)]
+        for blk in osc:
+            u = blk.ln1(x)
+            pad = torch.zeros(u.shape[0], max(RESET_KERNEL - u.shape[1], 0), u.shape[2],
+                              dtype=u.dtype, device=u.device)
+            bufs.append(torch.cat([pad, u[:, -(RESET_KERNEL):]], dim=1))
+            out, st = blk.mixer(u, boundary, return_state=True)
+            states.append(st)
+            x = x + out
+            x = x + blk.mlp(blk.ln2(x))
+        cache = {"states": states, "bufs": bufs, "y": x}
+        return self._attn_logits(cache["y"]), cache
+
+    @torch.no_grad()
+    def step(self, next_ids, cache):
+        """next_ids (b,) → logits (b,V); aggiorna cache in place."""
+        x = self.tok(next_ids)
+        boundary_t = (self.boundary_lut[next_ids].to(x.dtype)
+                      if self.cfg.heuristic_reset else None)
+        osc = [b for b in self.blocks if isinstance(b, OscBlock)]
+        for i, blk in enumerate(osc):
+            u = blk.ln1(x)
+            cache["bufs"][i] = torch.cat([cache["bufs"][i][:, 1:], u[:, None]], dim=1)
+            out, cache["states"][i] = blk.mixer.step(
+                u, cache["states"][i], cache["bufs"][i], boundary_t)
+            x = x + out
+            x = x + blk.mlp(blk.ln2(x))
+        cache["y"] = torch.cat([cache["y"], x[:, None]], dim=1)
+        return self._attn_logits(cache["y"])
+
+    def _attn_logits(self, y):
+        for blk in self.blocks:
+            if not isinstance(blk, OscBlock):
+                y = blk(y)
+        return self.head(self.ln_f(y[:, -1]))

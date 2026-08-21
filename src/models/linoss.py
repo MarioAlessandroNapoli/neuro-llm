@@ -220,9 +220,8 @@ class OscMixer(nn.Module):
             return [self.nu_raw, self.theta_raw]
         return [self.A_raw] + ([self.G_raw, self.dt_raw] if self.damped else [])
 
-    def forward(self, u, boundary=None):
-        t = u.shape[1]
-        bu = self.B(u)  # (b, t, m)
+    def _dynamics(self):
+        """(M (m,2,2), dt, S) dai parametri — condiviso tra forward e step."""
         if self.log_polar:
             r = torch.exp(-self.nu_raw.exp())
             theta = math.pi * torch.sigmoid(self.theta_raw)
@@ -249,6 +248,12 @@ class OscMixer(nn.Module):
         row1 = torch.stack([S, -S * dt * A], dim=-1)
         row2 = torch.stack([dt * S, 1 - dt.square() * S * A], dim=-1)
         M = torch.stack([row1, row2], dim=-2)  # (m, 2, 2)
+        return M, dt, S
+
+    def forward(self, u, boundary=None, return_state=False):
+        t = u.shape[1]
+        bu = self.B(u)  # (b, t, m)
+        M, dt, S = self._dynamics()
         f = torch.stack([dt * S * bu, dt.square() * S * bu], dim=-1)  # (b, t, m, 2)
         M_t = M.unsqueeze(0).expand(t, -1, -1, -1)
         if self.heuristic_reset:
@@ -264,7 +269,28 @@ class OscMixer(nn.Module):
             states = prefix_scan_gated(M_t, f, g)
         else:
             states = prefix_scan(M_t, f)
-        return self.C(states[..., 1])  # componente x dello stato
+        out = self.C(states[..., 1])  # componente x dello stato
+        if return_state:
+            return out, states[:, -1]
+        return out
+
+    def step(self, u_t, state, conv_buf=None, boundary_t=None):
+        """Generazione incrementale: un byte. u_t (b,d) · state (b,m,2) ·
+        conv_buf (b,K,d) ultimi K input u ordinati vecchio→nuovo (corrente in coda) ·
+        boundary_t (b,) per il reset euristico. → (out (b,d), nuovo state)."""
+        M, dt, S = self._dynamics()
+        bu = self.B(u_t)
+        f = torch.stack([dt * S * bu, dt.square() * S * bu], dim=-1)  # (b, m, 2)
+        new = torch.einsum("mij,bmj->bmi", M, state)
+        if self.heuristic_reset:
+            new = (1 - boundary_t)[:, None, None] * new
+        elif self.gate_conv is not None:
+            p = torch.sigmoid(torch.einsum("bkd,gdk->bg", conv_buf, self.gate_conv.weight)
+                              + self.gate_conv.bias)
+            g = (1 - p).repeat_interleave(new.shape[1] // RESET_GROUPS, dim=-1)
+            new = g[..., None] * new
+        state = new + f
+        return self.C(state[..., 1]), state
 
 
 class OscBlock(nn.Module):

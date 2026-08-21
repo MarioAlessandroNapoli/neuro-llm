@@ -856,8 +856,12 @@ dentro, e il gruppo H-Net è migrato sul DNA); sintassi esplicita come livello
 gerarchico (URNNG/ON-LSTM/StructFormer: ritorni marginali — si gerarchizza la
 sorpresa, non la grammatica); fase C lettura-a-fase (declassata: la rotazione è
 risultata inerte due volte, leggere a fase un orologio che vince da fermo non è più
-la domanda); scala frase incondizionata (rischio no-signal su TinyStories, e SOMBRERO
-mostra che forzare confini linguistici alti degrada).
+la domanda); scala frase incondizionata (rischio no-signal su TinyStories). [Correzione di
+provenienza, 21/08 dalla lettura integrale: l'avvertimento "forzare confini
+linguistici degrada" NON è in SOMBRERO — loro mostrano solo che il chunking fisso
+*posizionale* (equal-size) è pessimo e che i confini appresi collassano sul
+whitespace; il claim sul degrado da confini linguistici imposti resta da verificare
+su H-Net/SpaceByte prima di citarlo.]
 
 **Autopsia del gate (fase B, stessa sera — domanda dell'utente: "sta convergendo a
 una tokenizzazione classica?").** No — e la storia "reset a eventi" va corretta. Su
