@@ -67,7 +67,8 @@ class RecStack(nn.Module):
 
         self.blocks = nn.ModuleList(
             OscBlock(cfg, m, damped=True, phi_init=False, log_polar=True,
-                     ring=ring(i), reset=(arm == "gate"), no_rotation=(arm == "gate"))
+                     ring=ring(i), reset=arm in ("gate", "gaterot"),
+                     no_rotation=(arm == "gate"))
             for i in range(n_layer)
         )
         self.ln_f = nn.LayerNorm(d_model)
@@ -94,7 +95,7 @@ def evaluate(model, n_kv, seq, device, rng, n_batches=8, bs=64):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--arm", choices=["lti", "ts", "gate"], required=True)
+    parser.add_argument("--arm", choices=["lti", "ts", "gate", "gaterot"], required=True)
     parser.add_argument("--n-kv", type=int, default=16)
     parser.add_argument("--seq", type=int, default=512)
     parser.add_argument("--steps", type=int, default=3000)
