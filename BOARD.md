@@ -17,9 +17,15 @@ giudice in corso, poi distruggere).
   (ts, ultimo all'epoca); **il gate appreso è l'unico con capacità lunga (divisione
   del lavoro oblio→gate) e la migliore estrapolazione a ogni budget e lunghezza**;
   all'epoca piena la loss satura (tutti entro 0,011 da cb)
-- **Chiusura operativa**: generazioni giudice B2 in corso → distruzione 5090 →
-  discussione C2 con l'utente (la domanda è cambiata: dove il gate torna a contare —
-  recall/MQAR, scale maggiori, BabyLM?)
+- **Scrittura stadio char** (deciso 2026-08-21): letture integrali in corso
+  (HM-RNN, H-Net+codice, Harmonic, SOMBRERO) → scaletta → stesura. Frame candidato:
+  le quattro convergenze evolutive
+- **MQAR** (deciso): stack ricorrenti puri (lti/ts/gate) su recall sintetico — la
+  capacità lunga di hard messa alla prova; twist: senza confini linguistici, il gate
+  impara i confini del task?
+- **Giudice ufficiale best-4** (cb/hard/osc0/ts @B2, Elo 6 coppie): prerequisito
+  cache incrementale di generazione per gli scan (le generazioni ricorrenti oggi
+  costano ore); canale da decidere (Batches con API key o in-sessione)
 
 ## Next
 
@@ -41,7 +47,9 @@ giudice in corso, poi distruggere).
 - Griglia 1b, fasi 1-2 (D12): dlinoss log-polare + sweep lr · omeostasi vs controllo
   log-polare · ibrido intercalato A-O · hyb-oa@3e-3 · init post-autopsia r~U[0,7;0,9] ·
   asintoto 536M per i vincitori. Fuori scope dichiarato: selettività/gating (1c)
-- Stadio 2: BabyLM Strict-Small (10M parole) + valutazione BLiMP per la variante migliore
+- Stadio 2: BabyLM Strict-Small (10M parole) + BLiMP — rimandato (deciso 2026-08-21)
+- Gerarchia di reset annidati (C2): NON si fa a questa scala (deciso 2026-08-21);
+  trigger di riapertura: BabyLM (frasi vere) o buco emerso in scrittura
 - Ablazione granularità temporale (Q3: char-level o chunking appreso)
 - Probe diagnostici esplorativi (D7: non cambiano mai il verdetto dello stadio 1):
   name-cloze a distanza, ablazione del contesto, probe spettrale degli hidden state
