@@ -987,6 +987,26 @@ finestre): cb residual **0,997** · hard −0,010/−0,027/−0,013
 (4) Caveat dichiarati: probe LOCALE mai eseguita su ts e heu; autopsia del gate su
 un solo seed (fB-hard-s2); estrapolazione 700M = anteprima a 1 seed/braccio.
 
+**MQAR (D17, 2026-08-21 pomeriggio — recall associativo sui soli stack ricorrenti,
+`scripts/mqar.py`, 4×OscBlock ~1M param, 4070S).** Serie seq=256 s1 (accuracy sulle
+risposte; caso=0,008): lti 0,223/0,127/0,067/0,026 · ts 0,355/0,221/0,104/0,034 ·
+gate 0,329/0,228/**0,150**/**0,050** per n_kv=8/16/32/64 → **la selettività paga
+sotto carico**: gate/ts = 0,93→1,03→1,45→1,47 — a carico basso lo spettro basta, da
+32 coppie il gate protegge dove le bande si sovrascrivono. Su un task SENZA confini
+linguistici: il gate non è inchiodato agli spazi. **Il finding spinoso**: a seq=1024
+il braccio gate collassa al caso su ogni cella (loss = ln(120): minimo "ignora il
+contesto"); lr 3e-3/1e-3/3e-4 tutte inefficaci; ANCHE gaterot (con rotazione)
+fallisce → non è né lr né DC. **Causa trovata e verificata: orizzonte di
+apprendibilità dell'init** — con bias −4 il gate resetta con p≈0,018/byte anche sul
+rumore: su 992 byte di riempitivo la memoria sopravvive ~e^(−18)≈0 all'init, il
+segnale chiave→query è morto prima che il training inizi. Predizione quantitativa:
+bias −8 (p≈3e-4 → sopravvivenza ~0,7) deve addestrare → **verificata: 0,162 = 20×
+il caso** (vs 0,008 a bias −4). È la fragilità di HM-RNN in versione misurata, con
+cura a un parametro: *l'init del gate fissa l'orizzonte oltre il quale il reset
+appreso non può bootstrappare*. In coda: cura sulle celle 1024 restanti + controllo
+a 256 (la cura costa qualcosa a corto raggio?) + seed 2. ts a 1024 sano
+(0,346/0,182/0,059): il collasso era specifico del gate.
+
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
 gate-appreso = euristica-spazi (il livello 1 non è contributo: lo si dichiara e ci si
