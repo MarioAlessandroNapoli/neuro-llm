@@ -13,3 +13,4 @@ kaggle.json
 .netrc
 eval/judgments/*.bodies/
 PUBLICATION_LOG.md
+paper/
