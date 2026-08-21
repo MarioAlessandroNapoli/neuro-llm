@@ -1003,9 +1003,25 @@ segnale chiave→query è morto prima che il training inizi. Predizione quantita
 bias −8 (p≈3e-4 → sopravvivenza ~0,7) deve addestrare → **verificata: 0,162 = 20×
 il caso** (vs 0,008 a bias −4). È la fragilità di HM-RNN in versione misurata, con
 cura a un parametro: *l'init del gate fissa l'orizzonte oltre il quale il reset
-appreso non può bootstrappare*. In coda: cura sulle celle 1024 restanti + controllo
-a 256 (la cura costa qualcosa a corto raggio?) + seed 2. ts a 1024 sano
-(0,346/0,182/0,059): il collasso era specifico del gate.
+appreso non può bootstrappare*. ts a 1024 sano (0,346/0,182/0,059): il collasso
+era specifico del gate.
+
+**MQAR completa (2026-08-21 sera — griglia 48 run a 2 seed + cura, figura
+`docs/figures/2026-08-mqar{,-en}.png`).** Medie 2 seed, accuracy per n_kv=8/16/32/64:
+seq=256 → lti 0,258/0,147/0,066/0,029 · ts 0,358/0,217/0,093/0,037 · gate
+0,336/0,231/**0,152**/**0,047**; seq=1024 → lti 0,129/0,071/0,025/0,010 · ts
+**0,347**/**0,165**/0,060/0,024 · gate (bias −4) 0,040/0,011/0,017/0,016. Le due
+leggi replicano su s2: (1) *selettività paga sotto carico* — gate/ts a 256 sale
+0,94→1,06→1,63 fino a nkv=32 (monotono su s1; a nkv=64, vicino al pavimento,
+rumoroso su s2); (2) *lo spettro giusto paga a distanza* — a 1024 ts domina ogni
+carico, lti crolla. **Cura bias −8 a 1024**: 0,195 (2 seed: 0,162/0,228) · 0,136 ·
+0,090 · 0,056 (nkv 16-64 a 1 seed, s2) contro 0,040/0,011/0,017/0,016 non curato —
+e sopra nkv=32 la cura SUPERA ts (0,090 vs 0,060; 0,056 vs 0,030): *una volta
+riaperto l'orizzonte, la selettività paga sotto carico anche a distanza lunga* —
+le due leggi si compongono. Controllo a corto raggio: bias −8 su 256/32 s2 = 0,146
+vs 0,153 del −4, entro il rumore: la cura è gratis. Rumore di misura: due run
+gemelle involontarie (stessa config e seed, nondeterminismo CUDA) distano 0,006.
+Caveat: cura a 1 seed sui carichi 16-64; stack ~1M param, task sintetico.
 
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
@@ -1064,6 +1080,7 @@ curabile col decoupled training di SUNTA.
 | fC1-rel-1 | 2026-08-21 | char-transformer-rel | 6,40M | 700M byte | 1 | 0,7571 | **C1, controllo alla Segatron: la coordinata distanza-dal-confine esplicita da sola fa 0,757** — sblocca la transizione (vs nopos 1,45/2,04) ma resta a 0,33 da hard: il reset è coordinata + dinamica di oblio selettivo, non solo PE implicito |
 | fB2-ts-1 | 2026-08-21 | char-hyb-ts | 6,39M | 2,2B byte | 1 | 0,3991 | Asintoto B2: **ts scivola ultimo** (+0,005 da hard, +0,011 da cb) — la parità a 700M era effetto di traiettoria (bande che guidano la transizione e muoiono), come predetto dall'autopsia spettrale. 32-true |
 | judge-s1 | 2026-08-20 | as-t1 vs as-h1 | — | — | 1 | — | **Giudizio cieco D14** (non training): 188 giudici Opus 5 in-sessione, doppio ordine. t 82 · h 77 · tie 29 (p=0,75); prompt netti 28 vs 30 (p=0,90) → **parità qualitativa, conferma la loss**. Preliminare (1 coppia, 536M). Artefatti: eval/judgments/elo-536M-s1.* |
+| mqar-grid | 2026-08-21 | RecStack 4×OscBlock (lti/ts/gate) | 1,09M | 3k step × 53 run | 1-2 | — (accuracy) | **MQAR D17**, 4070S: griglia 3 bracci × n_kv {8,16,32,64} × seq {256,1024} × 2 seed + cura bias −8 (5 run). Verdetti nel blocco MQAR di D17; figura docs/figures/2026-08-mqar. Log integrale /tmp/mqar.log sul box (distrutto a fine giornata) |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo

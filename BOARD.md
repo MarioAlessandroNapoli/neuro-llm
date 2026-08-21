@@ -20,9 +20,12 @@ giudice in corso, poi distruggere).
 - **Scrittura stadio char** (deciso 2026-08-21): letture integrali in corso
   (HM-RNN, H-Net+codice, Harmonic, SOMBRERO) → scaletta → stesura. Frame candidato:
   le quattro convergenze evolutive
-- **MQAR** (deciso): stack ricorrenti puri (lti/ts/gate) su recall sintetico — la
-  capacità lunga di hard messa alla prova; twist: senza confini linguistici, il gate
-  impara i confini del task?
+- **MQAR CHIUSA** (2026-08-21 sera, 53 run a 2 seed su 4070S, esiti in D17):
+  la capacità lunga è FUNZIONALE; due leggi — selettività paga sotto carico
+  (gate/ts 0,94→1,63 a 256) e l'init del gate fissa l'orizzonte di apprendibilità
+  (bias −4 morto a 1024, cura −8 = 20× il caso, gratis a corto raggio; curato
+  supera ts sotto carico anche a 1024). Figura docs/figures/2026-08-mqar; sezione
+  Results IV nel paper. 4070S da distruggere
 - **Giudice ufficiale best-4** (cb/hard/osc0/ts @B2, Elo 6 coppie): prerequisito
   cache incrementale di generazione per gli scan (le generazioni ricorrenti oggi
   costano ore); canale da decidere (Batches con API key o in-sessione)
