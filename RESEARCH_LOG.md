@@ -719,7 +719,9 @@ metà del guado) — la letteratura NoPE ("la mask causale basta") NON regge a 6
 parametri byte-level su questo budget; la sua posizione implicita è appena decodificabile
 (R² 0,24). (2) **Il banco oscillatorio al layer 0 è un position encoder completo**:
 parità di loss con la baseline (0,428 vs 0,419; divario 0,009 ≈ 1,3σ, sotto il criterio
-pre-registrato) SENZA position embedding e con 260k parametri in meno; l'indirizzo
+pre-registrato) SENZA position embedding e con ~524k parametri in meno (la tabella
+posizionale 2048×256; corretto 2026-08-21 in review: il "260k" originario era fermo a
+seq 1024); l'indirizzo
 ordinale è leggibile linearmente **dalla fase** (R² 0,90 — phase precession artificiale,
 il claim neuro di D15 operazionalizzato e verificato). (3) Il vantaggio osc0 del
 collaudo (0,46 nats a 30M byte) era **velocità di transizione**, non asintoto: a 700M
@@ -969,6 +971,21 @@ estrapolazione (hard 4096-gratis a ogni budget; gerarchia hard≫ts>osc0≫cb), 
 del lavoro gate/pesi). (4) BPB all'epoca: cb 0,560 — il ponte cross-stadio si
 aggiorna (token-level 536M: 0,531). Caveat: ts 1 seed; nessun incrocio ≠ mai
 incrocio (budget oltre l'epoca non esplorabili senza ripetizioni).
+
+**Registrazione misure notturne rimaste fuori registro (2026-08-21, emerse dalla
+review della bozza — erano state misurate e riportate in chat ma mai registrate):**
+(1) *Estrapolazione fB2-ts-s1* (64 finestre, seed 20260820): seq 2048 tot 0,3945 ·
+4096 bucket lontano 0,4063 (+3,0%) · 8192 bucket lontano 0,5579 (**+41%**) — la
+cella mancante della matrice per-budget (ts: +15% a 700M → +41% a B2, coerente con
+l'erosione osservata su hard +13%→+33%). (2) *Autopsia spettrale, dettaglio per
+layer* — fC1-ts-s2: τ mediana 4,2 / 7,1 / 7,2 / 6,7 byte (p90 5,9-9,1; max
+7/22/20/59); fB-lti-s1: mediana 5,7 / 8,1 / 6,2 / 5,5 (max 9-53); fB-hard-s2:
+canali con τ>50: 169/337/402/345 su 512 per layer; τ>500: 65/190/200/164; massimi
+1,0·10⁵-2,2·10⁵ byte. (3) *Probe posizione assoluta, valori esatti* (36/12
+finestre): cb residual **0,997** · hard −0,010/−0,027/−0,013
+(residual/fase/ampiezza) · ts −0,009/−0,024/−0,019 · osc0 0,013/−0,002/0,004.
+(4) Caveat dichiarati: probe LOCALE mai eseguita su ts e heu; autopsia del gate su
+un solo seed (fB-hard-s2); estrapolazione 700M = anteprima a 1 seed/braccio.
 
 **Riconsiderare se.** (a) un terzo pubblica confini appresi + reset + estrapolazione
 (la finestra si chiude — Harmonic va replicato, non ignorato); (b) C1 mostra
