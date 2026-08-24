@@ -16,6 +16,7 @@ Uso: python -m scripts.mqar --arm gate --n-kv 16 --seq 512 --steps 3000
 """
 import argparse
 import math
+import os
 
 import torch
 import torch.nn as nn
@@ -216,6 +217,7 @@ def main():
     # La ripetizione apre il sentiero memorizzazione→generalizzazione che il
     # flusso infinito non innesca; eval sempre su dati freschi.
     parser.add_argument("--n-train", type=int, default=0)
+    parser.add_argument("--wandb", action="store_true")
     parser.add_argument("--n-kv", type=int, default=16)
     parser.add_argument("--seq", type=int, default=512)
     parser.add_argument("--steps", type=int, default=3000)
@@ -241,6 +243,22 @@ def main():
     print(f"mqar {args.arm}: {n_par/1e6:.2f}M param, "
           f"stato {model.state_per_layer} float/layer, n_kv={args.n_kv}, "
           f"seq={args.seq}, device={device}")
+
+    tag = (f"mamba{'p' if args.pure else ''}-N{args.d_state}-dt{args.dt_max:g}"
+           if args.arm == "mamba" else args.arm)
+    if args.gate_bias is not None:
+        tag += f"-gb{args.gate_bias:g}"
+    if args.n_train:
+        tag += f"-ft{args.n_train // 1000}k"
+    wb = None
+    if args.wandb:
+        if not os.environ.get("WANDB_API_KEY"):
+            raise RuntimeError("--wandb richiede WANDB_API_KEY nell'ambiente")
+        import wandb as wb
+        wb.init(project="neuro-llm", group="mqar",
+                name=f"mqar-{tag}-k{args.n_kv}-q{args.seq}-s{args.seed}",
+                config=vars(args) | {"n_par": n_par,
+                                     "state_per_layer": model.state_per_layer})
 
     if args.n_train:
         parts = [make_batch(512, args.n_kv, args.seq, device, rng)
@@ -274,20 +292,24 @@ def main():
             acc = evaluate(model, args.n_kv, args.seq, device, rng, n_batches=2,
                            bs=args.bs)
             extra = ""
+            tr = None
             if args.n_train:
                 with torch.no_grad():
                     mask = y != -100
-                    tr = (logits.argmax(-1)[mask] == y[mask]).float().mean()
+                    tr = (logits.argmax(-1)[mask] == y[mask]).float().mean().item()
                 extra = f" train_acc {tr:.3f}"
             print(f"  step {step}: loss {loss.item():.3f} acc {acc:.3f}{extra}",
                   flush=True)
+            if wb:
+                wb.log({"train_loss": loss.item(), "acc_fresh": acc,
+                        **({"train_acc": tr} if tr is not None else {})},
+                       step=step)
     acc = evaluate(model, args.n_kv, args.seq, device, rng)
-    tag = (f"mamba{'p' if args.pure else ''}-N{args.d_state}-dt{args.dt_max:g}"
-           if args.arm == "mamba" else args.arm)
-    if args.n_train:
-        tag += f"-ft{args.n_train // 1000}k"
     print(f"FINALE {tag} n_kv={args.n_kv} seq={args.seq} seed={args.seed}: "
           f"accuracy {acc:.4f}")
+    if wb:
+        wb.summary["final_accuracy"] = acc
+        wb.finish()
 
 
 if __name__ == "__main__":
