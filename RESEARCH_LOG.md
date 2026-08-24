@@ -1100,8 +1100,13 @@ geometria identica, scorciatoia impossibile. **Pilota v2 (nkv=8, seq=256, s1)**:
 gate 0,1443 · ts 0,1423 · lti 0,0835 (binding vero, 10-17× il caso, col protocollo
 3k/on-the-fly) — mamba con la ricetta Zoology crolla a 0,0129 ≈ caso: memorizza il
 train al 96% e generalizza zero (lookup-table). Il suo 0,345 su v1 era interamente
-la scorciatoia (l'eliminazione generalizza, il binding no). In coda: ultima chance
-equa a 100k esempi/20k step, poi verdetto del passo A sul banco pulito.
+la scorciatoia (l'eliminazione generalizza, il binding no). Ultima chance equa
+(100k esempi, 20k step): loss inchiodata a ln(120), train_acc 0,018, fresh 0,0081 —
+troppi esempi per memorizzare, nessuna scala verso il binding. **Verdetto passo A sul
+banco pulito: in 12 configurazioni su due versioni del banco, S6 a ~1M param non
+impara mai il binding associativo su byte; gli stack oscillatori lo imparano tutti
+(10-17× il caso), nonostante lo stato 8× di S6.** Prossimo: griglia v2 (proposta
+all'utente) e riscrittura Results IV sui numeri puliti.
 
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
