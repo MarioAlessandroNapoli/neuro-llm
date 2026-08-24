@@ -30,6 +30,11 @@ VOCAB = 256
 KEY_LO, KEY_HI = 1, 120      # chiavi
 VAL_LO, VAL_HI = 128, 247    # valori
 NOISE_LO, NOISE_HI = 248, 256  # riempitivo (mai chiave né valore)
+# v2: dopo la query l'input mostra un segnaposto, NON il valore vero. Nel formato
+# v1 (eco del valore) il blocco query rivelava i valori consumati e la strategia
+# "eliminazione sull'insieme" capava l'accuracy a H_n/n (≈0,34 a n=8) senza alcun
+# binding chiave→valore — verificato: acc per ordine di query = 1/(coppie rimaste).
+PLACEHOLDER = 0
 
 
 def make_batch(bs, n_kv, seq, device, rng):
@@ -46,7 +51,7 @@ def make_batch(bs, n_kv, seq, device, rng):
         q0 = seq - 2 * n_q
         for j, i in enumerate(order):
             x[b, q0 + 2 * j] = keys[i]
-            x[b, q0 + 2 * j + 1] = vals[i]
+            x[b, q0 + 2 * j + 1] = PLACEHOLDER
             y[b, q0 + 2 * j] = vals[i]  # dopo la query si predice il valore
     return x.to(device), y.to(device)
 
