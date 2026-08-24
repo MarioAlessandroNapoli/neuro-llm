@@ -171,15 +171,15 @@ class RecStack(nn.Module):
             return
 
         def ring(i):
-            if arm != "ts":
+            if arm not in ("ts", "tsgate"):
                 return (RING_R_MIN, RING_R_MAX)
             lo, hi = TS_TAU_MIN * TS_TAU_FACTOR**i, TS_TAU_MIN * TS_TAU_FACTOR**(i + 1)
             return (math.exp(-1 / lo), math.exp(-1 / hi))
 
         self.blocks = nn.ModuleList(
             OscBlock(cfg, m, damped=True, phi_init=False, log_polar=True,
-                     ring=ring(i), reset=arm in ("gate", "gaterot"),
-                     no_rotation=(arm == "gate"))
+                     ring=ring(i), reset=arm in ("gate", "gaterot", "tsgate"),
+                     no_rotation=arm in ("gate", "tsgate"))
             for i in range(n_layer)
         )
         if gate_bias is not None:
@@ -212,8 +212,9 @@ def evaluate(model, n_kv, seq, device, rng, n_batches=8, bs=64):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--arm", choices=["lti", "ts", "gate", "gaterot", "mamba"],
-                        required=True)
+    parser.add_argument("--arm", choices=["lti", "ts", "gate", "gaterot", "tsgate",
+                                          "mamba"], required=True)
+    parser.add_argument("--save-ckpt", action="store_true")
     parser.add_argument("--d-state", type=int, default=16)
     parser.add_argument("--dt-min", type=float, default=0.001)
     parser.add_argument("--dt-max", type=float, default=0.1)
@@ -242,6 +243,7 @@ def main():
     model = RecStack(args.arm, args.d_model, args.m, gate_bias=args.gate_bias,
                      d_state=args.d_state, dt_min=args.dt_min,
                      dt_max=args.dt_max, pure=args.pure).to(device)
+    raw_model = model
     if args.compile:
         model = torch.compile(model)
     n_par = sum(p.numel() for p in model.parameters())
@@ -312,6 +314,11 @@ def main():
     acc = evaluate(model, args.n_kv, args.seq, device, rng)
     print(f"FINALE {tag} n_kv={args.n_kv} seq={args.seq} seed={args.seed}: "
           f"accuracy {acc:.4f}")
+    if args.save_ckpt:
+        os.makedirs("ckpt", exist_ok=True)
+        path = f"ckpt/mqar-{tag}-k{args.n_kv}-q{args.seq}-s{args.seed}.pt"
+        torch.save(raw_model.state_dict(), path)
+        print(f"checkpoint: {path}")
     if wb:
         wb.summary["final_accuracy"] = acc
         wb.finish()
