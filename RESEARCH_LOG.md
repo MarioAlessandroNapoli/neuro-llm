@@ -1078,6 +1078,7 @@ recall in nessuna configurazione provata — resta sulla marginale ln(120), accu
 | tempo di fuga | 10.000 step | caso |
 | rumore continuo | cella quasi pulita seq=64 (lti: 0,36) | caso (0,0105) |
 | il nostro codice | implementazione di riferimento (mamba-minimal, scan sequenziale) | caso (0,0098) |
+| massima speranza | pure + lr 1e-2 + 10k step, cella facile | caso (0,0095) |
 
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
