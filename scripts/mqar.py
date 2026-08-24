@@ -212,6 +212,10 @@ def main():
     parser.add_argument("--dt-min", type=float, default=0.001)
     parser.add_argument("--dt-max", type=float, default=0.1)
     parser.add_argument("--pure", action="store_true")
+    # Ricetta Zoology: dataset FINITO riusato per epoche (0 = on-the-fly, D17).
+    # La ripetizione apre il sentiero memorizzazione→generalizzazione che il
+    # flusso infinito non innesca; eval sempre su dati freschi.
+    parser.add_argument("--n-train", type=int, default=0)
     parser.add_argument("--n-kv", type=int, default=16)
     parser.add_argument("--seq", type=int, default=512)
     parser.add_argument("--steps", type=int, default=3000)
@@ -238,11 +242,27 @@ def main():
           f"stato {model.state_per_layer} float/layer, n_kv={args.n_kv}, "
           f"seq={args.seq}, device={device}")
 
+    if args.n_train:
+        parts = [make_batch(512, args.n_kv, args.seq, device, rng)
+                 for _ in range(args.n_train // 512)]
+        X = torch.cat([p[0] for p in parts])
+        Y = torch.cat([p[1] for p in parts])
+        print(f"dataset finito: {len(X)} esempi, "
+              f"~{args.steps * args.bs / len(X):.0f} epoche")
+        perm, ptr = torch.randperm(len(X), generator=rng).to(device), 0
+
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     sched = torch.optim.lr_scheduler.OneCycleLR(
         opt, max_lr=args.lr, total_steps=args.steps, pct_start=0.1)
     for step in range(args.steps):
-        x, y = make_batch(args.bs, args.n_kv, args.seq, device, rng)
+        if args.n_train:
+            if ptr + args.bs > len(X):
+                perm, ptr = torch.randperm(len(X), generator=rng).to(device), 0
+            idx = perm[ptr:ptr + args.bs]
+            ptr += args.bs
+            x, y = X[idx], Y[idx]
+        else:
+            x, y = make_batch(args.bs, args.n_kv, args.seq, device, rng)
         logits = model(x)
         loss = F.cross_entropy(logits.view(-1, VOCAB), y.view(-1), ignore_index=-100)
         opt.zero_grad()
@@ -253,10 +273,19 @@ def main():
         if step % 500 == 0 or step == args.steps - 1:
             acc = evaluate(model, args.n_kv, args.seq, device, rng, n_batches=2,
                            bs=args.bs)
-            print(f"  step {step}: loss {loss.item():.3f} acc {acc:.3f}")
+            extra = ""
+            if args.n_train:
+                with torch.no_grad():
+                    mask = y != -100
+                    tr = (logits.argmax(-1)[mask] == y[mask]).float().mean()
+                extra = f" train_acc {tr:.3f}"
+            print(f"  step {step}: loss {loss.item():.3f} acc {acc:.3f}{extra}",
+                  flush=True)
     acc = evaluate(model, args.n_kv, args.seq, device, rng)
     tag = (f"mamba{'p' if args.pure else ''}-N{args.d_state}-dt{args.dt_max:g}"
            if args.arm == "mamba" else args.arm)
+    if args.n_train:
+        tag += f"-ft{args.n_train // 1000}k"
     print(f"FINALE {tag} n_kv={args.n_kv} seq={args.seq} seed={args.seed}: "
           f"accuracy {acc:.4f}")
 
