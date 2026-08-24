@@ -1079,6 +1079,24 @@ recall in nessuna configurazione provata — resta sulla marginale ln(120), accu
 | rumore continuo | cella quasi pulita seq=64 (lti: 0,36) | caso (0,0105) |
 | il nostro codice | implementazione di riferimento (mamba-minimal, scan sequenziale) | caso (0,0098) |
 | massima speranza | pure + lr 1e-2 + 10k step, cella facile | caso (0,0095) |
+| ricetta Zoology (dati finiti) | 20k esempi × 31 epoche, 10k step | **SBLOCCO: 0,345** (fuga a step ~3500-4000: prima memorizza — train_acc 0,09→0,59 — poi generalizza; 3k step sarebbero morti nella zona piatta anche coi dati finiti) |
+
+**MQAR-v1 aveva una scorciatoia — trovata dal sospetto dell'utente sul tetto comune
+0,33-0,36 (2026-08-24 sera).** Nel formato v1 il valore vero compariva nell'input dopo
+ogni query (formato LM): il blocco query rivelava i valori consumati e la strategia
+"ricorda l'INSIEME dei valori e depenna" capava l'accuracy a **H_n/n** (0,340 a n=8)
+senza alcun binding chiave→valore. Prova: accuracy per ordine di query in lti @seq64 =
+[0,16 0,15 0,19 0,21 0,25 0,34 0,53 **1,00**] vs previsione eliminazione 1/(coppie
+rimaste) = [0,125 0,143 0,167 0,20 0,25 0,33 0,50 1,00] — combacia; recall vero
+residuo ~0,01-0,04. Piatto invece per indice di scrittura (no recency). Conseguenze:
+(a) lo sblocco Zoology di mamba (0,345 ≈ H₈/8) è con ogni probabilità la scorciatoia;
+(b) la griglia v1 (53 run) misura un MIX binding+eliminazione: i numeri assoluti sono
+gonfiati; le letture di *persistenza* restano fatti (l'eliminazione richiede comunque
+memoria dell'insieme attraverso il rumore: ts 0,347 vs gate 0,072 a 1024 resta
+differenza reale di memoria) e a nkv=32 il gate 0,152 SUPERA il tetto H₃₂/32=0,127 →
+lì c'è binding vero; (c) la sezione Results IV del paper è IN REVISIONE fino ai numeri
+v2. **Fix v2** (commit 02c3951): segnaposto (byte 0) al posto dell'eco del valore —
+geometria identica, scorciatoia impossibile. Pilota v2 sui 4 bracci in corso.
 
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
