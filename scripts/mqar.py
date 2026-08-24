@@ -50,14 +50,111 @@ def make_batch(bs, n_kv, seq, device, rng):
     return x.to(device), y.to(device)
 
 
+class S6Mixer(nn.Module):
+    """Mamba/S6 minimale (D18 passo A): selettività di riferimento del campo.
+
+    Recurrence diagonale per canale: h_t = exp(Δ_t·A)·h_{t-1} + Δ_t·B_t·x_t,
+    y_t = C_t·h_t + D·x_t, con Δ, B, C tutti data-dependent (la selettività).
+    Scan doubling SENZA divisioni (solo prodotti di a≤1: underflow benigno,
+    backward limitato — la variante cumsum(b/cumprod) esplode in backward),
+    a chunk checkpointati: (b,L,d,N) intero non entra mai in memoria.
+    Stato = d_inner·N float.
+    """
+
+    CHUNK = 64
+    DT_RANK = 8
+
+    def __init__(self, d_model, d_state=16, expand=2, d_conv=4):
+        super().__init__()
+        d_inner = d_model * expand
+        self.d_inner, self.d_state = d_inner, d_state
+        self.in_proj = nn.Linear(d_model, 2 * d_inner, bias=False)
+        self.conv = nn.Conv1d(d_inner, d_inner, d_conv, groups=d_inner,
+                              padding=d_conv - 1)
+        self.x_proj = nn.Linear(d_inner, self.DT_RANK + 2 * d_state, bias=False)
+        self.dt_proj = nn.Linear(self.DT_RANK, d_inner)
+        # Init Mamba standard: Δ ~ logU[0,001; 0,1], A reale S4D −1..−N
+        dt = torch.exp(torch.rand(d_inner) * (math.log(0.1) - math.log(0.001))
+                       + math.log(0.001))
+        with torch.no_grad():
+            self.dt_proj.bias.copy_(dt + torch.log(-torch.expm1(-dt)))
+        self.A_log = nn.Parameter(torch.log(torch.arange(1, d_state + 1)
+                                            .float()).repeat(d_inner, 1))
+        self.D = nn.Parameter(torch.ones(d_inner))
+        self.out_proj = nn.Linear(d_inner, d_model, bias=False)
+
+    def _chunk(self, dt, x, B, C, h):
+        """Un chunk: costruisce a, b e scanna. (b,C,d,N) vive solo qui dentro."""
+        A = -torch.exp(self.A_log.float())                    # (d,N)
+        a = torch.exp(dt.unsqueeze(-1) * A)                   # (b,c,d,N)
+        f = (dt * x).unsqueeze(-1) * B.unsqueeze(2)           # (b,c,d,N)
+        f = torch.cat([(f[:, :1] + a[:, :1] * h.unsqueeze(1)), f[:, 1:]], dim=1)
+        stride = 1
+        while stride < a.shape[1]:
+            f = torch.cat([f[:, :stride],
+                           f[:, stride:] + a[:, stride:] * f[:, :-stride]], dim=1)
+            a = torch.cat([a[:, :stride],
+                           a[:, stride:] * a[:, :-stride]], dim=1)
+            stride *= 2
+        return torch.einsum("bldn,bln->bld", f, C), f[:, -1]
+
+    def forward(self, u):
+        b, L, _ = u.shape
+        x, z = self.in_proj(u).chunk(2, dim=-1)
+        x = self.conv(x.transpose(1, 2))[..., :L].transpose(1, 2)
+        x = F.silu(x)
+        dt_r, B, C = self.x_proj(x).split(
+            [self.DT_RANK, self.d_state, self.d_state], dim=-1)
+        dt = F.softplus(self.dt_proj(dt_r)).float()           # (b,L,d)
+        h = x.new_zeros(b, self.d_inner, self.d_state, dtype=torch.float32)
+        ys = []
+        for s in range(0, L, self.CHUNK):
+            e = s + self.CHUNK
+            yc, h = torch.utils.checkpoint.checkpoint(
+                self._chunk, dt[:, s:e], x[:, s:e].float(),
+                B[:, s:e].float(), C[:, s:e].float(), h, use_reentrant=False)
+            ys.append(yc)
+        y = torch.cat(ys, dim=1).to(u.dtype) + self.D * x
+        return self.out_proj(y * F.silu(z))
+
+
+class MambaBlock(nn.Module):
+    """Gemello di OscBlock (stessa LN/MLP): cambia solo il mixer."""
+
+    def __init__(self, cfg, d_state):
+        super().__init__()
+        self.ln1 = nn.LayerNorm(cfg.d_model)
+        self.ln2 = nn.LayerNorm(cfg.d_model)
+        self.mixer = S6Mixer(cfg.d_model, d_state)
+        self.mlp = nn.Sequential(
+            nn.Linear(cfg.d_model, 4 * cfg.d_model),
+            nn.GELU(),
+            nn.Linear(4 * cfg.d_model, cfg.d_model),
+        )
+
+    def forward(self, x):
+        x = x + self.mixer(self.ln1(x))
+        return x + self.mlp(self.ln2(x))
+
+
 class RecStack(nn.Module):
     """Stack ricorrente puro: emb + n OscBlock + head. Nessuna attention."""
 
-    def __init__(self, arm, d_model=128, m=256, n_layer=4, gate_bias=None):
+    def __init__(self, arm, d_model=128, m=256, n_layer=4, gate_bias=None,
+                 d_state=16):
         super().__init__()
         cfg = ModelConfig(vocab_size=VOCAB, d_model=d_model, n_layer=n_layer,
                           n_head=1, seq_len=8192)
         self.tok = nn.Embedding(VOCAB, d_model)
+        # Parità D18: si dichiarano parametri E stato (legge Based: recall ∝ stato)
+        self.state_per_layer = (2 * d_model * d_state if arm == "mamba" else 2 * m)
+
+        if arm == "mamba":
+            self.blocks = nn.ModuleList(
+                MambaBlock(cfg, d_state) for _ in range(n_layer))
+            self.ln_f = nn.LayerNorm(d_model)
+            self.head = nn.Linear(d_model, VOCAB, bias=False)
+            return
 
         def ring(i):
             if arm != "ts":
@@ -101,7 +198,9 @@ def evaluate(model, n_kv, seq, device, rng, n_batches=8, bs=64):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--arm", choices=["lti", "ts", "gate", "gaterot"], required=True)
+    parser.add_argument("--arm", choices=["lti", "ts", "gate", "gaterot", "mamba"],
+                        required=True)
+    parser.add_argument("--d-state", type=int, default=16)
     parser.add_argument("--n-kv", type=int, default=16)
     parser.add_argument("--seq", type=int, default=512)
     parser.add_argument("--steps", type=int, default=3000)
@@ -118,12 +217,14 @@ def main():
               else "mps" if torch.backends.mps.is_available() else "cpu")
     torch.manual_seed(args.seed)
     rng = torch.Generator().manual_seed(args.seed)
-    model = RecStack(args.arm, args.d_model, args.m, gate_bias=args.gate_bias).to(device)
+    model = RecStack(args.arm, args.d_model, args.m, gate_bias=args.gate_bias,
+                     d_state=args.d_state).to(device)
     if args.compile:
         model = torch.compile(model)
     n_par = sum(p.numel() for p in model.parameters())
-    print(f"mqar {args.arm}: {n_par/1e6:.2f}M param, n_kv={args.n_kv}, seq={args.seq}, "
-          f"device={device}")
+    print(f"mqar {args.arm}: {n_par/1e6:.2f}M param, "
+          f"stato {model.state_per_layer} float/layer, n_kv={args.n_kv}, "
+          f"seq={args.seq}, device={device}")
 
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
     sched = torch.optim.lr_scheduler.OneCycleLR(
@@ -142,7 +243,8 @@ def main():
                            bs=args.bs)
             print(f"  step {step}: loss {loss.item():.3f} acc {acc:.3f}")
     acc = evaluate(model, args.n_kv, args.seq, device, rng)
-    print(f"FINALE {args.arm} n_kv={args.n_kv} seq={args.seq} seed={args.seed}: "
+    tag = f"mamba-N{args.d_state}" if args.arm == "mamba" else args.arm
+    print(f"FINALE {tag} n_kv={args.n_kv} seq={args.seq} seed={args.seed}: "
           f"accuracy {acc:.4f}")
 
 
