@@ -11,26 +11,21 @@ giudice in corso, poi distruggere).
 
 ## Now
 
-- **Griglie stadio char TUTTE CHIUSE** (fase A+B+C1+B2, esiti in D16/D17): il quadro
-  finale — la coordinata locale è necessaria ma non sufficiente (rel 0,757); i
-  confini cablati valgono zero (heu); lo spettro imposto guida la transizione e muore
-  (ts, ultimo all'epoca); **il gate appreso è l'unico con capacità lunga (divisione
-  del lavoro oblio→gate) e la migliore estrapolazione a ogni budget e lunghezza**;
-  all'epoca piena la loss satura (tutti entro 0,011 da cb)
-- **Scrittura stadio char** (deciso 2026-08-21): letture integrali in corso
-  (HM-RNN, H-Net+codice, Harmonic, SOMBRERO) → scaletta → stesura. Frame candidato:
-  le quattro convergenze evolutive
-- **MQAR CHIUSA** (2026-08-21 sera, 53 run a 2 seed su 4070S, esiti in D17):
-  la capacità lunga è FUNZIONALE; due leggi — selettività paga sotto carico
-  (gate/ts 0,94→1,63 a 256) e l'init del gate fissa l'orizzonte di apprendibilità
-  (bias −4 morto a 1024, cura −8 = 20× il caso, gratis a corto raggio; curato
-  supera ts sotto carico anche a 1024). Figura docs/figures/2026-08-mqar; sezione
-  Results IV nel paper. 4070S da distruggere
-- **Giudice ufficiale best-4** (cb/hard/osc0/ts @B2, Elo 6 coppie): prerequisito
-  cache incrementale di generazione per gli scan (le generazioni ricorrenti oggi
-  costano ore); canale da decidere (Batches con API key o in-sessione)
+- **Scrittura stadio char / paper v0.3**: sezioni I-IV complete con numeri veri;
+  mancano appendici A-E, 2 figure (spettri τ per layer, autopsia gate), bibitem \todo
+- **Scala di rischio D18** (decisa 2026-08-24): validazione esterna a gradini
+  A→B→C→D — dettaglio in RESEARCH_LOG § D18. Primo gradino pronto: braccio mamba
+  in MQAR (attesa conferma lancio)
 
 ## Next
+
+- **D18 passo A — braccio mamba in MQAR** (1-2 $): S6 minimale in scripts/mqar.py,
+  parità parametri + stato dichiarate entrambe, stesse celle, 2 seed
+- **D18 passo B — R1-enwik8** (3-6 $): cb vs gate ~7M su dati reali; prima le
+  domande dell'utente (in attesa dal 21/08)
+- **Giudice ufficiale best-4** (cb/hard/osc0/ts @B2, Elo 6 coppie): cache
+  incrementale pronta; generazioni da rifare su GPU economica; canale da decidere
+  (Batches con API key o in-sessione)
 
 - **Griglia C1 (D17-tempo-a-eventi)**: hard-appreso (fatto) vs hard-euristico (reset
   su spazi cablati) vs gerarchia-di-timescale senza reset (Harmonic-style) — loss +
@@ -60,6 +55,14 @@ giudice in corso, poi distruggere).
 
 ## Done
 
+- 2026-08-21 — **MQAR chiusa** (53 run, 2 seed, 4070S distrutta): capacità lunga
+  FUNZIONALE; due leggi (selettività paga sotto carico; l'init del gate fissa
+  l'orizzonte di apprendibilità, cura bias −8 verificata e gratis a corto raggio);
+  figura + Results IV nel paper. Esiti in D17
+- 2026-08-20/21 — **Griglie stadio char chiuse** (A+B+C1+B2): coordinata locale
+  necessaria non sufficiente; confini cablati zero; spettro imposto guida e muore;
+  gate appreso = unica capacità lunga + migliore estrapolazione; loss satura
+  all'epoca. Esiti in D16/D17
 - 2026-08-20 (notte) — **Giudizio cieco preliminare D14**: canale in-sessione (188
   giudici Opus 5 naive, costo API zero), coppia asintoto s1 → **parità qualitativa**
   (82/77/29, p=0,75), modi di fallire identici tra le architetture; conferma

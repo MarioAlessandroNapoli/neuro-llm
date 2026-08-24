@@ -1032,6 +1032,40 @@ curabile col decoupled training di SUNTA.
 
 ---
 
+## D18 — Scala di rischio per la validazione esterna (2026-08-24)
+
+**Decisione.** La validazione fuori dal banco TinyStories/6,9M procede per gradini di
+costo crescente, ognuno capace di falsificare prima di pagare il successivo:
+
+| Passo | Cosa | Costo | Falsifica |
+|---|---|---|---|
+| A | Braccio **mamba** (S6 minimale) nel banco MQAR, stesse celle, 2 seed | 1-2 $ | il nostro gate vs la selettività moderna |
+| B | **R1-enwik8**: cb vs gate ~7M su dati reali (disegno già pronto) | 3-6 $ | "artefatto di TinyStories" |
+| C | ~25-40M su enwik8/FineWeb-Edu bytes, 2 bracci × 2 seed | 15-40 $ | "artefatto della scala 7M" |
+| D | ~100M su BabyLM, baseline riaddestrata da noi | 200-600 $ | il claim a scala udibile |
+
+**Parità del passo A (pre-registrata).** La legge di letteratura (Zoology/Based) è
+recall ∝ *dimensione dello stato ricorrente*, non ∝ parametri: il braccio mamba dichiara
+ENTRAMBE le grandezze (parametri e byte di stato per layer); se divergono oltre ~2×,
+cella extra a parità di stato (d_state regolato). Apparato MQAR congelato: stesse celle,
+3k step, OneCycle, 2 seed, accuracy sulle risposte.
+
+**Perché.** Le due leggi MQAR e la divisione del lavoro sono misurate solo a 1-7M su
+dati sintetici/TinyStories; la convergenza SOTA sugli ibridi (Jamba/Zamba/Qwen3-Next/
+Kimi Linear) dice che il recall è il punto debole dei ricorrenti puri — il confronto col
+meccanismo vincente del campo (selettività alla Mamba) è la prima domanda di qualunque
+reviewer, e va fatto nel nostro apparato (D5-baseline-nostra).
+
+**Scartato.** Partire da D (100M/BabyLM): la scommessa più cara al buio — 200-600 $ per
+un verdetto che A+B possono anticipare a ~8 $. Citare numeri MQAR di letteratura come
+confronto: setup incommensurabili (vocab, seq, attention, step), viola D5.
+
+**Riconsiderare se.** A o B falsificano → si ridimensiona il claim e la scala si ferma
+lì (esito dichiarato nel paper, non nascosto); BabyLM resta ultimo perché il suo asse è
+token/parole: entrarci è un fork dichiarato dell'apparato D3-tokenizer.
+
+---
+
 ## Questioni aperte (fase di design, in corso)
 
 - (nessuna — Q3-granularità chiusa in D15-stadio-char)
