@@ -1064,6 +1064,34 @@ confronto: setup incommensurabili (vocab, seq, attention, step), viola D5.
 lì (esito dichiarato nel paper, non nascosto); BabyLM resta ultimo perché il suo asse è
 token/parole: entrarci è un fork dichiarato dell'apparato D3-tokenizer.
 
+**Trail diagnostica passo A (2026-08-24, 4080).** Il braccio mamba (S6 minimale,
+1,06M param, stato 4096 float/layer vs 512 nostro, parità dichiarata) NON impara il
+recall in nessuna configurazione provata — resta sulla marginale ln(120), accuracy
+0,008-0,011 = caso, mentre lti nella stessa cella fa 0,22 (seq 256) e 0,36 (seq 64):
+
+| Ipotesi | Test | Esito |
+|---|---|---|
+| bug scan | forward E backward vs oracolo sequenziale fp64 | corretti (diff ~1e-10) |
+| lr | 3e-4 / 1e-3 / 3e-3 / 1e-2, run piene | tutte al caso |
+| init dt (orizzonte) | dt∈[0,01;1] (scrittura ~10× più udibile) | caso |
+| bypass MLP | variante pure: 8 blocchi canonici senza MLP | caso |
+| tempo di fuga | 10.000 step | caso |
+| rumore continuo | cella quasi pulita seq=64 (lti: 0,36) | caso (0,0105) |
+| il nostro codice | implementazione di riferimento (mamba-minimal, scan sequenziale) | caso (0,0098) |
+
+Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
+gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
+blocco S6 all'init è quasi trasparente (guadagno ~50× sotto gli oscillatori risonanti)
+e il gradiente del recall parte affamato ~1000×. La cura-init che salvò il gate qui
+NON basta: non è (solo) orizzonte, è fame strutturale del percorso di stato nel nostro
+protocollo. Tensione con la letteratura dichiarata apertamente: Zoology/Based riportano
+Mamba che risolve MQAR — con sweep lr per cella e training più lungo su dataset finito;
+non riproduciamo il loro claim, ne registriamo la non-replicazione NEL NOSTRO protocollo
+congelato (3k step, OneCycle, on-the-fly). Il segno si dichiara: sul nostro banco la
+selettività S6 parte svantaggiata rispetto allo stato oscillatorio, e il confronto
+gate-vs-mamba della griglia A è sospeso finché il braccio non ha una configurazione
+che apprende (griglia con un braccio morto = informazione nulla).
+
 ---
 
 ## Questioni aperte (fase di design, in corso)
