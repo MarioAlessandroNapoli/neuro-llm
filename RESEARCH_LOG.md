@@ -1108,6 +1108,14 @@ impara mai il binding associativo su byte; gli stack oscillatori lo imparano tut
 (10-17× il caso), nonostante lo stato 8× di S6.** Prossimo: griglia v2 (proposta
 all'utente) e riscrittura Results IV sui numeri puliti.
 
+**Emendamento protocollo v2: 10k step, non 3k (2026-08-24, sonda di convergenza su
+obiezione dell'utente).** A 3k con OneCycle la lr è annealata → piatto per costruzione
+(lezione B2: traiettoria ≠ capacità). Sonda 256/8 a 10k: gate 0,1436 (=3k), ts 0,1472
+(≈3k), **lti 0,1150 vs 0,0835 (+38%: il CONTROLLO a 3k non è convergiuto)** — un
+controllo sottostimato gonfia il valore apparente dei meccanismi. Griglia v2 rilanciata
+a 10k per tutti i bracci (uniformità); il confronto v1/v2 sui numeri resta valido solo
+a parità di step, dichiarato.
+
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
 blocco S6 all'init è quasi trasparente (guadagno ~50× sotto gli oscillatori risonanti)
