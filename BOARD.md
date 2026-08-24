@@ -13,14 +13,12 @@ giudice in corso, poi distruggere).
 
 - **Scrittura stadio char / paper v0.3**: sezioni I-IV complete con numeri veri;
   mancano appendici A-E, 2 figure (spettri τ per layer, autopsia gate), bibitem \todo
-- **Scala di rischio D18** (decisa 2026-08-24): validazione esterna a gradini
-  A→B→C→D — dettaglio in RESEARCH_LOG § D18. Primo gradino pronto: braccio mamba
-  in MQAR (attesa conferma lancio)
+- **Scala di rischio D18** (2026-08-24): **passo A CHIUSO** — banco v2 senza
+  scorciatoia, protocollo 10k; tre leggi confermate a 2 seed; S6 mai binding in
+  12 config (trail completa in D18). Prossimo gradino: B
 
 ## Next
 
-- **D18 passo A — braccio mamba in MQAR** (1-2 $): S6 minimale in scripts/mqar.py,
-  parità parametri + stato dichiarate entrambe, stesse celle, 2 seed
 - **D18 passo B — R1-enwik8** (3-6 $): cb vs gate ~7M su dati reali; prima le
   domande dell'utente (in attesa dal 21/08)
 - **Giudice ufficiale best-4** (cb/hard/osc0/ts @B2, Elo 6 coppie): cache
