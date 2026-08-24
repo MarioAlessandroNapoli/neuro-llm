@@ -1096,7 +1096,12 @@ memoria dell'insieme attraverso il rumore: ts 0,347 vs gate 0,072 a 1024 resta
 differenza reale di memoria) e a nkv=32 il gate 0,152 SUPERA il tetto H₃₂/32=0,127 →
 lì c'è binding vero; (c) la sezione Results IV del paper è IN REVISIONE fino ai numeri
 v2. **Fix v2** (commit 02c3951): segnaposto (byte 0) al posto dell'eco del valore —
-geometria identica, scorciatoia impossibile. Pilota v2 sui 4 bracci in corso.
+geometria identica, scorciatoia impossibile. **Pilota v2 (nkv=8, seq=256, s1)**:
+gate 0,1443 · ts 0,1423 · lti 0,0835 (binding vero, 10-17× il caso, col protocollo
+3k/on-the-fly) — mamba con la ricetta Zoology crolla a 0,0129 ≈ caso: memorizza il
+train al 96% e generalizza zero (lookup-table). Il suo 0,345 su v1 era interamente
+la scorciatoia (l'eliminazione generalizza, il binding no). In coda: ultima chance
+equa a 100k esempi/20k step, poi verdetto del passo A sul banco pulito.
 
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
