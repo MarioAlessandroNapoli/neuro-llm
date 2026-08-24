@@ -125,27 +125,29 @@ class S6Mixer(nn.Module):
 class MambaBlock(nn.Module):
     """Gemello di OscBlock (stessa LN/MLP): cambia solo il mixer."""
 
-    def __init__(self, cfg, d_state, dt_min=0.001, dt_max=0.1):
+    def __init__(self, cfg, d_state, dt_min=0.001, dt_max=0.1, mlp=True):
         super().__init__()
         self.ln1 = nn.LayerNorm(cfg.d_model)
-        self.ln2 = nn.LayerNorm(cfg.d_model)
         self.mixer = S6Mixer(cfg.d_model, d_state, dt_min=dt_min, dt_max=dt_max)
+        # Variante "pure" = canone Mamba: solo mixer, niente MLP (che nel nostro
+        # scheletro è un bypass per fittare la marginale senza usare lo stato)
+        self.ln2 = nn.LayerNorm(cfg.d_model) if mlp else None
         self.mlp = nn.Sequential(
             nn.Linear(cfg.d_model, 4 * cfg.d_model),
             nn.GELU(),
             nn.Linear(4 * cfg.d_model, cfg.d_model),
-        )
+        ) if mlp else None
 
     def forward(self, x):
         x = x + self.mixer(self.ln1(x))
-        return x + self.mlp(self.ln2(x))
+        return x + self.mlp(self.ln2(x)) if self.mlp else x
 
 
 class RecStack(nn.Module):
     """Stack ricorrente puro: emb + n OscBlock + head. Nessuna attention."""
 
     def __init__(self, arm, d_model=128, m=256, n_layer=4, gate_bias=None,
-                 d_state=16, dt_min=0.001, dt_max=0.1):
+                 d_state=16, dt_min=0.001, dt_max=0.1, pure=False):
         super().__init__()
         cfg = ModelConfig(vocab_size=VOCAB, d_model=d_model, n_layer=n_layer,
                           n_head=1, seq_len=8192)
@@ -154,8 +156,10 @@ class RecStack(nn.Module):
         self.state_per_layer = (2 * d_model * d_state if arm == "mamba" else 2 * m)
 
         if arm == "mamba":
+            # pure: 8 blocchi solo-mixer (canone Mamba), stessa parità ~1,0M
             self.blocks = nn.ModuleList(
-                MambaBlock(cfg, d_state, dt_min, dt_max) for _ in range(n_layer))
+                MambaBlock(cfg, d_state, dt_min, dt_max, mlp=not pure)
+                for _ in range(8 if pure else n_layer))
             self.ln_f = nn.LayerNorm(d_model)
             self.head = nn.Linear(d_model, VOCAB, bias=False)
             return
@@ -207,6 +211,7 @@ def main():
     parser.add_argument("--d-state", type=int, default=16)
     parser.add_argument("--dt-min", type=float, default=0.001)
     parser.add_argument("--dt-max", type=float, default=0.1)
+    parser.add_argument("--pure", action="store_true")
     parser.add_argument("--n-kv", type=int, default=16)
     parser.add_argument("--seq", type=int, default=512)
     parser.add_argument("--steps", type=int, default=3000)
@@ -225,7 +230,7 @@ def main():
     rng = torch.Generator().manual_seed(args.seed)
     model = RecStack(args.arm, args.d_model, args.m, gate_bias=args.gate_bias,
                      d_state=args.d_state, dt_min=args.dt_min,
-                     dt_max=args.dt_max).to(device)
+                     dt_max=args.dt_max, pure=args.pure).to(device)
     if args.compile:
         model = torch.compile(model)
     n_par = sum(p.numel() for p in model.parameters())
@@ -250,8 +255,8 @@ def main():
                            bs=args.bs)
             print(f"  step {step}: loss {loss.item():.3f} acc {acc:.3f}")
     acc = evaluate(model, args.n_kv, args.seq, device, rng)
-    tag = (f"mamba-N{args.d_state}-dt{args.dt_max:g}" if args.arm == "mamba"
-           else args.arm)
+    tag = (f"mamba{'p' if args.pure else ''}-N{args.d_state}-dt{args.dt_max:g}"
+           if args.arm == "mamba" else args.arm)
     print(f"FINALE {tag} n_kv={args.n_kv} seq={args.seq} seed={args.seed}: "
           f"accuracy {acc:.4f}")
 
