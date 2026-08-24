@@ -1116,6 +1116,18 @@ controllo sottostimato gonfia il valore apparente dei meccanismi. Griglia v2 ril
 a 10k per tutti i bracci (uniformità); il confronto v1/v2 sui numeri resta valido solo
 a parità di step, dichiarato.
 
+**Griglia v2 COMPLETA (2026-08-24 sera, 34 run, figura
+`docs/figures/2026-08-mqar-v2{,-en}.png`).** Medie 2 seed, accuracy su dati freschi:
+seq=256 → lti 0,118/0,062/0,031 · ts 0,143/0,075/0,041 · gate **0,146/0,098/0,065**
+per nkv=8/16/32; seq=1024 → lti 0,073/0,020 · ts **0,141**/0,034 · gate−4 0,027/0,020
+· gate−8 0,123/**0,053** per nkv=8/32. **Le tre leggi sopravvivono a banco pulito +
+convergenza + 2 seed**: (1) gate/ts sale 1,02→1,31→1,59 monotono su entrambi i seed;
+(2) gate−4 collassa a 1024, la cura −8 lo riporta 4,5×; (3) a distanza il curato
+incrocia ts col carico (0,123 vs 0,141 a nkv8 · 0,053 vs 0,034 a nkv32). Bonus: ts a
+nkv=8 non perde nulla da 256 a 1024 (0,143→0,141) — le bande attraversano 900 byte di
+rumore quasi gratis. Caveat: spread tra seed più ampio a 1024 (lti 0,100/0,047;
+gate−4 0,007/0,047 — varianza di fuga a distanza); a 256 spread ≤0,008.
+
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
 blocco S6 all'init è quasi trasparente (guadagno ~50× sotto gli oscillatori risonanti)
@@ -1179,7 +1191,8 @@ che apprende (griglia con un braccio morto = informazione nulla).
 | fC1-rel-1 | 2026-08-21 | char-transformer-rel | 6,40M | 700M byte | 1 | 0,7571 | **C1, controllo alla Segatron: la coordinata distanza-dal-confine esplicita da sola fa 0,757** — sblocca la transizione (vs nopos 1,45/2,04) ma resta a 0,33 da hard: il reset è coordinata + dinamica di oblio selettivo, non solo PE implicito |
 | fB2-ts-1 | 2026-08-21 | char-hyb-ts | 6,39M | 2,2B byte | 1 | 0,3991 | Asintoto B2: **ts scivola ultimo** (+0,005 da hard, +0,011 da cb) — la parità a 700M era effetto di traiettoria (bande che guidano la transizione e muoiono), come predetto dall'autopsia spettrale. 32-true |
 | judge-s1 | 2026-08-20 | as-t1 vs as-h1 | — | — | 1 | — | **Giudizio cieco D14** (non training): 188 giudici Opus 5 in-sessione, doppio ordine. t 82 · h 77 · tie 29 (p=0,75); prompt netti 28 vs 30 (p=0,90) → **parità qualitativa, conferma la loss**. Preliminare (1 coppia, 536M). Artefatti: eval/judgments/elo-536M-s1.* |
-| mqar-grid | 2026-08-21 | RecStack 4×OscBlock (lti/ts/gate) | 1,09M | 3k step × 53 run | 1-2 | — (accuracy) | **MQAR D17**, 4070S: griglia 3 bracci × n_kv {8,16,32,64} × seq {256,1024} × 2 seed + cura bias −8 (5 run). Verdetti nel blocco MQAR di D17; figura docs/figures/2026-08-mqar. Log integrale /tmp/mqar.log sul box (distrutto a fine giornata) |
+| mqar-grid | 2026-08-21 | RecStack 4×OscBlock (lti/ts/gate) | 1,09M | 3k step × 53 run | 1-2 | — (accuracy) | **MQAR v1 D17**, 4070S. ATTENZIONE: banco v1 con scorciatoia a eliminazione (D18) — numeri gonfiati di ~H_n/n, superseded dalla griglia v2; restano valide le letture di persistenza |
+| mqar-v2 | 2026-08-24 | RecStack (lti/ts/gate) + trail mamba/S6 | 0,86-1,09M | 10k step × 34 run (+~25 sonde diagnostiche) | 1-2 | — (accuracy fresh) | **MQAR v2 D18-A**, 4080, W&B group mqar: banco senza scorciatoia, 10k step (emendamento convergenza). Le 3 leggi confermate; S6 mai binding in 12 config. Figura docs/figures/2026-08-mqar-v2 |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo
