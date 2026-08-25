@@ -1234,6 +1234,23 @@ fallback FineWeb-Edu bytes, dichiarato; la ricetta 15M instabile allo sweep pilo
 si scende a 7M; la schermatura uccide anche l'intercalato → stop scala, indagine
 dedicata (ordine dei layer, curriculum, freeze parziali).
 
+**Emendamenti post ultracode review (2026-08-25, 30 finding confermati, PRIMA di
+ogni run).** (a) **σ del ginocchio**: non da una coppia sola (1 gdl, instabile di
+un ordine di grandezza nel registro char) ma **pooled sulle 4 coppie di braccio**,
+√(Σd_i²/8), 4 gdl — questa è la σ della soglia "entro 2σ". (b) **Engine dichiarati**:
+i 3 bracci osc hanno θ≡0 → `requires_fp32` cablato in config e guard fail-loud in
+train (16-mixed = NaN documentato, registro fB-hard); piano: smoke bf16-mixed su
+d19-osc8 (esponente fp32, mai validato perché la T4 non ha bf16) e se regge si usa
+per tutti, altrimenti 32-true+TF32; cb può girare 16-mixed come nello stadio char
+(engine per braccio dichiarato, come in C1). (c) **Ricetta**: b16@1e-2 esplicita
+(la ricetta char, non il default b32), NEURO_SCAN=hoo + --compile obbligatori nel
+runner. (d) **Dati**: revision HF pinnata + meta.json (sha256 dei bin) accanto ai
+dati; split valid/train per hash del documento, non per posizione dello stream.
+(e) **Fix pre-lancio**: prefill vietato sui layout interleaved (calcolava una rete
+diversa dal training, Δ=14,7 sui logits — la campagna giudice sui mix genererà col
+forward pieno); riferimento parità corretto pos-incluso (cb 0,00%, bracci entro
+±4%); autopsia del gate attraversa i blocchi attention invece di fermarsi.
+
 **Orizzonte D (rotta edge, per memoria).** Se la curva regge ai gradini C: 150M sul
 mix vincente (10-30B byte Nemotron-HQ, 500-2.000 $), quantizzazione int8 dello scan,
 kernel ggml, e la prova pubblica "retention per MB di RAM" contro la classe

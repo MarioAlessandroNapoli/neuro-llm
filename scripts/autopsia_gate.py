@@ -56,8 +56,10 @@ def main():
           f"quota byte-confine nel testo: {is_boundary.float().mean():.3f})")
     x = model.tok(idx)
     for li, blk in enumerate(model.blocks):
-        if not isinstance(blk, OscBlock):
-            break
+        # layout interleaved (D19): i blocchi attention si attraversano, non fermano
+        if not isinstance(blk, OscBlock) or blk.mixer.gate_conv is None:
+            x = blk(x)
+            continue
         mx = blk.mixer
         u = blk.ln1(x)
         p = torch.sigmoid(mx.gate_conv(u.transpose(1, 2))[..., :SEQ]).transpose(1, 2)

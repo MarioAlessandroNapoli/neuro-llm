@@ -120,8 +120,16 @@ def main():
     parser.add_argument("--compile", action="store_true", help="torch.compile del modello (solo CUDA)")
     args = parser.parse_args()
 
+    # TF32 sui tensor core per le run 32-true: stesso esponente di fp32, la fisica
+    # DC-resonance (range, non mantissa) non si riapre; sotto mixed è innocuo.
+    torch.set_float32_matmul_precision("high")
     L.seed_everything(args.seed, workers=True)
     model, cfg = build_model(args.arch)
+    if cfg.requires_fp32 and args.precision == "16-mixed":
+        raise SystemExit(
+            f"{args.arch}: braccio θ≡0/bande lente — 16-mixed è NaN documentato "
+            "(registro fB-hard/fC1-ts). Usare --precision 32-true (validata) o "
+            "bf16-mixed (esponente fp32, da validare con smoke)")
     if args.compile:
         model.compile()  # in place: le chiavi dello state_dict restano pulite
     lr_tag = f"{args.lr:.0e}".replace("e-0", "e-")

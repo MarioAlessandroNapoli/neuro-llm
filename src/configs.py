@@ -19,8 +19,9 @@ CHAR_EOT_BYTE = 0
 CHAR_BOUNDARY_BYTES = tuple(b" .,!?\"'\n:;") + (CHAR_EOT_BYTE,)
 CHAR_BASELINE_BACKBONE_PARAMS = 6_842_880
 CHAR_PARITY_TOL = 0.10
-# D19 (classe 15M, llama2.c): backbone del cb a d_model 384, misurato 2026-08-25
-D19_BASELINE_BACKBONE_PARAMS = 14_196_480
+# D19 (classe 15M, llama2.c): backbone del cb a d_model 384, POS EMB INCLUSO come
+# lo misura train.py (regola D6). Misurato 2026-08-25, corretto in review.
+D19_BASELINE_BACKBONE_PARAMS = 14_982_912
 
 
 @dataclass
@@ -35,6 +36,9 @@ class ModelConfig:
     rel_pos: bool = False  # C1 cb-rel (D17): pos emb indicizzato dalla distanza dal confine
     parity_ref: int = BASELINE_BACKBONE_PARAMS
     parity_tol: float = PARITY_TOL
+    # Fisica del NaN (registro fB-hard/fC1-ts): θ≡0 o bande lente risuonano a DC con
+    # guadagno (1-r)^-2 e saturano fp16 FUORI dallo scan (già fp32). fp16 vietato.
+    requires_fp32: bool = False
 
 
 @dataclass

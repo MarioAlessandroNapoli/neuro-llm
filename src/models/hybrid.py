@@ -74,6 +74,7 @@ class CharHybConfig(HybridOALPConfig):
 class CharHybHardConfig(CharHybConfig):
     reset: bool = True
     no_rotation: bool = True  # θ≡0: reset sì, oscillazione no → chunking puro
+    requires_fp32: bool = True
 
 
 @dataclass
@@ -87,6 +88,7 @@ class CharHybHeuConfig(CharHybConfig):
     # Se hard-appreso non batte questo, il gate è un rilevatore di spazi (SOMBRERO).
     no_rotation: bool = True
     heuristic_reset: bool = True
+    requires_fp32: bool = True
 
 
 @dataclass
@@ -94,6 +96,7 @@ class CharHybTsConfig(CharHybConfig):
     # C1 (D17): gerarchia di sole timescale senza reset (baseline Harmonic-style) —
     # lti con init dei ν per layer su bande τ scalate 8×.
     ts_hierarchy: bool = True
+    requires_fp32: bool = True
 
 
 @dataclass
@@ -111,11 +114,13 @@ class D19MixConfig(CharHybHardConfig):
 @dataclass
 class D19Mix2Config(D19MixConfig):
     attn_positions: tuple = (3, 7)
+    n_osc: int = 6
 
 
 @dataclass
 class D19Mix4Config(D19MixConfig):
     attn_positions: tuple = (1, 3, 5, 7)
+    n_osc: int = 4
 
 
 @dataclass
@@ -152,6 +157,14 @@ class Hybrid(nn.Module):
                             heuristic_reset=cfg.heuristic_reset)
 
         if cfg.attn_positions:
+            if cfg.ts_hierarchy:
+                raise ValueError(
+                    "attn_positions + ts_hierarchy: semantica delle bande non "
+                    "definita (indici per posizione, non per oscillatore)")
+            n_osc_eff = cfg.n_layer - len(cfg.attn_positions)
+            if cfg.n_osc != n_osc_eff:
+                raise ValueError(f"n_osc={cfg.n_osc} incoerente col layout "
+                                 f"interleaved ({n_osc_eff} osc reali)")
             self.blocks = nn.ModuleList(
                 Block(cfg) if p in cfg.attn_positions else osc_block(p)
                 for p in range(cfg.n_layer)
@@ -191,8 +204,11 @@ class Hybrid(nn.Module):
     @torch.no_grad()
     def prefill(self, idx):
         """→ (logits ultima posizione (b,V), cache)."""
-        if not self.cfg.osc_first or self.pos is not None:
-            raise NotImplementedError("prefill: solo ibridi osc-first senza pos emb")
+        if not self.cfg.osc_first or self.pos is not None or self.cfg.attn_positions:
+            raise NotImplementedError(
+                "prefill: solo ibridi osc-first contigui senza pos emb — il layout "
+                "interleaved (attn_positions) qui calcolerebbe una rete diversa dal "
+                "training; per i bracci D19 mix generare col forward pieno")
         from .linoss import RESET_KERNEL
         x = self.tok(idx)
         boundary = self.boundary_lut[idx].to(x.dtype) if self.cfg.heuristic_reset else None
