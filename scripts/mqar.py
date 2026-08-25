@@ -180,7 +180,7 @@ class RecStack(nn.Module):
 
     def __init__(self, arm, d_model=128, m=256, n_layer=4, gate_bias=None,
                  d_state=16, dt_min=0.001, dt_max=0.1, pure=False,
-                 attn_top=False):
+                 attn_top=0):
         super().__init__()
         cfg = ModelConfig(vocab_size=VOCAB, d_model=d_model, n_layer=n_layer,
                           n_head=1, seq_len=8192)
@@ -209,9 +209,10 @@ class RecStack(nn.Module):
                      no_rotation=arm in ("gate", "tsgate"))
             for i in range(n_layer)
         ]
-        if attn_top:
-            # Sonda retrieval (predizione pre-registrata in D18): un solo layer di
-            # attention sopra lo stack deve sfondare il soffitto di binding
+        # Sonda retrieval (D18): N layer di attention sopra lo stack. La predizione
+        # pre-registrata (1 layer sfonda) è stata FALSIFICATA; il circuito minimo
+        # di induction richiede 2 layer — attn_top è un conteggio.
+        for _ in range(attn_top):
             blocks.append(AttnBlock(d_model))
         self.blocks = nn.ModuleList(blocks)
         if gate_bias is not None:
@@ -247,7 +248,7 @@ def main():
     parser.add_argument("--arm", choices=["lti", "ts", "gate", "gaterot", "tsgate",
                                           "mamba"], required=True)
     parser.add_argument("--save-ckpt", action="store_true")
-    parser.add_argument("--attn-top", action="store_true")
+    parser.add_argument("--attn-top", type=int, default=0)
     parser.add_argument("--d-state", type=int, default=16)
     parser.add_argument("--dt-min", type=float, default=0.001)
     parser.add_argument("--dt-max", type=float, default=0.1)
@@ -290,7 +291,7 @@ def main():
     if args.gate_bias is not None:
         tag += f"-gb{args.gate_bias:g}"
     if args.attn_top:
-        tag += "-attn"
+        tag += f"-attn{args.attn_top}"
     if args.n_train:
         tag += f"-ft{args.n_train // 1000}k"
     wb = None

@@ -1160,6 +1160,13 @@ nostro apparato). Simmetria con lo stadio char: l'attention non serve per la POS
 su entrambi i lati. Predizione falsificabile per il paper: un solo layer di attention
 sopra lo stack oscillatorio deve sfondare il soffitto (→ eventuale sonda).
 
+**Predizione FALSIFICATA (2026-08-25): 1 layer di attention non sfonda** — tsgate+attn
+0,146/0,069 vs 0,151/0,066 senza. Dichiarato. Raffinamento: il circuito minimo di
+retrieval (induction) richiede 2 layer — il primo aggrega chiave+valore nella stessa
+posizione, il secondo fa il match; l'ipotesi che gli oscillatori facessero il lavoro
+del primo era sbagliata. Sonda a 2 layer in corso: se sfonda → "serve il circuito
+completo"; se no → il collo è nella SCRITTURA nello stato oscillatorio.
+
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
 blocco S6 all'init è quasi trasparente (guadagno ~50× sotto gli oscillatori risonanti)
