@@ -1167,6 +1167,22 @@ posizione, il secondo fa il match; l'ipotesi che gli oscillatori facessero il la
 del primo era sbagliata. Sonda a 2 layer in corso: se sfonda → "serve il circuito
 completo"; se no → il collo è nella SCRITTURA nello stato oscillatorio.
 
+**Chiusura della saga del soffitto (2026-08-25 sera): due regimi, tre finding.**
+Anche 2 layer di attention sopra lo stack NON sfondano (0,148/0,067 ≈ baseline). Il
+controllo mancante dalla nascita del banco — transformer puro (emb+PE+4 AttnBlock,
+1,9M param) — dà il verdetto: (1) **a carico basso (256/8) fa 1,0000 esatto** — il
+banco è validato, nessun cap nascosto, e il soffitto 0,151 dei ricorrenti è
+STRUTTURALE della ricorrenza (lettura non chiave-condizionata); (2) **SCHERMATURA**:
+la stessa attention che da sola fa 1,0, sopra lo stack resta a 0,148 — la soluzione
+parziale dei ricorrenti (0,151) toglie al gradiente la pressione per la transizione
+di fase delle induction head: interferenza di ottimizzazione tra meccanismi, misurata
+(spiega anche perché negli ibridi char l'attention convive senza dominare); (3)
+**a carico alto (256/32) crollano TUTTI**: transformer 0,056/0,038/0,072 su 3 lr ≈
+gate 0,065 ≈ tsgate 0,066 — il muro da carico a questa taglia non è del meccanismo,
+è della scala; lì il gate ricorrente EGUAGLIA l'attention. Le leggi comparative tra
+ricorrenti (selettività sotto carico, orizzonte, composizione) restano intatte:
+vivono nel confronto interno, non contro l'attention. Caveat: sonde a 1 seed.
+
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
 blocco S6 all'init è quasi trasparente (guadagno ~50× sotto gli oscillatori risonanti)
