@@ -40,7 +40,7 @@ def autopsia(path, device):
     for i, blk in enumerate(model.blocks):
         r = torch.exp(-blk.mixer.nu_raw.detach().exp()).flatten()
         tau = -1 / torch.log(r.clamp(max=0.999999))
-        q = torch.quantile(tau, torch.tensor([0.1, 0.5, 0.9]))
+        q = torch.quantile(tau, torch.tensor([0.1, 0.5, 0.9], device=tau.device))
         print(f"  layer {i}: tau p10/50/90 = {q[0]:.1f}/{q[1]:.1f}/{q[2]:.1f}, "
               f"canali tau>500: {(tau > 500).sum().item()}/{len(tau)}")
 
