@@ -1198,6 +1198,49 @@ che apprende (griglia con un braccio morto = informazione nulla).
 
 ---
 
+## D19 — Curva di sostituzione a 15M su Nemotron-CC-HQ (2026-08-25)
+
+**Decisione.** Il passo B della scala D18 diventa la *curva di sostituzione*: a parità
+~15M (classe llama2.c), 8 blocchi con rapporto oscillatori/attention variabile —
+**osc8** (8 osc-gate, 0 attn) · **mix2** (6+2) · **mix4** (4+4, config stadio char) ·
+**cb** (8 attn, baseline) — × 2 seed, byte-level, seq 2048, ~300M byte dal tier
+high-quality di **Nemotron-CC** (dati e ricetta aperti NVIDIA; stessa famiglia dati
+per tutti i gradini successivi C/D). Metriche, in ordine di verdetto: (1) val BPB;
+(2) estrapolazione 4k/8k; (3) **ablazione del contesto** = Δloss per posizione con
+contesto pieno vs troncato — la retention misurata in nats per distanza; (4) autopsia
+di tutti i checkpoint. **Pre-registrazioni**: (a) soglia del ginocchio — "k layer di
+attention bastano" se mix_k è entro 2σ da cb in BPB E la sua retention ≥ cb (σ dai
+seed pair a questa scala, misurata prima del verdetto); (b) schermatura — su MQAR
+l'attention SOPRA lo stack non impara il retrieval: qui è intercalata; se anche
+intercalata resta inerte (mix2 ≈ osc8 ovunque), la schermatura è la spiegazione
+candidata e va indagata prima di ogni scala ulteriore. Budget: 10-20 $ + mezza
+giornata di data prep (script streaming HF → formato byte nostro, riusabile per C/D).
+
+**Perché.** Le tre domande dell'utente (scala della retention, confronto SOTA, mix
+da inseguire) convergono in un solo esperimento; il confronto SOTA legittimo è a
+livello di design point (i rapporti attention/ricorrenza dei tiny ibridi prod) e
+Nemotron-CC è il corpus con cui NVIDIA addestra i propri ibridi Mamba+attention
+(Nemotron-H): stesso terreno dati del SOTA di categoria. Byte-level confermato
+dall'evidenza interna: su token (stadio 1) i nostri bracci fanno solo parità; tutto
+il raccolto è arrivato sui byte, dove il gate ha confini da imparare.
+
+**Scartato.** enwik8 (àncora solo psicologica — D5 vieta baseline di terzi — contro
+il costo del confound dataset-diverso tra i gradini); tornare ai token ora (evidenza
+interna sopra; resta il passo-ponte in Later: replica token-level della sola curva se
+il ginocchio esiste); cb-vs-gate secco a 2 bracci (perde la domanda del mix).
+
+**Riconsiderare se.** La fetta Nemotron si rivela impraticabile (formato/licenza) →
+fallback FineWeb-Edu bytes, dichiarato; la ricetta 15M instabile allo sweep pilota →
+si scende a 7M; la schermatura uccide anche l'intercalato → stop scala, indagine
+dedicata (ordine dei layer, curriculum, freeze parziali).
+
+**Orizzonte D (rotta edge, per memoria).** Se la curva regge ai gradini C: 150M sul
+mix vincente (10-30B byte Nemotron-HQ, 500-2.000 $), quantizzazione int8 dello scan,
+kernel ggml, e la prova pubblica "retention per MB di RAM" contro la classe
+SmolLM/Gemma-270M — stato O(1) = la dimensione dove i transformer non possono seguire.
+
+---
+
 ## Questioni aperte (fase di design, in corso)
 
 - (nessuna — Q3-granularità chiusa in D15-stadio-char)

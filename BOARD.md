@@ -19,8 +19,10 @@ giudice in corso, poi distruggere).
 
 ## Next
 
-- **D18 passo B — R1-enwik8** (3-6 $): cb vs gate ~7M su dati reali; prima le
-  domande dell'utente (in attesa dal 21/08)
+- **D19 — Curva di sostituzione** (design chiuso 2026-08-25, dettaglio nel log):
+  osc8/mix2/mix4/cb a 15M byte-level su Nemotron-CC-HQ ~300M byte, 2 seed; metriche
+  BPB + estrapolazione + ablazione del contesto + autopsia; schermatura e ginocchio
+  pre-registrati. Prerequisito: script data prep (streaming HF → byte). 10-20 $
 - **Giudice ufficiale best-4** (cb/hard/osc0/ts @B2, Elo 6 coppie): cache
   incrementale pronta; generazioni da rifare su GPU economica; canale da decidere
   (Batches con API key o in-sessione)
