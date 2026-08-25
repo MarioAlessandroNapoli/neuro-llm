@@ -149,11 +149,38 @@ class MambaBlock(nn.Module):
         return x + self.mlp(self.ln2(x)) if self.mlp else x
 
 
+class AttnBlock(nn.Module):
+    """Un layer di attention causale (sonda retrieval): stessa sagoma di OscBlock."""
+
+    def __init__(self, d_model, n_head=4):
+        super().__init__()
+        self.n_head = n_head
+        self.ln1 = nn.LayerNorm(d_model)
+        self.ln2 = nn.LayerNorm(d_model)
+        self.qkv = nn.Linear(d_model, 3 * d_model, bias=False)
+        self.proj = nn.Linear(d_model, d_model, bias=False)
+        self.mlp = nn.Sequential(
+            nn.Linear(d_model, 4 * d_model),
+            nn.GELU(),
+            nn.Linear(4 * d_model, d_model),
+        )
+
+    def forward(self, x):
+        b, t, d = x.shape
+        q, k, v = self.qkv(self.ln1(x)).chunk(3, dim=-1)
+        shape = (b, t, self.n_head, d // self.n_head)
+        q, k, v = (z.view(shape).transpose(1, 2) for z in (q, k, v))
+        y = F.scaled_dot_product_attention(q, k, v, is_causal=True)
+        x = x + self.proj(y.transpose(1, 2).reshape(b, t, d))
+        return x + self.mlp(self.ln2(x))
+
+
 class RecStack(nn.Module):
     """Stack ricorrente puro: emb + n OscBlock + head. Nessuna attention."""
 
     def __init__(self, arm, d_model=128, m=256, n_layer=4, gate_bias=None,
-                 d_state=16, dt_min=0.001, dt_max=0.1, pure=False):
+                 d_state=16, dt_min=0.001, dt_max=0.1, pure=False,
+                 attn_top=False):
         super().__init__()
         cfg = ModelConfig(vocab_size=VOCAB, d_model=d_model, n_layer=n_layer,
                           n_head=1, seq_len=8192)
@@ -176,17 +203,22 @@ class RecStack(nn.Module):
             lo, hi = TS_TAU_MIN * TS_TAU_FACTOR**i, TS_TAU_MIN * TS_TAU_FACTOR**(i + 1)
             return (math.exp(-1 / lo), math.exp(-1 / hi))
 
-        self.blocks = nn.ModuleList(
+        blocks = [
             OscBlock(cfg, m, damped=True, phi_init=False, log_polar=True,
                      ring=ring(i), reset=arm in ("gate", "gaterot", "tsgate"),
                      no_rotation=arm in ("gate", "tsgate"))
             for i in range(n_layer)
-        )
+        ]
+        if attn_top:
+            # Sonda retrieval (predizione pre-registrata in D18): un solo layer di
+            # attention sopra lo stack deve sfondare il soffitto di binding
+            blocks.append(AttnBlock(d_model))
+        self.blocks = nn.ModuleList(blocks)
         if gate_bias is not None:
             # Orizzonte di apprendibilità: all'init la memoria sopravvive a T byte di
             # rumore con fattore ~exp(-T·sigma(bias)) — il bias fissa l'orizzonte.
             for blk in self.blocks:
-                if blk.mixer.gate_conv is not None:
+                if isinstance(blk, OscBlock) and blk.mixer.gate_conv is not None:
                     nn.init.constant_(blk.mixer.gate_conv.bias, gate_bias)
         self.ln_f = nn.LayerNorm(d_model)
         self.head = nn.Linear(d_model, VOCAB, bias=False)
@@ -215,6 +247,7 @@ def main():
     parser.add_argument("--arm", choices=["lti", "ts", "gate", "gaterot", "tsgate",
                                           "mamba"], required=True)
     parser.add_argument("--save-ckpt", action="store_true")
+    parser.add_argument("--attn-top", action="store_true")
     parser.add_argument("--d-state", type=int, default=16)
     parser.add_argument("--dt-min", type=float, default=0.001)
     parser.add_argument("--dt-max", type=float, default=0.1)
@@ -242,7 +275,8 @@ def main():
     rng = torch.Generator().manual_seed(args.seed)
     model = RecStack(args.arm, args.d_model, args.m, gate_bias=args.gate_bias,
                      d_state=args.d_state, dt_min=args.dt_min,
-                     dt_max=args.dt_max, pure=args.pure).to(device)
+                     dt_max=args.dt_max, pure=args.pure,
+                     attn_top=args.attn_top).to(device)
     raw_model = model
     if args.compile:
         model = torch.compile(model)
@@ -255,6 +289,8 @@ def main():
            if args.arm == "mamba" else args.arm)
     if args.gate_bias is not None:
         tag += f"-gb{args.gate_bias:g}"
+    if args.attn_top:
+        tag += "-attn"
     if args.n_train:
         tag += f"-ft{args.n_train // 1000}k"
     wb = None
