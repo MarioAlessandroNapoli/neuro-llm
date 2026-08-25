@@ -13,7 +13,7 @@ import torch.nn as nn
 
 from ..configs import (
     CHAR_BASELINE_BACKBONE_PARAMS, CHAR_BOUNDARY_BYTES, CHAR_PARITY_TOL,
-    CHAR_SEQ_LEN, CHAR_VOCAB, ModelConfig,
+    CHAR_SEQ_LEN, CHAR_VOCAB, D19_BASELINE_BACKBONE_PARAMS, ModelConfig,
 )
 from .linoss import RING_R_MAX, RING_R_MIN, OscBlock
 from .transformer import Block
@@ -35,6 +35,10 @@ class HybridOAConfig(ModelConfig):
     no_rotation: bool = False
     heuristic_reset: bool = False
     ts_hierarchy: bool = False
+    # D19: posizioni dei blocchi attention nello stack (interleaved). Vuoto = layout
+    # contiguo storico (osc_first/n_osc). La schermatura MQAR è la ragione
+    # dell'interleaving: attention SOPRA lo stack non impara il retrieval.
+    attn_positions: tuple = ()
 
 
 @dataclass
@@ -93,6 +97,28 @@ class CharHybTsConfig(CharHybConfig):
 
 
 @dataclass
+class D19MixConfig(CharHybHardConfig):
+    # D19 (curva di sostituzione, classe 15M): 8 blocchi d_model 384, m=2·d (parità
+    # col blocco attention per costruzione), osc = gate appreso (vincitore char),
+    # attention interleaved uniformemente, niente pos emb (posizione dagli osc).
+    d_model: int = 384
+    m: int = 768
+    n_osc: int = 8
+    parity_ref: int = D19_BASELINE_BACKBONE_PARAMS
+    attn_positions: tuple = ()
+
+
+@dataclass
+class D19Mix2Config(D19MixConfig):
+    attn_positions: tuple = (3, 7)
+
+
+@dataclass
+class D19Mix4Config(D19MixConfig):
+    attn_positions: tuple = (1, 3, 5, 7)
+
+
+@dataclass
 class CharOsc0Config(HybridOALPConfig):
     # Fase A griglia char (D16): banco oscillatorio al layer 0 come codice di posizione,
     # 7 layer di attention SENZA position embedding sopra.
@@ -119,11 +145,21 @@ class Hybrid(nn.Module):
             lo, hi = TS_TAU_MIN * TS_TAU_FACTOR**i, TS_TAU_MIN * TS_TAU_FACTOR**(i + 1)
             return (math.exp(-1 / lo), math.exp(-1 / hi))
 
-        osc = [OscBlock(cfg, cfg.m, damped=True, phi_init=False, log_polar=cfg.log_polar,
-                        ring=ring(i), reset=cfg.reset, no_rotation=cfg.no_rotation,
-                        heuristic_reset=cfg.heuristic_reset) for i in range(n_osc)]
-        attn = [Block(cfg) for _ in range(cfg.n_layer - n_osc)]
-        self.blocks = nn.ModuleList(osc + attn if cfg.osc_first else attn + osc)
+        def osc_block(i):
+            return OscBlock(cfg, cfg.m, damped=True, phi_init=False,
+                            log_polar=cfg.log_polar, ring=ring(i), reset=cfg.reset,
+                            no_rotation=cfg.no_rotation,
+                            heuristic_reset=cfg.heuristic_reset)
+
+        if cfg.attn_positions:
+            self.blocks = nn.ModuleList(
+                Block(cfg) if p in cfg.attn_positions else osc_block(p)
+                for p in range(cfg.n_layer)
+            )
+        else:
+            osc = [osc_block(i) for i in range(n_osc)]
+            attn = [Block(cfg) for _ in range(cfg.n_layer - n_osc)]
+            self.blocks = nn.ModuleList(osc + attn if cfg.osc_first else attn + osc)
         if cfg.heuristic_reset:
             lut = torch.zeros(cfg.vocab_size, dtype=torch.bool)
             lut[list(CHAR_BOUNDARY_BYTES)] = True

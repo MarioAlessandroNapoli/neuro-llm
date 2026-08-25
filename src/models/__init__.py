@@ -1,5 +1,6 @@
 from ..configs import (
-    CharTransformerConfig, CharTransformerNoPosConfig, CharTransformerRelConfig, ModelConfig,
+    CharTransformerConfig, CharTransformerNoPosConfig, CharTransformerRelConfig,
+    D19CbConfig, ModelConfig,
 )
 from .hybrid import (
     CharHybConfig,
@@ -8,6 +9,9 @@ from .hybrid import (
     CharHybPhaseConfig,
     CharHybTsConfig,
     CharOsc0Config,
+    D19Mix2Config,
+    D19Mix4Config,
+    D19MixConfig,
     Hybrid,
     HybridAOConfig,
     HybridAOLPConfig,
@@ -50,6 +54,11 @@ ARCHS = {
     "char-hyb-heu": (Hybrid, CharHybHeuConfig),
     "char-hyb-phase": (Hybrid, CharHybPhaseConfig),
     "char-hyb-ts": (Hybrid, CharHybTsConfig),
+    # D19 (curva di sostituzione, classe 15M): rapporto osc-gate/attention variabile
+    "d19-osc8": (Hybrid, D19MixConfig),
+    "d19-mix2": (Hybrid, D19Mix2Config),
+    "d19-mix4": (Hybrid, D19Mix4Config),
+    "d19-cb": (Transformer, D19CbConfig),
 }
 
 

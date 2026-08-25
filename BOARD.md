@@ -9,20 +9,27 @@ la stima iniziale 1,5-2 $ è stata superata dall'estensione notturna (B2+C1+cont
 decisa a budget dichiarato ricaricabile. **Istanza attiva: 1** (5090 — generazioni
 giudice in corso, poi distruggere).
 
+## Roadmap "Rotta Edge" (decisa 2026-08-25; ogni fase è gate della successiva)
+
+| fase | cosa | costo | stato |
+|---|---|---|---|
+| 0 | data prep Nemotron-HQ + bracci mix + eval retention | 0 $ | **IN CORSO** |
+| 1 | D19 curva di sostituzione (15M, 8 run) | 10-20 $ | pronta al termine di 0 |
+| 2 | scala 25-40M, mix vincente, 3-10B byte | 30-60 $ | gate: ginocchio D19 |
+| 3 | paper v1.0 → TMLR+arXiv (parallela a 2) | 0 $ | — |
+| 4 | modello 150M su Nemotron-HQ | 500-2k $ | gate: fase 2 verde |
+| 5 | edge: int8 scan, ggml, demo RAM piatta | tempo | — |
+
 ## Now
 
-- **Scrittura stadio char / paper v0.3**: sezioni I-IV complete con numeri veri;
-  mancano appendici A-E, 2 figure (spettri τ per layer, autopsia gate), bibitem \todo
-- **Scala di rischio D18** (2026-08-24): **passo A CHIUSO** — banco v2 senza
-  scorciatoia, protocollo 10k; tre leggi confermate a 2 seed; S6 mai binding in
-  12 config (trail completa in D18). Prossimo gradino: B
+- **Fase 0**: script Nemotron→byte; bracci osc8/mix2/mix4/cb interleaved a 15M;
+  ablazione del contesto nell'eval; smoke M2
+- **Scrittura paper v0.4→1.0**: appendici A-E, 2 figure, bibitem; poi review finale
 
 ## Next
 
-- **D19 — Curva di sostituzione** (design chiuso 2026-08-25, dettaglio nel log):
-  osc8/mix2/mix4/cb a 15M byte-level su Nemotron-CC-HQ ~300M byte, 2 seed; metriche
-  BPB + estrapolazione + ablazione del contesto + autopsia; schermatura e ginocchio
-  pre-registrati. Prerequisito: script data prep (streaming HF → byte). 10-20 $
+- **Fase 1 — D19** (design e soglie nel log § D19): 8 run su GPU, poi tabellone,
+  figura, verdetto ginocchio+schermatura
 - **Giudice ufficiale best-4** (cb/hard/osc0/ts @B2, Elo 6 coppie): cache
   incrementale pronta; generazioni da rifare su GPU economica; canale da decidere
   (Batches con API key o in-sessione)

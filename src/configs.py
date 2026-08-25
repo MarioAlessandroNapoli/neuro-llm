@@ -19,6 +19,8 @@ CHAR_EOT_BYTE = 0
 CHAR_BOUNDARY_BYTES = tuple(b" .,!?\"'\n:;") + (CHAR_EOT_BYTE,)
 CHAR_BASELINE_BACKBONE_PARAMS = 6_842_880
 CHAR_PARITY_TOL = 0.10
+# D19 (classe 15M, llama2.c): backbone del cb a d_model 384, misurato 2026-08-25
+D19_BASELINE_BACKBONE_PARAMS = 14_196_480
 
 
 @dataclass
@@ -52,6 +54,13 @@ class CharTransformerNoPosConfig(CharTransformerConfig):
 # Cap della tabella rel-pos: la coordinata è la distanza dall'ultimo confine (parole
 # TinyStories ≤ ~15 byte; 64 copre anche le code senza sprecare tabella).
 CHAR_REL_POS_MAX = 64
+
+
+@dataclass
+class D19CbConfig(CharTransformerConfig):
+    # D19: baseline transformer della curva di sostituzione, classe 15M
+    d_model: int = 384
+    parity_ref: int = D19_BASELINE_BACKBONE_PARAMS
 
 
 @dataclass
