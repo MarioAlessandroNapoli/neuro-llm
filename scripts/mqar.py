@@ -188,6 +188,16 @@ class RecStack(nn.Module):
         # Parità D18: si dichiarano parametri E stato (legge Based: recall ∝ stato)
         self.state_per_layer = (2 * d_model * d_state if arm == "mamba" else 2 * m)
 
+        if arm == "attn":
+            # Controllo transformer puro: emb + PE apprese + 4 AttnBlock + head.
+            # La letteratura lo dà ~1,0 su MQAR: se qui cappa come i ricorrenti,
+            # il soffitto è del banco, non della ricorrenza.
+            self.pos = nn.Embedding(8192, d_model)
+            self.blocks = nn.ModuleList(AttnBlock(d_model) for _ in range(n_layer))
+            self.ln_f = nn.LayerNorm(d_model)
+            self.head = nn.Linear(d_model, VOCAB, bias=False)
+            return
+
         if arm == "mamba":
             # pure: 8 blocchi solo-mixer (canone Mamba), stessa parità ~1,0M
             self.blocks = nn.ModuleList(
@@ -226,6 +236,8 @@ class RecStack(nn.Module):
 
     def forward(self, idx):
         x = self.tok(idx)
+        if hasattr(self, "pos"):
+            x = x + self.pos(torch.arange(idx.shape[1], device=idx.device))
         for blk in self.blocks:
             x = blk(x)
         return self.head(self.ln_f(x))
@@ -246,7 +258,7 @@ def evaluate(model, n_kv, seq, device, rng, n_batches=8, bs=64):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--arm", choices=["lti", "ts", "gate", "gaterot", "tsgate",
-                                          "mamba"], required=True)
+                                          "mamba", "attn"], required=True)
     parser.add_argument("--save-ckpt", action="store_true")
     parser.add_argument("--attn-top", type=int, default=0)
     parser.add_argument("--d-state", type=int, default=16)
