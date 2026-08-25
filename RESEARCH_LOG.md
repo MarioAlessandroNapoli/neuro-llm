@@ -1146,6 +1146,20 @@ nei layer 1-2 (0,57-0,76); i bracci gated tirano giù le τ spettrali (mediane
 replica su MQAR); ts tiene il trasporto imposto (132/256 canali τ>500 al layer 3).
 Caveat: 2 OOM in notturna recuperati in sequenza (3080 10GB); frontiera a 2 celle.
 
+**Il soffitto di binding è strutturale (2026-08-25, sonda d_model + processo agli
+indiziati).** L'osservazione dell'utente: i migliori convergono a ~0,151 (nkv=8) e
+~0,066 (nkv=32) indipendentemente da distanza e meccanismo. Verificato che NON è una
+scorciatoia (breakdown per-query e per-scrittura piatti sul ckpt v2). Poi, per
+eliminazione: non è la distanza (256≈1024), non il training (convergenza), non lo
+stato (frontiera piatta), non la larghezza (**d_model 128→256, 3,2M param: tsgate
+0,149≈0,151 · gate 0,067≈0,065 — nulla si muove**). Resta la struttura della lettura:
+senza interazione moltiplicativa chiave-condizionata il recall puro-ricorrente ha un
+soffitto che nessuna risorsa compra (tesi Zoology, qui dimostrata per esclusione nel
+nostro apparato). Simmetria con lo stadio char: l'attention non serve per la POSIZIONE
+(osc0), serve per il RETRIEVAL — la divisione del lavoro degli ibridi è ora misurata
+su entrambi i lati. Predizione falsificabile per il paper: un solo layer di attention
+sopra lo stack oscillatorio deve sfondare il soffitto (→ eventuale sonda).
+
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
 blocco S6 all'init è quasi trasparente (guadagno ~50× sotto gli oscillatori risonanti)
