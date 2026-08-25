@@ -1128,6 +1128,24 @@ nkv=8 non perde nulla da 256 a 1024 (0,143→0,141) — le bande attraversano 90
 rumore quasi gratis. Caveat: spread tra seed più ampio a 1024 (lti 0,100/0,047;
 gate−4 0,007/0,047 — varianza di fuga a distanza); a 256 spread ≤0,008.
 
+**Evoluzione della memoria (2026-08-25 notte, 3080, 30 run + autopsia — fasi 1-3
+D18).** (1) **L'ibrido tsgate domina** (bande imposte + reset appreso, bias −8,
+2 seed): 0,151/0,100/0,066 a 256 per nkv 8/16/32 · **0,151**/0,066 a 1024 per
+nkv 8/32 — eguaglia il migliore ovunque e a distanza batte ENTRAMBI (0,151 vs ts
+0,141 a nkv8; 0,066 vs gate−8 0,053 a nkv32, +24%): trasporto e gestione delle
+interferenze si sommano senza interferire. (2) **Frontiera di stato** (m
+128/256/512 = stato 256/512/1024 float): sotto carico (256/32) gate quasi piatto
+0,061→0,065→0,067 mentre ts scala 0,026→0,041→0,049 — **gate a stato minimo batte
+ts a stato massimo: il reset compra recall col meccanismo, efficienza ≥4× in
+float**; a distanza (1024/8) lo stato serve a tutti ma ts satura (0,141→0,142) e
+gate−8 sale ancora (0,123→0,147). (3) **Autopsia**: il gate impara la struttura
+del task — sotto carico "ricambio in scrittura, protezione in lettura" (p su
+coppie 0,71-0,77, su query 0,06-0,08, layer 2-3); a distanza fuoco sulle coppie
+nei layer 1-2 (0,57-0,76); i bracci gated tirano giù le τ spettrali (mediane
+12-18: l'oblio migra dai pesi al gate — la divisione del lavoro dello stadio char
+replica su MQAR); ts tiene il trasporto imposto (132/256 canali τ>500 al layer 3).
+Caveat: 2 OOM in notturna recuperati in sequenza (3080 10GB); frontiera a 2 celle.
+
 Misura chiave (autopsia gradienti, step 0): i proiettori di stato di lti/gate ricevono
 gradienti ~1,0; l'intero mixer S6 vive a ~3e-2 col percorso di stato a ~3e-4 — il
 blocco S6 all'init è quasi trasparente (guadagno ~50× sotto gli oscillatori risonanti)
@@ -1193,6 +1211,7 @@ che apprende (griglia con un braccio morto = informazione nulla).
 | judge-s1 | 2026-08-20 | as-t1 vs as-h1 | — | — | 1 | — | **Giudizio cieco D14** (non training): 188 giudici Opus 5 in-sessione, doppio ordine. t 82 · h 77 · tie 29 (p=0,75); prompt netti 28 vs 30 (p=0,90) → **parità qualitativa, conferma la loss**. Preliminare (1 coppia, 536M). Artefatti: eval/judgments/elo-536M-s1.* |
 | mqar-grid | 2026-08-21 | RecStack 4×OscBlock (lti/ts/gate) | 1,09M | 3k step × 53 run | 1-2 | — (accuracy) | **MQAR v1 D17**, 4070S. ATTENZIONE: banco v1 con scorciatoia a eliminazione (D18) — numeri gonfiati di ~H_n/n, superseded dalla griglia v2; restano valide le letture di persistenza |
 | mqar-v2 | 2026-08-24 | RecStack (lti/ts/gate) + trail mamba/S6 | 0,86-1,09M | 10k step × 34 run (+~25 sonde diagnostiche) | 1-2 | — (accuracy fresh) | **MQAR v2 D18-A**, 4080, W&B group mqar: banco senza scorciatoia, 10k step (emendamento convergenza). Le 3 leggi confermate; S6 mai binding in 12 config. Figura docs/figures/2026-08-mqar-v2 |
+| mqar-evo | 2026-08-25 | RecStack (tsgate ibrido; ts/gate m 128-512) | 0,5-1,7M | 10k step × 30 run + 4 ckpt | 1-2 | — (accuracy fresh) | **Evoluzione memoria D18**, 3080, W&B group mqar: tsgate domina (a distanza batte entrambi i genitori); frontiera di stato (gate ≥4× efficiente per float sotto carico); autopsia gate = struttura del task appresa. Checkpoint dei 4 bracci autopsiati sul box (non su HF: usa-e-getta) |
 | pilot-1 | 2026-08-18 | transformer | 8,5M | 536M (1 epoch) | 1 | 1,509 (val completo @512) | Pilot per Q4, non braccio di griglia. BPB 0,531 @512 · 0,551 @256 (àncora: 0,4407). Curva: 100M→1,99 · 170M→1,80 · 260M→1,66 · 390M→1,56. Nota di metodo: la run dedicata da 20M dello sweep (3,67) chiude PEGGIO del punto 20M di questa curva (~3,4) — a piccoli budget l'annealing precoce costa più del rumore che toglie; i punti intermedi si leggono come stima centrale, non come limite |
 
 Ogni run vera aggiunge una riga; i dettagli vivono su W&B (progetto `neuro-llm`), qui solo
