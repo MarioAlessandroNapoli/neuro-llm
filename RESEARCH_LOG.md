@@ -1251,6 +1251,12 @@ diversa dal training, Δ=14,7 sui logits — la campagna giudice sui mix generer
 forward pieno); riferimento parità corretto pos-incluso (cb 0,00%, bracci entro
 ±4%); autopsia del gate attraversa i blocchi attention invece di fermarsi.
 
+**Fallback dati ATTIVATO (2026-08-26).** Accesso Nemotron-CC ancora pending → D19
+gira su **FineWeb-Edu** (clausola pre-registrata), config sample-10BT, revision
+pinnata `87f09149ef4734204d70ed1d046ddc9ca3f2b8f9`. Se Nemotron si sblocca prima
+della fase 2 si decide lì (cambio famiglia dichiarato vs coerenza FineWeb); la
+ricetta-mix NVIDIA resta rilevante solo dalla fase 4.
+
 **Orizzonte D (rotta edge, per memoria).** Se la curva regge ai gradini C: 150M sul
 mix vincente (10-30B byte Nemotron-HQ, 500-2.000 $), quantizzazione int8 dello scan,
 kernel ggml, e la prova pubblica "retention per MB di RAM" contro la classe
